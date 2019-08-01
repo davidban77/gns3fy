@@ -1,0 +1,56 @@
+[
+    {
+        "auto_close": false,
+        "auto_open": false,
+        "auto_start": false,
+        "drawing_grid_size": 25,
+        "filename": "test2.gns3",
+        "grid_size": 75,
+        "name": "test2",
+        "path": "/opt/gns3/projects/c9dc56bf-37b9-453b-8f95-2845ce8908e3",
+        "project_id": "c9dc56bf-37b9-453b-8f95-2845ce8908e3",
+        "scene_height": 1000,
+        "scene_width": 2000,
+        "show_grid": true,
+        "show_interface_labels": false,
+        "show_layers": false,
+        "snap_to_grid": false,
+        "status": "opened",
+        "supplier": null,
+        "variables": null,
+        "zoom": 100,
+        "stats": {
+            "drawings": 0,
+            "links": 9,
+            "nodes": 10,
+            "snapshots": 0
+        }
+    },
+    {
+        "auto_close": false,
+        "auto_open": false,
+        "auto_start": true,
+        "drawing_grid_size": 25,
+        "filename": "test_api1.gns3",
+        "grid_size": 75,
+        "name": "API_TEST",
+        "path": "/opt/gns3/projects/4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "scene_height": 1000,
+        "scene_width": 2000,
+        "show_grid": false,
+        "show_interface_labels": false,
+        "show_layers": false,
+        "snap_to_grid": false,
+        "status": "opened",
+        "supplier": null,
+        "variables": null,
+        "zoom": 100,
+        "stats": {
+            "drawings": 0,
+            "links": 4,
+            "nodes": 6,
+            "snapshots": 0
+        }
+    }
+]
