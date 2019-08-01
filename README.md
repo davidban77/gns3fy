@@ -80,6 +80,7 @@ print(f"Name: {alpine1.name} -- Status: {alpine1.status} -- Console: {alpine1.co
 alpine1.stop()
 print(alpine1.status)
 # stopped
+
 alpine1.start()
 print(alpine1.status)
 # started
@@ -102,7 +103,7 @@ You also have some commodity methods like the `nodes_summary` and `links_summary
 ...
 from tabulate import tabulate
 
-nodes_summary = lab.nodes_summar(is_print=False)
+nodes_summary = lab.nodes_summary(is_print=False)
 
 print(
     tabulate(nodes_summary, headers=["Node", "Status", "Console Port", "ID"])
