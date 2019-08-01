@@ -135,6 +135,10 @@ class Gns3Connector:
         "Returns the list of dictionaries of the projects on the server"
         return self.http_call("get", url=f"{self.base_url}/projects").json()
 
+    def get_version(self):
+        "Returns the version information"
+        return self.http_call("get", url=f"{self.base_url}/version").json()
+
 
 @dataclass(config=Config)
 class Link:
