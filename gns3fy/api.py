@@ -1,6 +1,6 @@
 import time
 import requests
-from urllib.parse import urlencode
+from urllib.parse import urlencode, urlparse
 from requests import ConnectionError, ConnectTimeout, HTTPError
 from dataclasses import field
 from typing import Optional, Any, Dict, List
@@ -309,7 +309,8 @@ class Node:
             if _err:
                 raise ValueError(f"{_err}")
 
-            extracted = [node for node in _response.json() if node["name"] == self.name]
+            extracted = [node for node in _response.json()
+                         if node["name"] == self.name]
             if len(extracted) > 1:
                 raise ValueError(
                     "Multiple nodes found with same name. Need to submit node_id"
@@ -805,6 +806,52 @@ class Project:
 
         return _nodes_summary if not is_print else None
 
+    def nodes_inventory(self, is_print=True):
+        """return an ansible-type inventory with the nodes of the project for initial Telnet
+        configuration
+
+        e.g  
+    {  "spine00.cmh": {
+        "hostname": "127.0.0.1",
+        "username": "vagrant",
+        "password": "vagrant",
+        "port": 12444,
+        "platform": "eos",
+        "groups": [
+          "cmh"
+        ],
+      },
+      "spine01.cmh": {
+        "hostname": "127.0.0.1",
+        "username": "vagrant"
+        "password": "",
+        "platform": "junos",
+        "port": 12204,
+        "groups": [
+          "cmh"
+        ]
+      }
+    } 
+        """
+
+        if not self.nodes:
+            self.get_nodes()
+
+        _nodes_inventory = {}
+        _hostname = urlparse(self.connector.base_url).hostname
+
+        for _n in self.nodes:
+
+            _nodes_inventory.update({_n.name: {'hostname': _hostname,
+                                               'name': _n.name,
+                                               'console_port': _n.console,
+                                               'type': _n.node_type,
+                                               }})
+        if is_print:
+            print(_nodes_inventory)
+
+        return _nodes_inventory if not is_print else None
+
     def links_summary(self, is_print=True):
         """
         Returns a summary of the links insode the project. If `is_print` is False, it
@@ -821,14 +868,16 @@ class Project:
         for _l in self.links:
             _side_a = _l.nodes[0]
             _side_b = _l.nodes[1]
-            _node_a = [x for x in self.nodes if x.node_id == _side_a["node_id"]][0]
+            _node_a = [x for x in self.nodes if x.node_id ==
+                       _side_a["node_id"]][0]
             _port_a = [
                 x["name"]
                 for x in _node_a.ports
                 if x["port_number"] == _side_a["port_number"]
                 and x["adapter_number"] == _side_a["adapter_number"]
             ][0]
-            _node_b = [x for x in self.nodes if x.node_id == _side_b["node_id"]][0]
+            _node_b = [x for x in self.nodes if x.node_id ==
+                       _side_b["node_id"]][0]
             _port_b = [
                 x["name"]
                 for x in _node_b.ports
@@ -839,6 +888,7 @@ class Project:
             endpoint_b = f"{_node_b.name}: {_port_b}"
             if is_print:
                 print(f"{endpoint_a} ---- {endpoint_b}")
-            _links_summary.append((_node_a.name, _port_a, _node_b.name, _port_b))
+            _links_summary.append(
+                (_node_a.name, _port_a, _node_b.name, _port_b))
 
         return _links_summary if not is_print else None
