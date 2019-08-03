@@ -131,13 +131,60 @@ class Gns3Connector:
         err = f"[ERROR][{response_obj.status_code}]: {response_obj.text}"
         return err if 400 <= response_obj.status_code <= 599 else False
 
+    def get_version(self):
+        "Returns the version information"
+        return self.http_call("get", url=f"{self.base_url}/version").json()
+
     def get_projects(self):
         "Returns the list of dictionaries of the projects on the server"
         return self.http_call("get", url=f"{self.base_url}/projects").json()
 
-    def get_version(self):
+    def get_project(self, name):
+        "Retrives an specific project"
+        _projects = self.http_call("get", url=f"{self.base_url}/projects").json()
+        return [p for p in _projects if p["name"] == name][0]
+
+    def get_templates(self):
         "Returns the version information"
-        return self.http_call("get", url=f"{self.base_url}/version").json()
+        return self.http_call("get", url=f"{self.base_url}/templates").json()
+
+    def get_template_by_name(self, name):
+        "Retrives an specific template searching by name"
+        _templates = self.http_call("get", url=f"{self.base_url}/templates").json()
+        try:
+            return [t for t in _templates if t["name"] == name][0]
+        except IndexError:
+            return None
+
+    def get_template_by_id(self, id):
+        "Retrives an specific template by id"
+        return self.http_call("get", url=f"{self.base_url}/templates/{id}").json()
+
+    def get_node_by_id(self, project_id, node_id):
+        """
+        Returns the node by locating ID
+        """
+        _url = f"{self.base_url}/projects/{project_id}/nodes/{node_id}"
+
+        _response = self.http_call("get", _url)
+        _err = self.error_checker(_response)
+        if _err:
+            raise ValueError(f"{_err}")
+
+        return _response.json()
+
+    def get_link_by_id(self, project_id, link_id):
+        """
+        Returns the link by locating ID
+        """
+        _url = f"{self.base_url}/projects/{project_id}/links/{link_id}"
+
+        _response = self.http_call("get", _url)
+        _err = self.error_checker(_response)
+        if _err:
+            raise ValueError(f"{_err}")
+
+        return _response.json()
 
 
 @dataclass(config=Config)
@@ -220,6 +267,32 @@ class Link:
         self.project_id = None
         self.link_id = None
 
+    def create(self):
+        """
+        Creates a link
+        """
+        if not self.connector:
+            raise ValueError("Gns3Connector not assigned under 'connector'")
+        if not self.project_id:
+            raise ValueError("Need to submit project_id")
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/links"
+
+        data = {
+            k: v
+            for k, v in self.__dict__.items()
+            if k not in ("connector", "__initialised__")
+            if v is not None
+        }
+
+        _response = self.connector.http_call("post", _url, json_data=data)
+        _err = Gns3Connector.error_checker(_response)
+        if _err:
+            raise ValueError(f"{_err}")
+
+        # Now update it
+        self._update(_response.json())
+
 
 @dataclass(config=Config)
 class Node:
@@ -242,7 +315,7 @@ class Node:
     name: Optional[str] = None
     project_id: Optional[str] = None
     node_id: Optional[str] = None
-    compute_id: Optional[str] = None
+    compute_id: str = "local"
     node_type: Optional[str] = None
     node_directory: Optional[str] = None
     status: Optional[str] = None
@@ -265,8 +338,9 @@ class Node:
     y: Optional[int] = None
     z: Optional[int] = None
     template_id: Optional[str] = None
-    properties: Optional[Any] = None
+    properties: Dict = field(default_factory=dict)
 
+    template: Optional[str] = None
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
 
@@ -443,6 +517,74 @@ class Node:
         else:
             self.get()
 
+    def create(self, extra_properties={}):
+        """
+        Creates a node.
+
+        Attributes:
+        - `with_template`: It fetches for the template data and applies it to the nodes
+        `properties` field. This is needed in order to create the desired node on the
+        topology.
+        - `extra_properties`: When issued, it applies the given dictionary of parameters
+        to the nodes `properties`
+        """
+        if not self.connector:
+            raise ValueError("Gns3Connector not assigned under 'connector'")
+        if not self.project_id:
+            raise ValueError("Need to submit 'project_id'")
+        if not self.compute_id:
+            raise ValueError("Need to submit 'compute_id'")
+        if not self.name:
+            raise ValueError("Need to submit 'name'")
+        if not self.node_type:
+            raise ValueError("Need to submit 'node_type'")
+        if self.node_id:
+            raise ValueError("Node already created")
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
+
+        data = {
+            k: v
+            for k, v in self.__dict__.items()
+            if k
+            not in ("project_id", "template", "links", "connector", "__initialised__")
+            if v is not None
+        }
+
+        # Fetch template for properties
+        if self.template_id:
+            _properties = self.connector.get_template_by_id(self.template_id)
+        elif self.template:
+            _properties = self.connector.get_template_by_name(self.template)
+        else:
+            raise ValueError("You must provide `template` or `template_id`")
+
+        # Delete not needed fields
+        for _field in (
+            "compute_id",
+            "default_name_format",
+            "template_type",
+            "template_id",
+            "builtin",
+            "name",  # Needs to be deleted because it overrides the name of host
+        ):
+            try:
+                _properties.pop(_field)
+            except KeyError:
+                continue
+
+        # Override/Merge extra properties
+        if extra_properties:
+            _properties.update(**extra_properties)
+        data.update(properties=_properties)
+
+        _response = self.connector.http_call("post", _url, json_data=data)
+        _err = Gns3Connector.error_checker(_response)
+        if _err:
+            raise ValueError(f"{_err}")
+
+        self._update(_response.json())
+
     def delete(self):
         """
         Deletes the node from the project
@@ -573,6 +715,32 @@ class Project:
             self.get_nodes()
         if get_links:
             self.get_links()
+
+    def create(self):
+        """
+        Creates the project
+        """
+        if not self.name:
+            raise ValueError("Need to submit projects `name`")
+        if not self.connector:
+            raise ValueError("Gns3Connector not assigned under 'connector'")
+
+        _url = f"{self.connector.base_url}/projects"
+
+        data = {
+            k: v
+            for k, v in self.__dict__.items()
+            if k not in ("stats", "nodes", "links", "connector", "__initialised__")
+            if v is not None
+        }
+
+        _response = self.connector.http_call("post", _url, json_data=data)
+        _err = Gns3Connector.error_checker(_response)
+        if _err:
+            raise ValueError(f"{_err}")
+
+        # Now update it
+        self._update(_response.json())
 
     def update(self, **kwargs):
         """
@@ -842,3 +1010,139 @@ class Project:
             _links_summary.append((_node_a.name, _port_a, _node_b.name, _port_b))
 
         return _links_summary if not is_print else None
+
+    def _search_node(self, key, value):
+        "Performs a search based on a key and value"
+        # Retrive nodes if neccesary
+        if not self.nodes:
+            self.get_nodes()
+
+        try:
+            return [_p for _p in self.nodes if getattr(_p, key) == value][0]
+        except IndexError:
+            return None
+
+    def get_node(self, name=None, node_id=None):
+        """
+        Returns the Node object by searching for the name or the node_id.
+
+        NOTE: Run method `get_nodes()` manually to refresh list of nodes if necessary
+        """
+        if node_id:
+            return self._search_node(key="node_id", value=node_id)
+        elif name:
+            return self._search_node(key="name", value=name)
+        else:
+            raise ValueError("name or node_ide must be provided")
+
+    def _search_link(self, key, value):
+        "Performs a search based on a key and value"
+        # Retrive links if neccesary
+        if not self.links:
+            self.get_links()
+
+        try:
+            return [_p for _p in self.links if getattr(_p, key) == value][0]
+        except IndexError:
+            return None
+
+    def get_link(self, link_id):
+        """
+        Returns the Link object by locating ID
+
+        NOTE: Run method `get_links()` manually to refresh list of nodes if necessary
+        """
+        if link_id:
+            return self._search_node(key="link_id", value=link_id)
+        else:
+            raise ValueError("name or node_ide must be provided")
+
+    def create_node(self, name=None, **kwargs):
+        """
+        Creates a node
+        """
+        if not self.nodes:
+            self.get_nodes()
+
+        # Even though GNS3 allow same name to be pushed because it automatically
+        # generates a new name if matches an exising node, here is verified beforehand
+        # and forces developer to create new name.
+        _matches = [(_n.name, _n.node_id) for _n in self.nodes if name == _n.name]
+        if _matches:
+            raise ValueError(
+                f"Node with equal name found: {_matches[0][0]} - ID: {_matches[0][-1]}"
+            )
+
+        _node = Node(
+            project_id=self.project_id, connector=self.connector, name=name, **kwargs
+        )
+        _node.create()
+        self.nodes.append(_node)
+        print(
+            f"Created: {_node.name} -- Type: {_node.node_type} -- "
+            f"Console: {_node.console}"
+        )
+
+    def create_link(self, node_a, port_a, node_b, port_b):
+        """
+        Creates a link
+        """
+        if not self.nodes:
+            self.get_nodes()
+        if not self.links:
+            self.get_links()
+
+        _node_a = self.get_node(name=node_a)
+        if not _node_a:
+            raise ValueError(f"node_a: {node_a} not found")
+        try:
+            _port_a = [_p for _p in _node_a.ports if _p["name"] == port_a][0]
+        except IndexError:
+            raise ValueError(f"port_a: {port_a} - not found")
+
+        _node_b = self.get_node(name=node_b)
+        if not _node_b:
+            raise ValueError(f"node_b: {node_b} not found")
+        try:
+            _port_b = [_p for _p in _node_b.ports if _p["name"] == port_b][0]
+        except IndexError:
+            raise ValueError(f"port_b: {port_b} - not found")
+
+        _matches = []
+        for _l in self.links:
+            if (
+                _l.nodes[0]["node_id"] == _node_a.node_id
+                and _l.nodes[0]["adapter_number"] == _port_a["adapter_number"]
+                and _l.nodes[0]["port_number"] == _port_a["port_number"]
+            ):
+                _matches.append(_l)
+            elif (
+                _l.nodes[1]["node_id"] == _node_b.node_id
+                and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
+                and _l.nodes[1]["port_number"] == _port_b["port_number"]
+            ):
+                _matches.append(_l)
+        if _matches:
+            raise ValueError(f"At least one port is used, ID: {_matches[0].link_id}")
+
+        # Now create the link!
+        _link = Link(
+            project_id=self.project_id,
+            connector=self.connector,
+            nodes=[
+                dict(
+                    node_id=_node_a.node_id,
+                    adapter_number=_port_a["adapter_number"],
+                    port_number=_port_a["port_number"],
+                ),
+                dict(
+                    node_id=_node_b.node_id,
+                    adapter_number=_port_b["adapter_number"],
+                    port_number=_port_b["port_number"],
+                ),
+            ],
+        )
+
+        _link.create()
+        self.links.append(_link)
+        print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
