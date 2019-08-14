@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  codecov: codecov/codecov@1.0.2
+  codecov: codecov/codecov@1.0.5
 jobs:
   build:
     docker:
@@ -25,6 +25,6 @@ jobs:
       - run:
           name: Running tests
           command: |
-            poetry run pytest -v --cov=gns3fy --cov-report=html tests
+            poetry run pytest --cov=gns3fy tests/
       - codecov/upload:
-          file: htmlcov
+          file: .coverage
