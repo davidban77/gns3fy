@@ -1,0 +1,26 @@
+version: 2
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            poetry install
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+      - run:
+          name: Run flake8
+          command: |
+            poetry run flake8 .
+      - run:
+          name: Running tests
+          command: |
+            poetry run pytest -v --cov=gns3fy tests
