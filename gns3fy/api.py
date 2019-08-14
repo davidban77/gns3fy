@@ -1006,31 +1006,23 @@ class Project:
         return _nodes_summary if not is_print else None
 
     def nodes_inventory(self, is_print=True):
-        """return an ansible-type inventory with the nodes of the project for initial Telnet
-        configuration
+        """
+        Returns an ansible-type inventory with the nodes of the project
 
-        e.g  
-    {  "spine00.cmh": {
-        "hostname": "127.0.0.1",
-        "username": "vagrant",
-        "password": "vagrant",
-        "port": 12444,
-        "platform": "eos",
-        "groups": [
-          "cmh"
-        ],
-      },
-      "spine01.cmh": {
-        "hostname": "127.0.0.1",
-        "username": "vagrant"
-        "password": "",
-        "platform": "junos",
-        "port": 12204,
-        "groups": [
-          "cmh"
-        ]
-      }
-    } 
+        Example:
+
+        {
+            "router01": {
+                "hostname": "127.0.0.1",
+                "username": "vagrant",
+                "password": "vagrant",
+                "port": 12444,
+                "platform": "eos",
+                "groups": [
+                    "border"
+                ],
+            }
+        }
         """
 
         if not self.nodes:

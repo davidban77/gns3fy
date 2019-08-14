@@ -1,3 +1,5 @@
+[![Circle CI](https://circleci.com/gh/davidban77/gns3fy/tree/develop.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/davidban77/gns3fy/tree/develop)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+
 # gns3fy
 Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html).
 
