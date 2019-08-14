@@ -25,6 +25,6 @@ jobs:
       - run:
           name: Running tests
           command: |
-            poetry run pytest --cov=gns3fy tests/
+            poetry run pytest --cov-report=xml --cov=gns3fy tests/
       - codecov/upload:
-          file:
+          file: coverage.xml
