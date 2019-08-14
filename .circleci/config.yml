@@ -27,4 +27,4 @@ jobs:
           command: |
             poetry run pytest -v --cov=gns3fy --cov-report=html tests
       - codecov/upload:
-          path: htmlcov
+          file: htmlcov
