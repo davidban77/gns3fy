@@ -72,10 +72,17 @@ class Gns3Connector:
         self.api_calls = 0
 
         # Create session object
+        self.create_session()
+        # self.session = requests.Session()
+        # self.session.headers["Accept"] = "application/json"
+        # if self.user:
+        #     self.session.auth = (user, cred)
+
+    def create_session(self):
         self.session = requests.Session()
         self.session.headers["Accept"] = "application/json"
         if self.user:
-            self.session.auth = (user, cred)
+            self.session.auth = (self.user, self.cred)
 
     def http_call(
         self,
@@ -93,6 +100,7 @@ class Gns3Connector:
                 _response = getattr(self.session, method.lower())(
                     url,
                     data=urlencode(data),
+                    # data=data,
                     headers=headers,
                     params=params,
                     verify=verify,
@@ -139,10 +147,17 @@ class Gns3Connector:
         "Returns the list of dictionaries of the projects on the server"
         return self.http_call("get", url=f"{self.base_url}/projects").json()
 
-    def get_project(self, name):
+    def get_project_by_name(self, name):
         "Retrives an specific project"
         _projects = self.http_call("get", url=f"{self.base_url}/projects").json()
-        return [p for p in _projects if p["name"] == name][0]
+        try:
+            return [p for p in _projects if p["name"] == name][0]
+        except IndexError:
+            return None
+
+    def get_project_by_id(self, id):
+        "Retrives an specific template by id"
+        return self.http_call("get", url=f"{self.base_url}/projects/{id}").json()
 
     def get_templates(self):
         "Returns the version information"
@@ -160,31 +175,47 @@ class Gns3Connector:
         "Retrives an specific template by id"
         return self.http_call("get", url=f"{self.base_url}/templates/{id}").json()
 
+    def get_nodes(self, project_id):
+        return self.http_call(
+            "get", url=f"{self.base_url}/projects/{project_id}/nodes"
+        ).json()
+
     def get_node_by_id(self, project_id, node_id):
         """
         Returns the node by locating ID
         """
         _url = f"{self.base_url}/projects/{project_id}/nodes/{node_id}"
+        return self.http_call("get", _url).json()
 
-        _response = self.http_call("get", _url)
-        _err = self.error_checker(_response)
-        if _err:
-            raise ValueError(f"{_err}")
-
-        return _response.json()
+    def get_links(self, project_id):
+        return self.http_call(
+            "get", url=f"{self.base_url}/projects/{project_id}/links"
+        ).json()
 
     def get_link_by_id(self, project_id, link_id):
         """
         Returns the link by locating ID
         """
         _url = f"{self.base_url}/projects/{project_id}/links/{link_id}"
+        return self.http_call("get", _url).json()
 
-        _response = self.http_call("get", _url)
-        _err = self.error_checker(_response)
-        if _err:
-            raise ValueError(f"{_err}")
+    def create_project(self, **kwargs):
+        """
+        Pass a dictionary type object with the project parameters to be created.
+        Parameter `name` is mandatory. Returns project
+        """
+        _url = f"{self.base_url}/projects"
+        if "name" not in kwargs:
+            raise ValueError("Parameter 'name' is mandatory")
+        return self.http_call("post", _url, json_data=kwargs).json()
 
-        return _response.json()
+    def delete_project(self, project_id):
+        """
+        Deletes a project from server
+        """
+        _url = f"{self.base_url}/projects/{project_id}"
+        self.http_call("delete", _url)
+        return
 
 
 @dataclass(config=Config)
@@ -987,6 +1018,8 @@ class Project:
 
         _links_summary = []
         for _l in self.links:
+            if not _l.nodes:
+                continue
             _side_a = _l.nodes[0]
             _side_b = _l.nodes[1]
             _node_a = [x for x in self.nodes if x.node_id == _side_a["node_id"]][0]

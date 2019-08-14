@@ -164,7 +164,8 @@
         "width": 72,
         "x": -11,
         "y": -114,
-        "z": 1
+        "z": 1,
+        "template": null
     },
     {
         "command_line": "/opt/gns3/images/IOU/L3-ADVENTERPRISEK9-M-15.4-2T.bin 1",
@@ -387,7 +388,8 @@
         "width": 60,
         "x": -184,
         "y": -139,
-        "z": 1
+        "z": 1,
+        "template": null
     },
     {
         "command_line": "/opt/gns3/images/IOU/L3-ADVENTERPRISEK9-M-15.4-2T.bin 2",
@@ -610,10 +612,11 @@
         "width": 60,
         "x": -183,
         "y": 6,
-        "z": 1
+        "z": 1,
+        "template": null
     },
     {
-        "command_line": "/usr/bin/qemu-system-x86_64 -name vEOS-4.21.5F-1 -m 2048M -smp cpus=2 -enable-kvm -machine smm=off -boot order=c -drive file=/opt/gns3/projects/4b21dfb3-675a-4efa-8613-2f7fb32e76fe/project-files/qemu/8283b923-df0e-4bc1-8199-be6fea40f500/hda_disk.qcow2,if=ide,index=0,media=disk -uuid 8283b923-df0e-4bc1-8199-be6fea40f500 -serial telnet:127.0.0.1:5004,server,nowait -monitor tcp:127.0.0.1:35261,server,nowait -net none -device e1000,mac=0c:76:fe:f5:00:00,netdev=gns3-0 -netdev socket,id=gns3-0,udp=127.0.0.1:10011,localaddr=127.0.0.1:10010 -device e1000,mac=0c:76:fe:f5:00:01,netdev=gns3-1 -netdev socket,id=gns3-1,udp=127.0.0.1:10013,localaddr=127.0.0.1:10012 -device e1000,mac=0c:76:fe:f5:00:02,netdev=gns3-2 -netdev socket,id=gns3-2,udp=127.0.0.1:10015,localaddr=127.0.0.1:10014 -device e1000,mac=0c:76:fe:f5:00:03,netdev=gns3-3 -netdev socket,id=gns3-3,udp=127.0.0.1:10017,localaddr=127.0.0.1:10016 -device e1000,mac=0c:76:fe:f5:00:04,netdev=gns3-4 -netdev socket,id=gns3-4,udp=127.0.0.1:10019,localaddr=127.0.0.1:10018 -device e1000,mac=0c:76:fe:f5:00:05,netdev=gns3-5 -netdev socket,id=gns3-5,udp=127.0.0.1:10021,localaddr=127.0.0.1:10020 -device e1000,mac=0c:76:fe:f5:00:06,netdev=gns3-6 -netdev socket,id=gns3-6,udp=127.0.0.1:10023,localaddr=127.0.0.1:10022 -device e1000,mac=0c:76:fe:f5:00:07,netdev=gns3-7 -netdev socket,id=gns3-7,udp=127.0.0.1:10025,localaddr=127.0.0.1:10024 -device e1000,mac=0c:76:fe:f5:00:08,netdev=gns3-8 -netdev socket,id=gns3-8,udp=127.0.0.1:10027,localaddr=127.0.0.1:10026 -device e1000,mac=0c:76:fe:f5:00:09,netdev=gns3-9 -netdev socket,id=gns3-9,udp=127.0.0.1:10029,localaddr=127.0.0.1:10028 -device e1000,mac=0c:76:fe:f5:00:0a,netdev=gns3-10 -netdev socket,id=gns3-10,udp=127.0.0.1:10031,localaddr=127.0.0.1:10030 -device e1000,mac=0c:76:fe:f5:00:0b,netdev=gns3-11 -netdev socket,id=gns3-11,udp=127.0.0.1:10033,localaddr=127.0.0.1:10032 -device e1000,mac=0c:76:fe:f5:00:0c,netdev=gns3-12 -netdev socket,id=gns3-12,udp=127.0.0.1:10035,localaddr=127.0.0.1:10034 -nographic",
+        "command_line": "/usr/bin/qemu-system-x86_64 -name vEOS -m 2048M -smp cpus=2 -enable-kvm -machine smm=off -boot order=c -drive file=/opt/gns3/projects/4b21dfb3-675a-4efa-8613-2f7fb32e76fe/project-files/qemu/8283b923-df0e-4bc1-8199-be6fea40f500/hda_disk.qcow2,if=ide,index=0,media=disk -uuid 8283b923-df0e-4bc1-8199-be6fea40f500 -serial telnet:127.0.0.1:5004,server,nowait -monitor tcp:127.0.0.1:35261,server,nowait -net none -device e1000,mac=0c:76:fe:f5:00:00,netdev=gns3-0 -netdev socket,id=gns3-0,udp=127.0.0.1:10011,localaddr=127.0.0.1:10010 -device e1000,mac=0c:76:fe:f5:00:01,netdev=gns3-1 -netdev socket,id=gns3-1,udp=127.0.0.1:10013,localaddr=127.0.0.1:10012 -device e1000,mac=0c:76:fe:f5:00:02,netdev=gns3-2 -netdev socket,id=gns3-2,udp=127.0.0.1:10015,localaddr=127.0.0.1:10014 -device e1000,mac=0c:76:fe:f5:00:03,netdev=gns3-3 -netdev socket,id=gns3-3,udp=127.0.0.1:10017,localaddr=127.0.0.1:10016 -device e1000,mac=0c:76:fe:f5:00:04,netdev=gns3-4 -netdev socket,id=gns3-4,udp=127.0.0.1:10019,localaddr=127.0.0.1:10018 -device e1000,mac=0c:76:fe:f5:00:05,netdev=gns3-5 -netdev socket,id=gns3-5,udp=127.0.0.1:10021,localaddr=127.0.0.1:10020 -device e1000,mac=0c:76:fe:f5:00:06,netdev=gns3-6 -netdev socket,id=gns3-6,udp=127.0.0.1:10023,localaddr=127.0.0.1:10022 -device e1000,mac=0c:76:fe:f5:00:07,netdev=gns3-7 -netdev socket,id=gns3-7,udp=127.0.0.1:10025,localaddr=127.0.0.1:10024 -device e1000,mac=0c:76:fe:f5:00:08,netdev=gns3-8 -netdev socket,id=gns3-8,udp=127.0.0.1:10027,localaddr=127.0.0.1:10026 -device e1000,mac=0c:76:fe:f5:00:09,netdev=gns3-9 -netdev socket,id=gns3-9,udp=127.0.0.1:10029,localaddr=127.0.0.1:10028 -device e1000,mac=0c:76:fe:f5:00:0a,netdev=gns3-10 -netdev socket,id=gns3-10,udp=127.0.0.1:10031,localaddr=127.0.0.1:10030 -device e1000,mac=0c:76:fe:f5:00:0b,netdev=gns3-11 -netdev socket,id=gns3-11,udp=127.0.0.1:10033,localaddr=127.0.0.1:10032 -device e1000,mac=0c:76:fe:f5:00:0c,netdev=gns3-12 -netdev socket,id=gns3-12,udp=127.0.0.1:10035,localaddr=127.0.0.1:10034 -nographic",
         "compute_id": "local",
         "console": 5003,
         "console_auto_start": false,
@@ -625,12 +628,12 @@
         "label": {
             "rotation": 0,
             "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-            "text": "vEOS-4.21.5F-1",
+            "text": "vEOS",
             "x": -15,
             "y": -25
         },
         "locked": false,
-        "name": "vEOS-4.21.5F-1",
+        "name": "vEOS",
         "node_directory": "/opt/gns3/projects/4b21dfb3-675a-4efa-8613-2f7fb32e76fe/project-files/qemu/8283b923-df0e-4bc1-8199-be6fea40f500",
         "node_id": "8283b923-df0e-4bc1-8199-be6fea40f500",
         "node_type": "qemu",
@@ -839,7 +842,8 @@
         "width": 60,
         "x": -20,
         "y": -6,
-        "z": 1
+        "z": 1,
+        "template": null
     },
     {
         "command_line": null,
@@ -908,7 +912,8 @@
         "width": 60,
         "x": 169,
         "y": -10,
-        "z": 1
+        "z": 1,
+        "template": null
     },
     {
         "command_line": null,
@@ -1020,6 +1025,7 @@
         "width": 159,
         "x": 150,
         "y": -236,
-        "z": 1
+        "z": 1,
+        "template": null
     }
 ]

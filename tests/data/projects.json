@@ -15,7 +15,7 @@
         "show_interface_labels": false,
         "show_layers": false,
         "snap_to_grid": false,
-        "status": "opened",
+        "status": "closed",
         "supplier": null,
         "variables": null,
         "zoom": 100,
@@ -45,12 +45,6 @@
         "status": "opened",
         "supplier": null,
         "variables": null,
-        "zoom": 100,
-        "stats": {
-            "drawings": 0,
-            "links": 4,
-            "nodes": 6,
-            "snapshots": 0
-        }
+        "zoom": 100
     }
 ]
