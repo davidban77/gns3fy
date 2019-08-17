@@ -6,7 +6,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - gh-pages
+                - "gh-pages"
 
 
 orbs:
