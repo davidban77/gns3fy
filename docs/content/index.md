@@ -54,4 +54,4 @@ for node in lab.nodes:
 
 ## Release Notes
 
-Please see the [Release Notes](changelog.md) for details
+Please see the [Release Notes](about/changelog.md) for details
