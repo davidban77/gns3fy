@@ -548,11 +548,7 @@ class TestNode:
             )
 
     def test_create_with_incomplete_parameters(self, gns3_server):
-        node = Node(
-            name="alpine-1",
-            connector=gns3_server,
-            project_id=CPROJECT["id"],
-        )
+        node = Node(name="alpine-1", connector=gns3_server, project_id=CPROJECT["id"])
         with pytest.raises(ValueError, match="Need to submit 'node_type'"):
             node.create()
 

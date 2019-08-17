@@ -34,6 +34,10 @@ jobs:
           command: |
             poetry run flake8 .
       - run:
+          name: Run black formatting check
+          command: |
+            poetry run black --diff --check .
+      - run:
           name: Running tests
           command: |
             poetry run pytest --cov-report=xml --cov=gns3fy tests/

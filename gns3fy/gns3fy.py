@@ -519,8 +519,7 @@ class Node:
             if _err:
                 raise ValueError(f"{_err}")
 
-            extracted = [node for node in _response.json()
-                         if node["name"] == self.name]
+            extracted = [node for node in _response.json() if node["name"] == self.name]
             if len(extracted) > 1:
                 raise ValueError(
                     "Multiple nodes found with same name. Need to submit node_id"
@@ -1251,7 +1250,7 @@ class Project:
 
     def nodes_inventory(self):
         """
-        Returns an inventory-style with the nodes of the project
+        Returns an inventory-style dictionary of the nodes
 
         Example:
 
@@ -1278,11 +1277,16 @@ class Project:
 
         for _n in self.nodes:
 
-            _nodes_inventory.update({_n.name: {'hostname': _hostname,
-                                               'name': _n.name,
-                                               'console_port': _n.console,
-                                               'type': _n.node_type,
-                                               }})
+            _nodes_inventory.update(
+                {
+                    _n.name: {
+                        "hostname": _hostname,
+                        "name": _n.name,
+                        "console_port": _n.console,
+                        "type": _n.node_type,
+                    }
+                }
+            )
 
         return _nodes_inventory
 
@@ -1309,16 +1313,14 @@ class Project:
                 continue
             _side_a = _l.nodes[0]
             _side_b = _l.nodes[1]
-            _node_a = [x for x in self.nodes if x.node_id ==
-                       _side_a["node_id"]][0]
+            _node_a = [x for x in self.nodes if x.node_id == _side_a["node_id"]][0]
             _port_a = [
                 x["name"]
                 for x in _node_a.ports
                 if x["port_number"] == _side_a["port_number"]
                 and x["adapter_number"] == _side_a["adapter_number"]
             ][0]
-            _node_b = [x for x in self.nodes if x.node_id ==
-                       _side_b["node_id"]][0]
+            _node_b = [x for x in self.nodes if x.node_id == _side_b["node_id"]][0]
             _port_b = [
                 x["name"]
                 for x in _node_b.ports
@@ -1329,8 +1331,7 @@ class Project:
             endpoint_b = f"{_node_b.name}: {_port_b}"
             if is_print:
                 print(f"{endpoint_a} ---- {endpoint_b}")
-            _links_summary.append(
-                (_node_a.name, _port_a, _node_b.name, _port_b))
+            _links_summary.append((_node_a.name, _port_a, _node_b.name, _port_b))
 
         return _links_summary if not is_print else None
 
