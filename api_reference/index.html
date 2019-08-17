@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="../img/favicon.ico">
+
+    
+    <title>API Reference - gns3fy</title>
+    
+
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+    <link href="../css/highlight.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href="..">gns3fy</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Overview</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../user-guide/">User Guide</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">API Reference</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../about/changelog/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../about/license/">License</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="../user-guide/">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="next" href="../about/changelog/">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/davidban77/gns3fy/edit/master/docs/api_reference.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#gns3connector-objects">Gns3Connector Objects</a></li>
+            <li class="second-level"><a href="#gns3connector__init__">Gns3Connector.__init__()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorcreate_session">Gns3Connector.create_session()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorhttp_call">Gns3Connector.http_call()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorerror_checker">Gns3Connector.error_checker()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_version">Gns3Connector.get_version()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_projects">Gns3Connector.get_projects()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_project_by_name">Gns3Connector.get_project_by_name()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_project_by_id">Gns3Connector.get_project_by_id()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_templates">Gns3Connector.get_templates()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_template_by_name">Gns3Connector.get_template_by_name()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_template_by_id">Gns3Connector.get_template_by_id()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_nodes">Gns3Connector.get_nodes()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_node_by_id">Gns3Connector.get_node_by_id()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_links">Gns3Connector.get_links()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_link_by_id">Gns3Connector.get_link_by_id()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorcreate_project">Gns3Connector.create_project()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectordelete_project">Gns3Connector.delete_project()</a></li>
+                
+        <li class="first-level "><a href="#link-objects">Link Objects</a></li>
+            <li class="second-level"><a href="#linkget">Link.get()</a></li>
+                
+            <li class="second-level"><a href="#linkdelete">Link.delete()</a></li>
+                
+            <li class="second-level"><a href="#linkcreate">Link.create()</a></li>
+                
+        <li class="first-level "><a href="#node-objects">Node Objects</a></li>
+            <li class="second-level"><a href="#nodeget">Node.get()</a></li>
+                
+            <li class="second-level"><a href="#nodeget_links">Node.get_links()</a></li>
+                
+            <li class="second-level"><a href="#nodestart">Node.start()</a></li>
+                
+            <li class="second-level"><a href="#nodestop">Node.stop()</a></li>
+                
+            <li class="second-level"><a href="#nodereload">Node.reload()</a></li>
+                
+            <li class="second-level"><a href="#nodesuspend">Node.suspend()</a></li>
+                
+            <li class="second-level"><a href="#nodecreate">Node.create()</a></li>
+                
+            <li class="second-level"><a href="#nodedelete">Node.delete()</a></li>
+                
+        <li class="first-level "><a href="#project-objects">Project Objects</a></li>
+            <li class="second-level"><a href="#projectget">Project.get()</a></li>
+                
+            <li class="second-level"><a href="#projectcreate">Project.create()</a></li>
+                
+            <li class="second-level"><a href="#projectupdate">Project.update()</a></li>
+                
+            <li class="second-level"><a href="#projectdelete">Project.delete()</a></li>
+                
+            <li class="second-level"><a href="#projectclose">Project.close()</a></li>
+                
+            <li class="second-level"><a href="#projectopen">Project.open()</a></li>
+                
+            <li class="second-level"><a href="#projectget_stats">Project.get_stats()</a></li>
+                
+            <li class="second-level"><a href="#projectget_nodes">Project.get_nodes()</a></li>
+                
+            <li class="second-level"><a href="#projectget_links">Project.get_links()</a></li>
+                
+            <li class="second-level"><a href="#projectstart_nodes">Project.start_nodes()</a></li>
+                
+            <li class="second-level"><a href="#projectstop_nodes">Project.stop_nodes()</a></li>
+                
+            <li class="second-level"><a href="#projectreload_nodes">Project.reload_nodes()</a></li>
+                
+            <li class="second-level"><a href="#projectsuspend_nodes">Project.suspend_nodes()</a></li>
+                
+            <li class="second-level"><a href="#projectnodes_summary">Project.nodes_summary()</a></li>
+                
+            <li class="second-level"><a href="#projectnodes_inventory">Project.nodes_inventory()</a></li>
+                
+            <li class="second-level"><a href="#projectlinks_summary">Project.links_summary()</a></li>
+                
+            <li class="second-level"><a href="#projectget_node">Project.get_node()</a></li>
+                
+            <li class="second-level"><a href="#projectget_link">Project.get_link()</a></li>
+                
+            <li class="second-level"><a href="#projectcreate_node">Project.create_node()</a></li>
+                
+            <li class="second-level"><a href="#projectcreate_link">Project.create_link()</a></li>
+                
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h2 id="gns3connector-objects"><code>Gns3Connector</code> Objects</h2>
+<pre><code class="python">def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
+</code></pre>
+
+<p>Connector to be use for interaction against GNS3 server controller API.</p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><code>url</code> (str): URL of the GNS3 server (<strong>required</strong>)</li>
+<li><code>user</code> (str): User used for authentication</li>
+<li><code>cred</code> (str): Password used for authentication</li>
+<li><code>verify</code> (bool): Whether or not to verify SSL</li>
+<li><code>api_version</code> (int): GNS3 server REST API version</li>
+<li><code>api_calls</code>: Counter of amount of <code>http_calls</code> has been performed</li>
+<li><code>base_url</code>: url passed + api_version</li>
+<li><code>session</code>: Requests Session object</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p><code>Gns3Connector</code> instance</p>
+<p><strong>Example:</strong></p>
+<pre><code class="python">&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://&lt;address&gt;:3080&quot;)
+&gt;&gt;&gt; print(server.get_version())
+{'local': False, 'version': '2.2.0b4'}
+</code></pre>
+
+<h3 id="gns3connector__init__"><code>Gns3Connector.__init__()</code></h3>
+<pre><code class="python">def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
+</code></pre>
+
+<h3 id="gns3connectorcreate_session"><code>Gns3Connector.create_session()</code></h3>
+<pre><code class="python">def create_session(self)
+</code></pre>
+
+<p>Creates the requests.Session object and applies the necessary parameters</p>
+<h3 id="gns3connectorhttp_call"><code>Gns3Connector.http_call()</code></h3>
+<pre><code class="python">def http_call(self, method, url, data=None, json_data=None, headers=None, verify=False, params=None)
+</code></pre>
+
+<p>Performs the HTTP operation actioned</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>method</code> (enum): HTTP method to perform: get, post, put, delete, head,
+patch (<strong>required</strong>)</li>
+<li><code>url</code> (str): URL target (<strong>required</strong>)</li>
+<li><code>data</code>: Dictionary or byte of request body data to attach to the Request</li>
+<li><code>json_data</code>: Dictionary or List of dicts to be passed as JSON object/array</li>
+<li><code>headers</code>: ictionary of HTTP Headers to attach to the Request</li>
+<li><code>verify</code>: SSL Verification</li>
+<li><code>params</code>: Dictionary or bytes to be sent in the query string for the Request</li>
+</ul>
+<h3 id="gns3connectorerror_checker"><code>Gns3Connector.error_checker()</code></h3>
+<pre><code class="python">@staticmethod
+def error_checker(response_obj)
+</code></pre>
+
+<p>Returns the error if found</p>
+<h3 id="gns3connectorget_version"><code>Gns3Connector.get_version()</code></h3>
+<pre><code class="python">def get_version(self)
+</code></pre>
+
+<p>Returns the version information of GNS3 server</p>
+<h3 id="gns3connectorget_projects"><code>Gns3Connector.get_projects()</code></h3>
+<pre><code class="python">def get_projects(self)
+</code></pre>
+
+<p>Returns the list of the projects on the server</p>
+<h3 id="gns3connectorget_project_by_name"><code>Gns3Connector.get_project_by_name()</code></h3>
+<pre><code class="python">def get_project_by_name(self, name)
+</code></pre>
+
+<p>Retrives a specific project</p>
+<h3 id="gns3connectorget_project_by_id"><code>Gns3Connector.get_project_by_id()</code></h3>
+<pre><code class="python">def get_project_by_id(self, id)
+</code></pre>
+
+<p>Retrives a specific project by id</p>
+<h3 id="gns3connectorget_templates"><code>Gns3Connector.get_templates()</code></h3>
+<pre><code class="python">def get_templates(self)
+</code></pre>
+
+<p>Returns the templates defined on the server</p>
+<h3 id="gns3connectorget_template_by_name"><code>Gns3Connector.get_template_by_name()</code></h3>
+<pre><code class="python">def get_template_by_name(self, name)
+</code></pre>
+
+<p>Retrives a specific template searching by name</p>
+<h3 id="gns3connectorget_template_by_id"><code>Gns3Connector.get_template_by_id()</code></h3>
+<pre><code class="python">def get_template_by_id(self, id)
+</code></pre>
+
+<p>Retrives a specific template by id</p>
+<h3 id="gns3connectorget_nodes"><code>Gns3Connector.get_nodes()</code></h3>
+<pre><code class="python">def get_nodes(self, project_id)
+</code></pre>
+
+<p>Retieves the nodes defined on the project</p>
+<h3 id="gns3connectorget_node_by_id"><code>Gns3Connector.get_node_by_id()</code></h3>
+<pre><code class="python">def get_node_by_id(self, project_id, node_id)
+</code></pre>
+
+<p>Returns the node by locating its ID</p>
+<h3 id="gns3connectorget_links"><code>Gns3Connector.get_links()</code></h3>
+<pre><code class="python">def get_links(self, project_id)
+</code></pre>
+
+<p>Retrieves the links defined in the project</p>
+<h3 id="gns3connectorget_link_by_id"><code>Gns3Connector.get_link_by_id()</code></h3>
+<pre><code class="python">def get_link_by_id(self, project_id, link_id)
+</code></pre>
+
+<p>Returns the link by locating its ID</p>
+<h3 id="gns3connectorcreate_project"><code>Gns3Connector.create_project()</code></h3>
+<pre><code class="python">def create_project(self, kwargs)
+</code></pre>
+
+<p>Pass a dictionary type object with the project parameters to be created.
+Parameter <code>name</code> is mandatory. Returns project</p>
+<h3 id="gns3connectordelete_project"><code>Gns3Connector.delete_project()</code></h3>
+<pre><code class="python">def delete_project(self, project_id)
+</code></pre>
+
+<p>Deletes a project from server</p>
+<h2 id="link-objects"><code>Link</code> Objects</h2>
+<p>GNS3 Link API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/link/projectsprojectidlinks.html">Links Endpoint API information</a></p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><code>link_id</code> (str): Link UUID (<strong>required</strong> to be set when using <code>get</code> method)</li>
+<li><code>link_type</code> (enum): Possible values: ethernet, serial</li>
+<li><code>project_id</code> (str): Project UUID (<strong>required</strong>)</li>
+<li><code>connector</code> (object): <code>Gns3Connector</code> instance used for interaction (<strong>required</strong>)</li>
+<li><code>suspend</code> (bool): Suspend the link</li>
+<li><code>nodes</code> (list): List of the Nodes and ports (<strong>required</strong> when using <code>create</code>
+method, see Features/Link creation on the docs)</li>
+<li><code>filters</code> (dict): Packet filter. This allow to simulate latency and errors</li>
+<li><code>capturing</code> (bool): Read only property. True if a capture running on the link</li>
+<li><code>capture_file_path</code> (str): Read only property. The full path of the capture file
+if capture is running</li>
+<li><code>capture_file_name</code> (str): Read only property. The name of the capture file if
+capture is running</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p><code>Link</code> instance</p>
+<p><strong>Example:</strong></p>
+<pre><code class="python">&gt;&gt;&gt; link = Link(project_id=&lt;pr_id&gt;, link_id=&lt;link_id&gt; connector=&lt;Gns3Connector
+instance&gt;)
+&gt;&gt;&gt; link.get()
+&gt;&gt;&gt; print(link.link_type)
+'ethernet'
+</code></pre>
+
+<h3 id="linkget"><code>Link.get()</code></h3>
+<pre><code class="python">def get(self)
+</code></pre>
+
+<p>Retrieves the information from the link endpoint.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>link_id</code></li>
+</ul>
+<h3 id="linkdelete"><code>Link.delete()</code></h3>
+<pre><code class="python">def delete(self)
+</code></pre>
+
+<p>Deletes a link endpoint from the project. It sets to <code>None</code> the attributes
+<code>link_id</code> when executed sucessfully</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>link_id</code></li>
+</ul>
+<h3 id="linkcreate"><code>Link.create()</code></h3>
+<pre><code class="python">def create(self)
+</code></pre>
+
+<p>Creates a link endpoint</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>nodes</code></li>
+</ul>
+<h2 id="node-objects"><code>Node</code> Objects</h2>
+<p>GNS3 Node API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/node/projectsprojectidnodes.html">Node Endpoint API information</a></p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><code>name</code> (str): Node name (<strong>required</strong> when using <code>create</code> method)</li>
+<li><code>project_id</code> (str): Project UUID (<strong>required</strong>)</li>
+<li><code>node_id</code> (str): Node UUID (<strong>required</strong> when using <code>get</code> method)</li>
+<li><code>compute_id</code> (str): Compute identifier (<strong>required</strong>, default=local)</li>
+<li><code>node_type</code> (enum): frame_relay_switch, atm_switch, docker, dynamips, vpcs,
+traceng, virtualbox, vmware, iou, qemu (<strong>required</strong> when using <code>create</code> method)</li>
+<li><code>connector</code> (object): <code>Gns3Connector</code> instance used for interaction (<strong>required</strong>)</li>
+<li><code>template_id</code>: Template UUID from the which the node is from.</li>
+<li><code>template</code>: Template name from the which the node is from.</li>
+<li><code>node_directory</code> (str): Working directory of the node. Read only</li>
+<li><code>status</code> (enum): Possible values: stopped, started, suspended</li>
+<li><code>ports</code> (list): List of node ports, READ only</li>
+<li><code>port_name_format</code> (str): Formating for port name {0} will be replace by port
+number</li>
+<li><code>port_segment_size</code> (int): Size of the port segment</li>
+<li><code>first_port_name</code> (str): Name of the first port</li>
+<li><code>properties</code> (dict): Properties specific to an emulator</li>
+<li><code>locked</code> (bool): Whether the element locked or not</li>
+<li><code>label</code> (dict): TBC</li>
+<li><code>console</code> (int): Console TCP port</li>
+<li><code>console_host</code> (str): Console host</li>
+<li><code>console_auto_start</code> (bool): Automatically start the console when the node has
+started</li>
+<li><code>command_line</code> (str): Command line use to start the node</li>
+<li><code>custom_adapters</code> (list): TBC</li>
+<li><code>height</code> (int): Height of the node, READ only</li>
+<li><code>width</code> (int): Width of the node, READ only</li>
+<li><code>symbol</code> (str): Symbol of the node</li>
+<li><code>x</code> (int): X position of the node</li>
+<li><code>y</code> (int): Y position of the node</li>
+<li>`z (int): Z position of the node</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p><code>Node</code> instance</p>
+<p><strong>Example:</strong></p>
+<pre><code class="python">&gt;&gt;&gt; alpine = Node(name=&quot;alpine1&quot;, node_type=&quot;docker&quot;, template=&quot;alpine&quot;,
+project_id=&lt;pr_id&gt;, connector=&lt;Gns3Connector instance&gt;)
+&gt;&gt;&gt; alpine.create()
+&gt;&gt;&gt; print(alpine.node_id)
+'SOME-UUID-GENERATED'
+</code></pre>
+
+<h3 id="nodeget"><code>Node.get()</code></h3>
+<pre><code class="python">def get(self, get_links=True)
+</code></pre>
+
+<p>Retrieves the node information. When <code>get_links</code> is <code>True</code> it also retrieves the
+links respective to the node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodeget_links"><code>Node.get_links()</code></h3>
+<pre><code class="python">def get_links(self)
+</code></pre>
+
+<p>Retrieves the links of the respective node. They will be saved at the <code>links</code>
+attribute</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodestart"><code>Node.start()</code></h3>
+<pre><code class="python">def start(self)
+</code></pre>
+
+<p>Starts the node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodestop"><code>Node.stop()</code></h3>
+<pre><code class="python">def stop(self)
+</code></pre>
+
+<p>Stops the node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodereload"><code>Node.reload()</code></h3>
+<pre><code class="python">def reload(self)
+</code></pre>
+
+<p>Reloads the node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodesuspend"><code>Node.suspend()</code></h3>
+<pre><code class="python">def suspend(self)
+</code></pre>
+
+<p>Suspends the node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h3 id="nodecreate"><code>Node.create()</code></h3>
+<pre><code class="python">def create(self, extra_properties={})
+</code></pre>
+
+<p>Creates a node.</p>
+<p>By default it will fetch the nodes properties for creation based on the
+<code>template</code> or <code>template_id</code> attribute supplied. This can be overriden/updated
+by sending a dictionary of the properties under <code>extra_properties</code>.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>compute_id</code>: Defaults to "local"</li>
+<li><code>name</code></li>
+<li><code>node_type</code></li>
+<li><code>template</code> or <code>template_id</code></li>
+</ul>
+<h3 id="nodedelete"><code>Node.delete()</code></h3>
+<pre><code class="python">def delete(self)
+</code></pre>
+
+<p>Deletes the node from the project. It sets to <code>None</code> the attributes <code>node_id</code>
+and <code>name</code> when executed successfully</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_id</code></li>
+</ul>
+<h2 id="project-objects"><code>Project</code> Objects</h2>
+<p>GNS3 Project API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html">Project Endpoint API
+information</a></p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li><code>name</code>: Project name (<strong>required</strong> when using <code>create</code> method)</li>
+<li><code>project_id</code> (str): Project UUID (<strong>required</strong>)</li>
+<li><code>connector</code> (object): <code>Gns3Connector</code> instance used for interaction (<strong>required</strong>)</li>
+<li><code>status</code> (enum): Possible values: opened, closed</li>
+<li><code>path</code> (str): Path of the project on the server</li>
+<li><code>filename</code> (str): Project filename</li>
+<li><code>auto_start</code> (bool): Project start when opened</li>
+<li><code>auto_close</code> (bool): Project auto close when client cut off the notifications feed</li>
+<li><code>auto_open</code> (bool): Project open when GNS3 start</li>
+<li><code>drawing_grid_size</code> (int): Grid size for the drawing area for drawings</li>
+<li><code>grid_size</code> (int): Grid size for the drawing area for nodes</li>
+<li><code>scene_height</code> (int): Height of the drawing area</li>
+<li><code>scene_width</code> (int): Width of the drawing area</li>
+<li><code>show_grid</code> (bool): Show the grid on the drawing area</li>
+<li><code>show_interface_labels</code> (bool): Show interface labels on the drawing area</li>
+<li><code>show_layers</code> (bool): Show layers on the drawing area</li>
+<li><code>snap_to_grid</code> (bool): Snap to grid on the drawing area</li>
+<li><code>supplier</code> (dict): Supplier of the project</li>
+<li><code>variables</code> (list): Variables required to run the project</li>
+<li><code>zoom</code> (int): Zoom of the drawing area</li>
+<li><code>stats</code> (dict): Project stats</li>
+<li><code>nodes</code> (list): List of <code>Node</code> instances present on the project</li>
+<li><code>links</code> (list): List of <code>Link</code> instances present on the project</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p><code>Project</code> instance</p>
+<p><strong>Example:</strong></p>
+<pre><code class="python">&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=&lt;Gns3Connector instance&gt;)
+&gt;&gt;&gt; lab.create()
+&gt;&gt;&gt; print(lab.status)
+'opened'
+</code></pre>
+
+<h3 id="projectget"><code>Project.get()</code></h3>
+<pre><code class="python">def get(self, get_links=True, get_nodes=True, get_stats=True)
+</code></pre>
+
+<p>Retrieves the projects information.</p>
+<ul>
+<li><code>get_links</code>: When true it also queries for the links inside the project</li>
+<li><code>get_nodes</code>: When true it also queries for the nodes inside the project</li>
+<li><code>get_stats</code>: When true it also queries for the stats inside the project</li>
+</ul>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>connector</code></li>
+<li><code>project_id</code> or <code>name</code></li>
+</ul>
+<h3 id="projectcreate"><code>Project.create()</code></h3>
+<pre><code class="python">def create(self)
+</code></pre>
+
+<p>Creates the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectupdate"><code>Project.update()</code></h3>
+<pre><code class="python">def update(self, kwargs)
+</code></pre>
+
+<p>Updates the project instance by passing the keyword arguments of the attributes
+you want to be updated</p>
+<p>Example: <code>lab.update(auto_close=True)</code></p>
+<p>This will update the project <code>auto_close</code> attribute to <code>True</code></p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectdelete"><code>Project.delete()</code></h3>
+<pre><code class="python">def delete(self)
+</code></pre>
+
+<p>Deletes the project from the server. It sets to <code>None</code> the attributes
+<code>project_id</code> and <code>name</code> when executed successfully</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectclose"><code>Project.close()</code></h3>
+<pre><code class="python">def close(self)
+</code></pre>
+
+<p>Closes the project on the server.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectopen"><code>Project.open()</code></h3>
+<pre><code class="python">def open(self)
+</code></pre>
+
+<p>Opens the project on the server.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectget_stats"><code>Project.get_stats()</code></h3>
+<pre><code class="python">def get_stats(self)
+</code></pre>
+
+<p>Retrieve the stats of the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectget_nodes"><code>Project.get_nodes()</code></h3>
+<pre><code class="python">def get_nodes(self)
+</code></pre>
+
+<p>Retrieve the nodes of the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectget_links"><code>Project.get_links()</code></h3>
+<pre><code class="python">def get_links(self)
+</code></pre>
+
+<p>Retrieve the links of the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectstart_nodes"><code>Project.start_nodes()</code></h3>
+<pre><code class="python">def start_nodes(self, poll_wait_time=5)
+</code></pre>
+
+<p>Starts all the nodes inside the project.</p>
+<ul>
+<li><code>poll_wait_time</code> is used as a delay when performing the next query of the
+nodes status.</li>
+</ul>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectstop_nodes"><code>Project.stop_nodes()</code></h3>
+<pre><code class="python">def stop_nodes(self, poll_wait_time=5)
+</code></pre>
+
+<p>Stops all the nodes inside the project.</p>
+<ul>
+<li><code>poll_wait_time</code> is used as a delay when performing the next query of the
+nodes status.</li>
+</ul>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectreload_nodes"><code>Project.reload_nodes()</code></h3>
+<pre><code class="python">def reload_nodes(self, poll_wait_time=5)
+</code></pre>
+
+<p>Reloads all the nodes inside the project.</p>
+<ul>
+<li><code>poll_wait_time</code> is used as a delay when performing the next query of the
+nodes status.</li>
+</ul>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectsuspend_nodes"><code>Project.suspend_nodes()</code></h3>
+<pre><code class="python">def suspend_nodes(self, poll_wait_time=5)
+</code></pre>
+
+<p>Suspends all the nodes inside the project.</p>
+<ul>
+<li><code>poll_wait_time</code> is used as a delay when performing the next query of the
+nodes status.</li>
+</ul>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectnodes_summary"><code>Project.nodes_summary()</code></h3>
+<pre><code class="python">def nodes_summary(self, is_print=True)
+</code></pre>
+
+<p>Returns a summary of the nodes insode the project. If <code>is_print</code> is <code>False</code>, it
+will return a list of tuples like:</p>
+<p><code>[(node_name, node_status, node_console, node_id) ...]</code></p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectnodes_inventory"><code>Project.nodes_inventory()</code></h3>
+<pre><code class="python">def nodes_inventory(self)
+</code></pre>
+
+<p>Returns an inventory-style with the nodes of the project</p>
+<p>Example:</p>
+<p><code>{
+    "router01": {
+        "hostname": "127.0.0.1",
+        "name": "router01",
+        "console_port": 5077,
+        "type": "vEOS"
+    }
+}</code></p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectlinks_summary"><code>Project.links_summary()</code></h3>
+<pre><code class="python">def links_summary(self, is_print=True)
+</code></pre>
+
+<p>Returns a summary of the links insode the project. If <code>is_print</code> is False, it
+will return a list of tuples like:</p>
+<p><code>[(node_a, port_a, node_b, port_b) ...]</code></p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectget_node"><code>Project.get_node()</code></h3>
+<pre><code class="python">def get_node(self, name=None, node_id=None)
+</code></pre>
+
+<p>Returns the Node object by searching for the <code>name</code> or the <code>node_id</code>.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>name</code> or <code>node_id</code></li>
+</ul>
+<p><strong>NOTE:</strong> Run method <code>get_nodes()</code> manually to refresh list of nodes if
+necessary</p>
+<h3 id="projectget_link"><code>Project.get_link()</code></h3>
+<pre><code class="python">def get_link(self, link_id)
+</code></pre>
+
+<p>Returns the Link object by locating its ID</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>link_id</code></li>
+</ul>
+<p><strong>NOTE:</strong> Run method <code>get_links()</code> manually to refresh list of links if
+necessary</p>
+<h3 id="projectcreate_node"><code>Project.create_node()</code></h3>
+<pre><code class="python">def create_node(self, name=None, kwargs)
+</code></pre>
+
+<p>Creates a node.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>name</code></li>
+<li><code>node_type</code></li>
+<li><code>compute_id</code>: Defaults to "local"</li>
+<li><code>template</code> or <code>template_id</code></li>
+</ul>
+<h3 id="projectcreate_link"><code>Project.create_link()</code></h3>
+<pre><code class="python">def create_link(self, node_a, port_a, node_b, port_b)
+</code></pre>
+
+<p>Creates a link.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>node_a</code>: Node name of the A side</li>
+<li><code>port_a</code>: Port name of the A side (must match the <code>name</code> attribute of the
+port)</li>
+<li><code>node_b</code>: Node name of the B side</li>
+<li><code>port_b</code>: Port name of the B side (must match the <code>name</code> attribute of the
+port)</li>
+</ul></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>

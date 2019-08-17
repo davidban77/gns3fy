@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="../img/favicon.ico">
+
+    
+    <title>User Guide - gns3fy</title>
+    
+
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
+    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
+    <link href="../css/base.min.css" rel="stylesheet">
+    <link href="../css/cinder.min.css" rel="stylesheet">
+    <link href="../css/highlight.min.css" rel="stylesheet">
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+        <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+    WebFont.load({
+        google: {
+            families: ['Open Sans', 'PT Sans']
+        }
+    });
+    </script>
+
+    
+
+     
+</head>
+
+<body>
+
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+
+        <!-- Collapsed navigation -->
+        <div class="navbar-header">
+            <!-- Expander button -->
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            
+
+            <!-- Main title -->
+
+            <a class="navbar-brand" href="..">gns3fy</a>
+        </div>
+
+        <!-- Expanded navigation -->
+        <div class="navbar-collapse collapse">
+                <!-- Main navigation -->
+                <ul class="nav navbar-nav">
+                
+                
+                    <li >
+                        <a href="..">Overview</a>
+                    </li>
+                
+                
+                
+                    <li class="active">
+                        <a href="./">User Guide</a>
+                    </li>
+                
+                
+                
+                    <li >
+                        <a href="../api_reference/">API Reference</a>
+                    </li>
+                
+                
+                
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                        
+                            
+<li >
+    <a href="../about/changelog/">Release Notes</a>
+</li>
+
+                        
+                            
+<li >
+    <a href="../about/license/">License</a>
+</li>
+
+                        
+                        </ul>
+                    </li>
+                
+                
+                </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <i class="fas fa-search"></i> Search
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="prev" href="..">
+                            <i class="fas fa-arrow-left"></i> Previous
+                        </a>
+                    </li>
+                    <li >
+                        <a rel="next" href="../api_reference/">
+                            Next <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/davidban77/gns3fy/edit/master/docs/user-guide.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                    </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+    <div class="container">
+        
+        
+        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="first-level active"><a href="#interact-with-existing-project">Interact with existing Project</a></li>
+            <li class="second-level"><a href="#gns3connector-and-project-objects">Gns3Connector and Project objects</a></li>
+                
+            <li class="second-level"><a href="#node-and-link-objects">Node and Link objects</a></li>
+                
+        <li class="first-level "><a href="#creating-a-new-project">Creating a new Project</a></li>
+            <li class="second-level"><a href="#project-creation">Project creation</a></li>
+                
+            <li class="second-level"><a href="#node-creation">Node creation</a></li>
+                
+            <li class="second-level"><a href="#link-creation">Link creation</a></li>
+                
+        <li class="first-level "><a href="#examples">Examples</a></li>
+            <li class="second-level"><a href="#get-nodes-and-links-summary">Get Nodes and Links summary</a></li>
+                
+            <li class="second-level"><a href="#manipulate-a-node-from-a-project">Manipulate a Node from a Project</a></li>
+                
+    </ul>
+</div></div>
+        <div class="col-md-9" role="main">
+
+<h1>How it works</h1>
+<p>The library provide the following interfaces:</p>
+<ul>
+<li><code>Gns3Connector</code>: Main object that interacts with the GNS3 server REST API and its objective is to be its interface.</li>
+<li><code>Project</code>: Interface of a project/lab defined.</li>
+<li><code>Node</code>: Interface of a node/entity defined.</li>
+<li><code>Link</code>: Interface of a link defined.</li>
+</ul>
+<p>The <code>Gns3Connector</code> is mandatory and needs to be assigned to the <code>Project</code>, <code>Node</code> or <code>Link</code> object you want to work with, the latter uses the connector to interact with the REST API.</p>
+<p>Next you can see different ways to interact with the library.</p>
+<h2 id="interact-with-existing-project">Interact with existing Project</h2>
+<h3 id="gns3connector-and-project-objects">Gns3Connector and Project objects</h3>
+<p>Here is an example of defining a connector object and a project that is already configured on a local GNS3 server:</p>
+<pre><code class="python">from gns3fy import Gns3Connector, Project
+
+server = Gns3Connector(&quot;http://localhost:3080&quot;)
+
+lab = Project(name=&quot;API_TEST&quot;, connector=server)
+
+# Retrieve its information and display
+lab.get()
+
+print(lab)
+# Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...
+
+# Access the project attributes
+print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
+# Name: API_TEST -- Status: closed -- Is auto_closed?: False
+
+# Open the project
+lab.open()
+print(lab.status)
+# opened
+
+# Verify the stats
+print(lab.stats)
+# {'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
+
+# List the names and status of all the nodes in the project
+for node in lab.nodes:
+    print(f&quot;Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}&quot;)
+# Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started
+# ...
+</code></pre>
+
+<p>As noted before you can also use the <code>Gns3Connector</code> as an interface object to the GNS3 server REST API.</p>
+<pre><code class="python">In [1]: from gns3fy import Gns3Connector, Project, Node, Link
+
+In [2]: server = Gns3Connector(url=&quot;http://localhost:3080&quot;)
+
+In [3]: server.get_version()
+Out[3]: {'local': False, 'version': '2.2.0b4'}
+
+In [4]: server.get_templates()
+Out[4]:
+[{'adapter_type': 'e1000',
+  'adapters': 13,
+  'bios_image': '',
+  'boot_priority': 'c',
+  'builtin': False,
+  'category': 'router',
+  'cdrom_image': '',
+  'compute_id': 'local',
+  ...
+</code></pre>
+
+<h3 id="node-and-link-objects">Node and Link objects</h3>
+<p>You have access to the <code>Node</code> and <code>Link</code> objects as well, and this gives you the ability to start, stop, suspend the individual element in a GNS3 project.</p>
+<pre><code class="python">from gns3fy import Node, Link, Gns3Connector
+
+PROJECT_ID = &quot;&lt;some project id&gt;&quot;
+server = Gns3Connector(&quot;http://&lt;server address&gt;:3080&quot;)
+
+alpine1 = Node(project_id=PROJECT_ID, name=&quot;alpine-1&quot;, connector=server)
+
+alpine1.get()
+print(alpine1)
+# Node(name='alpine-1', node_type='docker', node_directory= ...
+
+# And you can access the attributes the same way as the project
+print(f&quot;Name: {alpine1.name} -- Status: {alpine1.status} -- Console: {alpine1.console}&quot;)
+# Name: alpine-1 -- Status: started -- Console: 5005
+
+# Stop the node and start (you can just restart it as well)
+alpine1.stop()
+print(alpine1.status)
+# stopped
+
+alpine1.start()
+print(alpine1.status)
+# started
+
+# You can also see the Link objects assigned to this node
+print(alpine1.links)
+# [Link(link_id='4d9f1235-7fd1-466b-ad26-0b4b08beb778', link_type='ethernet', ....
+
+# And in the same way you can interact with a Link object
+link1 = alpine1.links[0]
+print(f&quot;Link Type: {link1.link_type} -- Capturing?: {link1.capturing} -- Endpoints: {link1.nodes}&quot;)
+# Link Type: ethernet -- Capturing?: False -- Endpoints: [{'adapter_number': 2, ...
+</code></pre>
+
+<h2 id="creating-a-new-project">Creating a new Project</h2>
+<p>You can find here a couple of methods that are available on the interfaces provided by the library.</p>
+<p>To navigate to some of them and see their value, lets create a simple lab on the server with 2 nodes connected betweem each other.</p>
+<h3 id="project-creation">Project creation</h3>
+<p>Lets start by creating a lab called <code>test_lab</code></p>
+<pre><code class="python">In [1]: from gns3fy import Gns3Connector, Project, Node, Link
+
+In [2]: server = Gns3Connector(url=&quot;http://localhost:3080&quot;)
+
+In [3]: lab = Project(name=&quot;test_lab&quot;, connector=server)
+
+In [4]: lab.create()
+
+In [5]:
+
+In [5]: lab
+Out[5]: Project(project_id='e83f1275-3a6f-48f7-88ee-36386ee27a55', name='test_lab', status='opened',...
+</code></pre>
+
+<p>You can see you get the <code>project_id</code>. In GNS3 the project ID is key for all interactions under that project.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a complete list of the attibutes you can see the <a href="../api_reference/#project-objects">API Reference</a></p>
+</div>
+<h3 id="node-creation">Node creation</h3>
+<p>Next, lets try and create a Ethernet switch node. For this we need to know the template and node type of it.</p>
+<pre><code class="python">In [7]: for template in server.get_templates():
+   ...:     if &quot;switch&quot; in template[&quot;name&quot;]:
+   ...:         print(f&quot;Template: {template['name']} -- ID: {template['template_id']}&quot;)
+   ...:
+   ...:
+Template: Ethernet switch -- ID: 1966b864-93e7-32d5-965f-001384eec461
+Template: Frame Relay switch -- ID: dd0f6f3a-ba58-3249-81cb-a1dd88407a47
+Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2
+
+In [8]: server.get_template_by_name(&quot;Ethernet switch&quot;)
+Out[8]:
+{'builtin': True,
+ 'category': 'switch',
+ 'console_type': 'none',
+ 'name': 'Ethernet switch',
+ 'symbol': ':/symbols/ethernet_switch.svg',
+ 'template_id': '1966b864-93e7-32d5-965f-001384eec461',
+ 'template_type': 'ethernet_switch'}
+</code></pre>
+
+<p>By knowing the template information of the device we can create the Node instace of it</p>
+<pre><code class="python">
+In [9]: switch = Node(
+    project_id=lab.project_id,
+    connector=server,
+    name=&quot;Ethernet-switch&quot;,
+    node_type=&quot;ethernet_switch&quot;,
+    template=&quot;Ethernet switch&quot;
+)
+
+In [10]: switch.create()
+
+In [11]: switch
+Out[11]: Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609-49...
+</code></pre>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a complete list of the attibutes you can see the <a href="../api_reference/#node-objects">API Reference</a></p>
+</div>
+<p>Now lets add an docker Alpine host to the project (<strong>NOTE:</strong> The docker image and template needs to be already configured in GNS3)</p>
+<pre><code class="python">In [12]: alpine = Node(
+    project_id=lab.project_id,
+    connector=server,
+    name=&quot;alpine-host&quot;,
+    node_type=&quot;docker&quot;,
+    template=&quot;alpine&quot;
+)
+
+In [13]: alpine.create()
+
+In [14]: alpine
+Out[14]: Node(name='alpine-host', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b...
+
+In [15]: alpine.properties
+Out[15]:
+{'adapters': 2,
+ 'aux': 5026,
+ 'category': 'guest',
+ 'console_auto_start': False,
+ 'console_http_path': '/',
+ 'console_http_port': 80,
+ 'console_resolution': '1024x768',
+ 'console_type': 'telnet',
+ 'container_id': 'f26b6aee763a9399c93c86032b75717c57b260e5010e88c4d410ce13554771df',
+ 'custom_adapters': [],
+ 'environment': '',
+ 'extra_hosts': '',
+ 'extra_volumes': [],
+ 'image': 'alpine:latest',
+ 'start_command': '',
+ 'symbol': ':/symbols/affinity/circle/gray/docker.svg',
+ 'usage': ''}
+
+In [16]: alpine.ports
+Out[16]:
+[{'adapter_number': 0,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'eth0',
+  'port_number': 0,
+  'short_name': 'eth0'},
+ {'adapter_number': 1,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'eth1',
+  'port_number': 0,
+  'short_name': 'eth1'}]
+</code></pre>
+
+<p>You can access all of the host attributes and see their specifications based on the template defined on the server.</p>
+<p>To update the <code>lab</code> object with their latest nodes added</p>
+<pre><code class="python">In [17]: lab.get()
+
+# I have shorten the output shown
+In [18]: lab.nodes
+Out[18]:
+[Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609...
+Node(name='alpine-host1', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b...
+]
+</code></pre>
+
+<h3 id="link-creation">Link creation</h3>
+<p>Next lets create a link between the switch and the alpine host.</p>
+<p><code>Switch Etherner0 &lt;--&gt; Alpine Eth1</code></p>
+<pre><code class="python">
+In [15]: lab.create_link('Ethernet-switch', 'Ethernet0', 'alpine-host1', 'eth1')
+Created Link-ID: b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce -- Type: ethernet
+
+In [16]: lab.links
+Out[16]: [Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet', project_id='6e7
+</code></pre>
+
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For a complete list of the attibutes you can see the <a href="../api_reference/#link-objects">API Reference</a></p>
+</div>
+<p>This is one way to create a link (using the <code>lab</code> object), but you can also create it using a <code>Link</code> instance as well.</p>
+<p>We need the link mapping to be set under the <code>nodes</code> attribute of the <code>Link</code> instance. For this we need:</p>
+<ul>
+<li><code>node_id</code></li>
+<li><code>adapter_number</code></li>
+<li><code>port_number</code></li>
+</ul>
+<pre><code class="python">
+In [17]: switch.ports
+Out[17]:
+[{'adapter_number': 0,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'Ethernet0',
+  'port_number': 0,
+  'short_name': 'e0'},
+ {'adapter_number': 0,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'Ethernet1',
+  'port_number': 1,
+  'short_name': 'e1'},
+  ...
+
+In [18]: alpine.ports
+Out[18]:
+[{'adapter_number': 0,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'eth0',
+  'port_number': 0,
+  'short_name': 'eth0'},
+ {'adapter_number': 1,
+  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
+  'link_type': 'ethernet',
+  'name': 'eth1',
+  'port_number': 0,
+  'short_name': 'eth1'}]
+</code></pre>
+
+<p>Gettings this information from both nodes we can create the Link.</p>
+<pre><code class="python">
+In [19]: nodes = [
+    dict(node_id=switch.node_id, adapter_number=0, port_number=1),
+    dict(node_id=alpine.node_id, adapter_number=0, port_number=0)
+]
+
+In [20]: extra_link = Link(project_id=lab.project_id, connector=server, nodes=nodes)
+
+In [21]: extra_link.create()
+
+In [22]: extra_link
+Out[22]: Link(link_id='edf38e1a-67e7-4060-8493-0e222ec22072', link_type='ethernet', project_id='6e75bca5...
+</code></pre>
+
+<p>You can get the latest link information on the project</p>
+<pre><code class="python">
+In [41]: lab.get_links()
+
+# You can see the 2 links created earlier
+In [42]: lab.links
+Out[42]:
+[Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet'...
+Link(link_id='=', link_type='ethernet'...]
+</code></pre>
+
+<p>You can see the final result if you open the lab on your GNS3 client:</p>
+<p><img alt="test_lab" src="../img/create_lab_example.png" /></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The devices are all clustered together. This will be addressed in the future. For te moment you can re-arrange them the way you want</p>
+</div>
+<h2 id="examples">Examples</h2>
+<p>Here are some examples of what you can do with the library</p>
+<h3 id="get-nodes-and-links-summary">Get Nodes and Links summary</h3>
+<p>For a given project you can use <code>nodes_summary</code> and <code>links_summary</code>, that if used with a library like <code>tabulate</code> you can obtain the following:</p>
+<pre><code class="python">...
+from tabulate import tabulate
+
+nodes_summary = lab.nodes_summary(is_print=False)
+
+print(
+    tabulate(nodes_summary, headers=[&quot;Node&quot;, &quot;Status&quot;, &quot;Console Port&quot;, &quot;ID&quot;])
+)
+# Node              Status      Console Port  ID
+# ----------------  --------  --------------  ------------------------------------
+# Ethernetswitch-1  started             5000  da28e1c0-9465-4f7c-b42c-49b2f4e1c64d
+# IOU1              started             5001  de23a89a-aa1f-446a-a950-31d4bf98653c
+# IOU2              started             5002  0d10d697-ef8d-40af-a4f3-fafe71f5458b
+# vEOS-4.21.5F-1    started             5003  8283b923-df0e-4bc1-8199-be6fea40f500
+# alpine-1          started             5005  ef503c45-e998-499d-88fc-2765614b313e
+# Cloud-1           started                   cde85a31-c97f-4551-9596-a3ed12c08498
+
+links_summary = lab.links_summary(is_print=False)
+print(
+    tabulate(links_summary, headers=[&quot;Node A&quot;, &quot;Port A&quot;, &quot;Node B&quot;, &quot;Port B&quot;])
+)
+# Node A          Port A       Node B            Port B
+# --------------  -----------  ----------------  -----------
+# IOU1            Ethernet1/0  IOU2              Ethernet1/0
+# vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0
+# vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0
+# Cloud-1         eth1         Ethernetswitch-1  Ethernet7
+</code></pre>
+
+<h3 id="manipulate-a-node-from-a-project">Manipulate a Node from a Project</h3>
+<p>The <code>Project</code> object gives you all the nodes configured on it. This is typically saved under <code>Project.nodes</code> as a list of <code>Node</code> instances.</p>
+<p>When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the <code>Gns3Connector</code> by default if you follow the procedure below.</p>
+<pre><code class="python">&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://&lt;address&gt;:3080&quot;)]
+&gt;&gt;&gt; print(server)
+'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
+&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=server)
+
+# Retrieve the lab information and print the amount of nodes configured
+&gt;&gt;&gt; lab.get()
+&gt;&gt;&gt; print(len(lab.nodes))
+2
+
+# Assign one of the nodes to a varaible and start manipulating it
+&gt;&gt;&gt; node_1 = lab.nodes[0]
+&gt;&gt;&gt; print(node_1.status)
+'stopped'
+
+&gt;&gt;&gt; node_1.start()
+&gt;&gt;&gt; print(node_1.status)
+'started'
+&gt;&gt;&gt; print(node_1.connector)
+'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
+</code></pre>
+
+<p><code>node_1</code> has the same connector object as reference for interaction with the server.</p>
+<p>The same can be done with a <code>Link</code> by interacting with the <code>Project.links</code> attribute.</p></div>
+        
+        
+    </div>
+
+    <footer class="col-md-12 text-center">
+        
+        <hr>
+        <p>
+        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
+
+        
+        
+    </footer>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-3.0.3.min.js"></script>
+    <script src="../js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>var base_url = ".."</script>
+    
+    <script src="../js/base.js"></script>
+    <script src="../search/main.js"></script>
+
+    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+    </body>
+
+</html>
