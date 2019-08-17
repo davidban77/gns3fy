@@ -1,0 +1,41 @@
+version: 2.1
+workflows:
+  main:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - "gh-pages"
+
+
+orbs:
+  codecov: codecov/codecov@1.0.5
+
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+      - run:
+          name: Install Dependencies
+          command: |
+            poetry install
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+      - run:
+          name: Run flake8
+          command: |
+            poetry run flake8 .
+      - run:
+          name: Running tests
+          command: |
+            poetry run pytest --cov-report=xml --cov=gns3fy tests/
+      - codecov/upload:
+          file: coverage.xml
