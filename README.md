@@ -5,6 +5,8 @@ Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html).
 
 Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts.
 
+Check out the [Documentation](https://davidban77.github.io/gns3fy/) for further details.
+
 ## Install
 
 ```
