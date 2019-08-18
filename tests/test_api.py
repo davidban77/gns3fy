@@ -4,6 +4,7 @@ import requests
 import requests_mock
 from pathlib import Path
 from pydantic.error_wrappers import ValidationError
+from requests.exceptions import HTTPError
 from gns3fy import Link, Node, Project, Gns3Connector
 from .data import links, nodes, projects
 
@@ -157,10 +158,12 @@ def post_put_matcher(request):
             nodes = _data.get("nodes")
             if len(nodes) != 2:
                 resp.status_code = 400
-                resp.json = lambda: dict(message="Invalid request", status=400)
+                resp.url = request.path_url
+                resp.json = lambda: dict(message="Bad Request", status=400)
                 return resp
             elif nodes[0]["node_id"] == nodes[1]["node_id"]:
                 resp.status_code = 409
+                resp.url = request.path_url
                 resp.json = lambda: dict(message="Cannot connect to itself", status=409)
                 return resp
             _returned = json_api_test_link()
@@ -398,9 +401,10 @@ class TestGns3Connector:
             gns3_server.get_template()
 
     def test_error_template_id_not_found(self, gns3_server):
-        response = gns3_server.get_template(template_id="7777-4444-0000")
-        assert response["message"] == "Template ID 7777-4444-0000 doesn't exist"
-        assert response["status"] == 404
+        with pytest.raises(
+            HTTPError, match="404: Template ID 7777-4444-0000 doesn't exist"
+        ):
+            gns3_server.get_template(template_id="7777-4444-0000")
 
     def test_error_template_name_not_found(self, gns3_server):
         # NOTE: Should it give the same output as the one above?
@@ -438,9 +442,10 @@ class TestGns3Connector:
             gns3_server.get_project()
 
     def test_error_project_id_not_found(self, gns3_server):
-        response = gns3_server.get_project(project_id="7777-4444-0000")
-        assert response["message"] == "Project ID 7777-4444-0000 doesn't exist"
-        assert response["status"] == 404
+        with pytest.raises(
+            HTTPError, match="404: Project ID 7777-4444-0000 doesn't exist"
+        ):
+            gns3_server.get_project(project_id="7777-4444-0000")
 
     def test_error_project_name_not_found(self, gns3_server):
         # NOTE: Should it give the same output as the one above?
@@ -469,11 +474,10 @@ class TestGns3Connector:
         assert response["console"] == 5005
 
     def test_error_node_not_found(self, gns3_server):
-        response = gns3_server.get_node(
-            project_id=CPROJECT["id"], node_id="7777-4444-0000"
-        )
-        assert response["message"] == "Node ID 7777-4444-0000 doesn't exist"
-        assert response["status"] == 404
+        with pytest.raises(
+            HTTPError, match="404: Node ID 7777-4444-0000 doesn't exist"
+        ):
+            gns3_server.get_node(project_id=CPROJECT["id"], node_id="7777-4444-0000")
 
     def test_get_links(self, gns3_server):
         response = gns3_server.get_links(project_id=CPROJECT["id"])
@@ -486,11 +490,10 @@ class TestGns3Connector:
         assert response["suspend"] is False
 
     def test_error_link_not_found(self, gns3_server):
-        response = gns3_server.get_link(
-            project_id=CPROJECT["id"], link_id="7777-4444-0000"
-        )
-        assert "Link ID 7777-4444-0000 doesn't exist" == response["message"]
-        assert 404 == response["status"]
+        with pytest.raises(
+            HTTPError, match="404: Link ID 7777-4444-0000 doesn't exist"
+        ):
+            gns3_server.get_link(project_id=CPROJECT["id"], link_id="7777-4444-0000")
 
     def test_create_project(self, gns3_server):
         response = gns3_server.create_project(name="API_TEST")
@@ -498,9 +501,8 @@ class TestGns3Connector:
         assert "opened" == response["status"]
 
     def test_error_create_duplicate_project(self, gns3_server):
-        response = gns3_server.create_project(name="DUPLICATE")
-        assert "Project 'DUPLICATE' already exists" == response["message"]
-        assert 409 == response["status"]
+        with pytest.raises(HTTPError, match="409: Project 'DUPLICATE' already exists"):
+            gns3_server.create_project(name="DUPLICATE")
 
     def test_error_create_project_with_no_name(self, gns3_server):
         with pytest.raises(ValueError, match="Parameter 'name' is mandatory"):
@@ -595,16 +597,16 @@ class TestLink:
     def test_error_create_with_incomplete_node_data(self, gns3_server):
         _link_data = [{"adapter_number": 0, "port_number": 0, "node_id": CNODE["id"]}]
         link = Link(connector=gns3_server, project_id=CPROJECT["id"], nodes=_link_data)
-        with pytest.raises(ValueError, match="400"):
+        with pytest.raises(HTTPError, match="400"):
             link.create()
 
-    def test_error_create_with_invalid_nodes_id(self, gns3_server):
+    def test_error_create_connecting_to_itself(self, gns3_server):
         _link_data = [
             {"adapter_number": 2, "port_number": 0, "node_id": CNODE["id"]},
             {"adapter_number": 0, "port_number": 0, "node_id": CNODE["id"]},
         ]
         link = Link(connector=gns3_server, project_id=CPROJECT["id"], nodes=_link_data)
-        with pytest.raises(ValueError, match="409"):
+        with pytest.raises(HTTPError, match="409: Cannot connect to itself"):
             link.create()
 
     def test_delete(self, api_test_link):
