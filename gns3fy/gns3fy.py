@@ -163,63 +163,121 @@ class Gns3Connector:
         return err if 400 <= response_obj.status_code <= 599 else False
 
     def get_version(self):
-        "Returns the version information of GNS3 server"
+        """
+        Returns the version information of GNS3 server
+        """
         return self.http_call("get", url=f"{self.base_url}/version").json()
 
     def get_projects(self):
-        "Returns the list of the projects on the server"
+        """
+        Returns the list of the projects on the server
+        """
         return self.http_call("get", url=f"{self.base_url}/projects").json()
 
-    def get_project_by_name(self, name):
-        "Retrives a specific project"
-        _projects = self.http_call("get", url=f"{self.base_url}/projects").json()
-        try:
-            return [p for p in _projects if p["name"] == name][0]
-        except IndexError:
-            return None
+    def get_project(self, name=None, project_id=None):
+        """
+        Retrieves a project from either a name or ID
 
-    def get_project_by_id(self, id):
-        "Retrives a specific project by id"
-        return self.http_call("get", url=f"{self.base_url}/projects/{id}").json()
+        **Required Attributes:**
+
+        - `name` or `project_id`
+        """
+        if project_id:
+            return self.http_call(
+                "get", url=f"{self.base_url}/projects/{project_id}"
+            ).json()
+        elif name:
+            try:
+                return next(p for p in self.get_projects() if p["name"] == name)
+            except StopIteration:
+                # Project not found
+                return None
+        else:
+            raise ValueError("Must provide either a name or project_id")
+
+    # def get_project_by_name(self, name):
+    #     "Retrives a specific project"
+    #     _projects = self.http_call("get", url=f"{self.base_url}/projects").json()
+    #     try:
+    #         return [p for p in _projects if p["name"] == name][0]
+    #     except IndexError:
+    #         return None
+
+    # def get_project_by_id(self, id):
+    #     "Retrives a specific project by id"
+    #     return self.http_call("get", url=f"{self.base_url}/projects/{id}").json()
 
     def get_templates(self):
-        "Returns the templates defined on the server"
+        """
+        Returns the templates defined on the server.
+        """
         return self.http_call("get", url=f"{self.base_url}/templates").json()
 
-    def get_template_by_name(self, name):
-        "Retrives a specific template searching by name"
-        _templates = self.http_call("get", url=f"{self.base_url}/templates").json()
-        try:
-            return [t for t in _templates if t["name"] == name][0]
-        except IndexError:
-            return None
+    def get_template(self, name=None, template_id=None):
+        """
+        Retrieves a template from either a name or ID
 
-    def get_template_by_id(self, id):
-        "Retrives a specific template by id"
-        return self.http_call("get", url=f"{self.base_url}/templates/{id}").json()
+        **Required Attributes:**
+
+        - `name` or `template_id`
+        """
+        if template_id:
+            return self.http_call(
+                "get", url=f"{self.base_url}/templates/{template_id}"
+            ).json()
+        elif name:
+            try:
+                return next(t for t in self.get_templates() if t["name"] == name)
+            except StopIteration:
+                # Template name not found
+                return None
+        else:
+            raise ValueError("Must provide either a name or template_id")
 
     def get_nodes(self, project_id):
-        "Retieves the nodes defined on the project"
+        """
+        Retieves the nodes defined on the project
+
+        **Required Attributes:**
+
+        - `project_id`
+        """
         return self.http_call(
             "get", url=f"{self.base_url}/projects/{project_id}/nodes"
         ).json()
 
-    def get_node_by_id(self, project_id, node_id):
+    def get_node(self, project_id, node_id):
         """
-        Returns the node by locating its ID
+        Returns the node by locating its ID.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `node_id`
         """
         _url = f"{self.base_url}/projects/{project_id}/nodes/{node_id}"
         return self.http_call("get", _url).json()
 
     def get_links(self, project_id):
-        "Retrieves the links defined in the project"
+        """
+        Retrieves the links defined in the project.
+
+        **Required Attributes:**
+
+        - `project_id`
+        """
         return self.http_call(
             "get", url=f"{self.base_url}/projects/{project_id}/links"
         ).json()
 
-    def get_link_by_id(self, project_id, link_id):
+    def get_link(self, project_id, link_id):
         """
-        Returns the link by locating its ID
+        Returns the link by locating its ID.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `link_id`
         """
         _url = f"{self.base_url}/projects/{project_id}/links/{link_id}"
         return self.http_call("get", _url).json()
@@ -227,7 +285,14 @@ class Gns3Connector:
     def create_project(self, **kwargs):
         """
         Pass a dictionary type object with the project parameters to be created.
-        Parameter `name` is mandatory. Returns project
+
+        **Required Attributes:**
+
+        - `name`
+
+        **Returns**
+
+        JSON project information
         """
         _url = f"{self.base_url}/projects"
         if "name" not in kwargs:
@@ -236,7 +301,11 @@ class Gns3Connector:
 
     def delete_project(self, project_id):
         """
-        Deletes a project from server
+        Deletes a project from server.
+
+        **Required Attributes:**
+
+        - `project_id`
         """
         _url = f"{self.base_url}/projects/{project_id}"
         self.http_call("delete", _url)
@@ -461,7 +530,7 @@ class Node:
     first_port_name: Optional[str] = None
     locked: Optional[bool] = None
     label: Optional[Any] = None
-    console: Optional[str] = None
+    console: Optional[int] = None
     console_host: Optional[str] = None
     console_type: Optional[str] = None
     console_auto_start: Optional[bool] = None
@@ -709,13 +778,11 @@ class Node:
         if not self.connector:
             raise ValueError("Gns3Connector not assigned under 'connector'")
         if not self.project_id:
-            raise ValueError("Need to submit 'project_id'")
-        if not self.compute_id:
-            raise ValueError("Need to submit 'compute_id'")
+            raise ValueError("Need to submit project_id")
         if not self.name:
-            raise ValueError("Need to submit 'name'")
+            raise ValueError("Need to submit name")
         if not self.node_type:
-            raise ValueError("Need to submit 'node_type'")
+            raise ValueError("Need to submit node_type")
         if self.node_id:
             raise ValueError("Node already created")
 
@@ -731,11 +798,11 @@ class Node:
 
         # Fetch template for properties
         if self.template_id:
-            _properties = self.connector.get_template_by_id(self.template_id)
+            _properties = self.connector.get_template(template_id=self.template_id)
         elif self.template:
-            _properties = self.connector.get_template_by_name(self.template)
+            _properties = self.connector.get_template(name=self.template)
         else:
-            raise ValueError("You must provide `template` or `template_id`")
+            raise ValueError("You must provide template or template_id")
 
         # Delete not needed fields
         for _field in (
@@ -864,7 +931,7 @@ class Project:
     @validator("status")
     def _valid_status(cls, value):
         if value != "opened" and value != "closed":
-            raise ValueError("status must be 'opened' or 'closed'")
+            raise ValueError("status must be opened or closed")
         return value
 
     def _update(self, data_dict):
@@ -937,7 +1004,7 @@ class Project:
         - `connector`
         """
         if not self.name:
-            raise ValueError("Need to submit projects `name`")
+            raise ValueError("Need to submit project name")
         if not self.connector:
             raise ValueError("Gns3Connector not assigned under 'connector'")
 
@@ -1373,8 +1440,8 @@ class Project:
             self.get_links()
 
         try:
-            return [_p for _p in self.links if getattr(_p, key) == value][0]
-        except IndexError:
+            return next(_p for _p in self.links if getattr(_p, key) == value)
+        except StopIteration:
             return None
 
     def get_link(self, link_id):
@@ -1390,10 +1457,7 @@ class Project:
         **NOTE:** Run method `get_links()` manually to refresh list of links if
         necessary
         """
-        if link_id:
-            return self._search_node(key="link_id", value=link_id)
-        else:
-            raise ValueError("name or node_ide must be provided")
+        return self._search_link(key="link_id", value=link_id)
 
     def create_node(self, name=None, **kwargs):
         """
@@ -1403,6 +1467,9 @@ class Project:
 
         - `project_id`
         - `connector`
+
+        **Required Keyword attributes:**
+
         - `name`
         - `node_type`
         - `compute_id`: Defaults to "local"
@@ -1456,7 +1523,7 @@ class Project:
         try:
             _port_a = [_p for _p in _node_a.ports if _p["name"] == port_a][0]
         except IndexError:
-            raise ValueError(f"port_a: {port_a} - not found")
+            raise ValueError(f"port_a: {port_a} not found")
 
         _node_b = self.get_node(name=node_b)
         if not _node_b:
@@ -1464,10 +1531,12 @@ class Project:
         try:
             _port_b = [_p for _p in _node_b.ports if _p["name"] == port_b][0]
         except IndexError:
-            raise ValueError(f"port_b: {port_b} - not found")
+            raise ValueError(f"port_b: {port_b} not found")
 
         _matches = []
         for _l in self.links:
+            if not _l.nodes:
+                continue
             if (
                 _l.nodes[0]["node_id"] == _node_a.node_id
                 and _l.nodes[0]["adapter_number"] == _port_a["adapter_number"]

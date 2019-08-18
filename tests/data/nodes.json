@@ -912,8 +912,7 @@
         "width": 60,
         "x": 169,
         "y": -10,
-        "z": 1,
-        "template": null
+        "z": 1
     },
     {
         "command_line": null,
