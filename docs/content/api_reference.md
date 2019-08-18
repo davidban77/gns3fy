@@ -1,3 +1,6 @@
+# `gns3fy`
+
+
 ## `Gns3Connector` Objects
 
 ```python
@@ -36,14 +39,6 @@ def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
 ```
 
 
-### `Gns3Connector.create_session()`
-
-```python
-def create_session(self)
-```
-
-Creates the requests.Session object and applies the necessary parameters
-
 ### `Gns3Connector.http_call()`
 
 ```python
@@ -63,15 +58,6 @@ patch (**required**)
 - `verify`: SSL Verification
 - `params`: Dictionary or bytes to be sent in the query string for the Request
 
-### `Gns3Connector.error_checker()`
-
-```python
-@staticmethod
-def error_checker(response_obj)
-```
-
-Returns the error if found
-
 ### `Gns3Connector.get_version()`
 
 ```python
@@ -88,21 +74,17 @@ def get_projects(self)
 
 Returns the list of the projects on the server
 
-### `Gns3Connector.get_project_by_name()`
+### `Gns3Connector.get_project()`
 
 ```python
-def get_project_by_name(self, name)
+def get_project(self, name=None, project_id=None)
 ```
 
-Retrives a specific project
+Retrieves a project from either a name or ID
 
-### `Gns3Connector.get_project_by_id()`
+**Required Attributes:**
 
-```python
-def get_project_by_id(self, id)
-```
-
-Retrives a specific project by id
+- `name` or `project_id`
 
 ### `Gns3Connector.get_templates()`
 
@@ -110,23 +92,19 @@ Retrives a specific project by id
 def get_templates(self)
 ```
 
-Returns the templates defined on the server
+Returns the templates defined on the server.
 
-### `Gns3Connector.get_template_by_name()`
-
-```python
-def get_template_by_name(self, name)
-```
-
-Retrives a specific template searching by name
-
-### `Gns3Connector.get_template_by_id()`
+### `Gns3Connector.get_template()`
 
 ```python
-def get_template_by_id(self, id)
+def get_template(self, name=None, template_id=None)
 ```
 
-Retrives a specific template by id
+Retrieves a template from either a name or ID
+
+**Required Attributes:**
+
+- `name` or `template_id`
 
 ### `Gns3Connector.get_nodes()`
 
@@ -136,13 +114,22 @@ def get_nodes(self, project_id)
 
 Retieves the nodes defined on the project
 
-### `Gns3Connector.get_node_by_id()`
+**Required Attributes:**
+
+- `project_id`
+
+### `Gns3Connector.get_node()`
 
 ```python
-def get_node_by_id(self, project_id, node_id)
+def get_node(self, project_id, node_id)
 ```
 
-Returns the node by locating its ID
+Returns the node by locating its ID.
+
+**Required Attributes:**
+
+- `project_id`
+- `node_id`
 
 ### `Gns3Connector.get_links()`
 
@@ -150,15 +137,24 @@ Returns the node by locating its ID
 def get_links(self, project_id)
 ```
 
-Retrieves the links defined in the project
+Retrieves the links defined in the project.
 
-### `Gns3Connector.get_link_by_id()`
+**Required Attributes:**
+
+- `project_id`
+
+### `Gns3Connector.get_link()`
 
 ```python
-def get_link_by_id(self, project_id, link_id)
+def get_link(self, project_id, link_id)
 ```
 
-Returns the link by locating its ID
+Returns the link by locating its ID.
+
+**Required Attributes:**
+
+- `project_id`
+- `link_id`
 
 ### `Gns3Connector.create_project()`
 
@@ -167,7 +163,14 @@ def create_project(self, kwargs)
 ```
 
 Pass a dictionary type object with the project parameters to be created.
-Parameter `name` is mandatory. Returns project
+
+**Required Attributes:**
+
+- `name`
+
+**Returns**
+
+JSON project information
 
 ### `Gns3Connector.delete_project()`
 
@@ -175,7 +178,11 @@ Parameter `name` is mandatory. Returns project
 def delete_project(self, project_id)
 ```
 
-Deletes a project from server
+Deletes a project from server.
+
+**Required Attributes:**
+
+- `project_id`
 
 ## `Link` Objects
 
@@ -687,7 +694,7 @@ will return a list of tuples like:
 def nodes_inventory(self)
 ```
 
-Returns an inventory-style with the nodes of the project
+Returns an inventory-style dictionary of the nodes
 
 Example:
 
@@ -767,6 +774,9 @@ Creates a node.
 
 - `project_id`
 - `connector`
+
+**Required Keyword attributes:**
+
 - `name`
 - `node_type`
 - `compute_id`: Defaults to "local"

@@ -9,6 +9,10 @@
 - Added some commodity methods like `nodes_summary`
 - Created the `docs`
 - Improved the tests and coverage
+- Added CircleCI with the following checks:
+    - flake8
+    - black formatting
+    - pytest
 
 ## 0.1.1
 
