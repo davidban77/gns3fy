@@ -1,0 +1,15 @@
+site_name: gns3fy
+repo_url: https://github.com/davidban77/gns3fy/
+docs_dir: "content"
+theme: cinder
+markdown_extensions:
+  - toc:
+      toc_depth: 2-4
+  - admonition
+nav:
+  - Overview: index.md
+  - User Guide: user-guide.md
+  - API Reference: api_reference.md
+  - About:
+    - Release Notes: about/changelog.md
+    - License: about/license.md

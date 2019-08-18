@@ -22,7 +22,7 @@ NODES_REPR = [
         "port_name_format='Ethernet{0}', port_segment_size=0, first_port_name=None, "
         "locked=False, label={'rotation': 0, 'style': 'font-family: TypeWriter;font-"
         "size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;', 'text': '"
-        "Ethernetswitch-1', 'x': -13, 'y': -25}, console='5000', console_host='0.0.0."
+        "Ethernetswitch-1', 'x': -13, 'y': -25}, console=5000, console_host='0.0.0."
         "0', console_type='none', console_auto_start=False, command_line=None, "
         "custom_adapters=[], height=32, width=72, symbol=':/symbols/ethernet_switch."
         "svg', x=-11, y=-114, z=1, template_id='1966b864-93e7-32d5-965f-001384eec461', "
@@ -33,7 +33,7 @@ NODES_REPR = [
         "{'name': 'Ethernet4', 'port_number': 4, 'type': 'access', 'vlan': 1}, {'name"
         "': 'Ethernet5', 'port_number': 5, 'type': 'access', 'vlan': 1}, {'name': '"
         "Ethernet6', 'port_number': 6, 'type': 'access', 'vlan': 1}, {'name': '"
-        "Ethernet7', 'port_number': 7, 'type': 'access', 'vlan': 1}]})"
+        "Ethernet7', 'port_number': 7, 'type': 'access', 'vlan': 1}]}, template=None)"
     ),
     (
         "Node(name='IOU1', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', "
@@ -83,7 +83,7 @@ NODES_REPR = [
         "port_name_format='Ethernet{segment0}/{port0}', port_segment_size=4, "
         "first_port_name=None, locked=False, label={'rotation': 0, 'style': 'font-"
         "family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-"
-        "opacity: 1.0;', 'text': 'IOU1', 'x': 13, 'y': -25}, console='5001', "
+        "opacity: 1.0;', 'text': 'IOU1', 'x': 13, 'y': -25}, console=5001, "
         "console_host='0.0.0.0', console_type='telnet', console_auto_start=False, "
         "command_line='/opt/gns3/images/IOU/L3-ADVENTERPRISEK9-M-15.4-2T.bin 1', "
         "custom_adapters=[], height=60, width=60, symbol=':/symbols/affinity/circle/"
@@ -91,7 +91,7 @@ NODES_REPR = [
         "a2638382db0e', properties={'application_id': 1, 'ethernet_adapters': 2, '"
         "l1_keepalives': False, 'md5sum': '50d1c5aaf1976e4622daf9eaa2632212', 'nvram': "
         "64, 'path': 'L3-ADVENTERPRISEK9-M-15.4-2T.bin', 'ram': 256, 'serial_adapters"
-        "': 2, 'usage': '', 'use_default_iou_values': True})"
+        "': 2, 'usage': '', 'use_default_iou_values': True}, template=None)"
     ),
     (
         "Node(name='IOU2', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', "
@@ -141,7 +141,7 @@ NODES_REPR = [
         "/3'}], port_name_format='Ethernet{segment0}/{port0}', port_segment_size=4, "
         "first_port_name=None, locked=False, label={'rotation': 0, 'style': 'font-"
         "family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-"
-        "opacity: 1.0;', 'text': 'IOU2', 'x': 13, 'y': -25}, console='5002', "
+        "opacity: 1.0;', 'text': 'IOU2', 'x': 13, 'y': -25}, console=5002, "
         "console_host='0.0.0.0', console_type='telnet', console_auto_start=False, "
         "command_line='/opt/gns3/images/IOU/L3-ADVENTERPRISEK9-M-15.4-2T.bin 2', "
         "custom_adapters=[], height=60, width=60, symbol=':/symbols/affinity/circle/"
@@ -149,10 +149,10 @@ NODES_REPR = [
         "a2638382db0e', properties={'application_id': 2, 'ethernet_adapters': 2, '"
         "l1_keepalives': False, 'md5sum': '50d1c5aaf1976e4622daf9eaa2632212', 'nvram': "
         "64, 'path': 'L3-ADVENTERPRISEK9-M-15.4-2T.bin', 'ram': 256, 'serial_adapters"
-        "': 2, 'usage': '', 'use_default_iou_values': True})"
+        "': 2, 'usage': '', 'use_default_iou_values': True}, template=None)"
     ),
     (
-        "Node(name='vEOS-4.21.5F-1', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe"
+        "Node(name='vEOS', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe"
         "', node_id='8283b923-df0e-4bc1-8199-be6fea40f500', compute_id='local', "
         "node_type='qemu', node_directory='/opt/gns3/projects/4b21dfb3-675a-4efa-8613-"
         "2f7fb32e76fe/project-files/qemu/8283b923-df0e-4bc1-8199-be6fea40f500', status"
@@ -198,9 +198,9 @@ NODES_REPR = [
         "short_name': 'e11'}], port_name_format='Ethernet{0}', port_segment_size=0, "
         "first_port_name='Management1', locked=False, label={'rotation': 0, 'style': '"
         "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-"
-        "opacity: 1.0;', 'text': 'vEOS-4.21.5F-1', 'x': -15, 'y': -25}, console='5003"
-        "', console_host='0.0.0.0', console_type='telnet', console_auto_start=False, "
-        "command_line='/usr/bin/qemu-system-x86_64 -name vEOS-4.21.5F-1 -m 2048M -smp "
+        "opacity: 1.0;', 'text': 'vEOS', 'x': -15, 'y': -25}, console=5003"
+        ", console_host='0.0.0.0', console_type='telnet', console_auto_start=False, "
+        "command_line='/usr/bin/qemu-system-x86_64 -name vEOS -m 2048M -smp "
         "cpus=2 -enable-kvm -machine smm=off -boot order=c -drive file=/opt/gns3/"
         "projects/4b21dfb3-675a-4efa-8613-2f7fb32e76fe/project-files/qemu/"
         "8283b923-df0e-4bc1-8199-be6fea40f500/hda_disk.qcow2,if=ide,index=0,media=disk "
@@ -242,7 +242,7 @@ NODES_REPR = [
         "kernel_image_md5sum': None, 'legacy_networking': False, 'linked_clone': True, "
         "'mac_address': '0c:76:fe:f5:00:00', 'on_close': 'power_off', 'options': '-"
         "nographic', 'platform': 'x86_64', 'process_priority': 'normal', 'qemu_path': "
-        "'/usr/bin/qemu-system-x86_64', 'ram': 2048, 'usage': ''})"
+        "'/usr/bin/qemu-system-x86_64', 'ram': 2048, 'usage': ''}, template=None)"
     ),
     (
         "Node(name='alpine-1', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', "
@@ -256,7 +256,7 @@ NODES_REPR = [
         "short_name': 'eth1'}], port_name_format='Ethernet{0}', port_segment_size=0, "
         "first_port_name=None, locked=False, label={'rotation': 0, 'style': 'font-"
         "family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-"
-        "opacity: 1.0;', 'text': 'alpine-1', 'x': 3, 'y': -25}, console='5005', "
+        "opacity: 1.0;', 'text': 'alpine-1', 'x': 3, 'y': -25}, console=5005, "
         "console_host='0.0.0.0', console_type='telnet', console_auto_start=False, "
         "command_line=None, custom_adapters=[], height=60, width=60, symbol=':/symbols"
         "/affinity/circle/gray/docker.svg', x=169, y=-10, z=1, "
@@ -265,7 +265,7 @@ NODES_REPR = [
         "console_resolution': '1024x768', 'container_id': "
         "'a2109a13328c2a5f57a7405b43bcf791811f85c1d90267693fe3b57dfefe81d9', '"
         "environment': None, 'extra_hosts': None, 'extra_volumes': [], 'image': '"
-        "alpine:latest', 'start_command': None, 'usage': ''})"
+        "alpine:latest', 'start_command': None, 'usage': ''}, template=None)"
     ),
     (
         "Node(name='Cloud-1', project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', "
@@ -292,6 +292,6 @@ NODES_REPR = [
         "[{'interface': 'eth0', 'name': 'eth0', 'port_number': 0, 'type': 'ethernet'}, "
         "{'interface': 'eth1', 'name': 'eth1', 'port_number': 1, 'type': 'ethernet'}], "
         "'remote_console_host': '', 'remote_console_http_path': '/', '"
-        "remote_console_port': 23, 'remote_console_type': 'none'})"
+        "remote_console_port': 23, 'remote_console_type': 'none'}, template=None)"
     ),
 ]

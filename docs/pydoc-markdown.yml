@@ -1,0 +1,15 @@
+loaders:
+  - type: python
+    modules: [gns3fy]
+    search_path: [../gns3fy]
+processors:
+  - type: pydocmd
+  - type: filter
+    document_only: true
+  - type: filter
+    expression: not name.endswith("_TYPES")
+  - type: filter
+    expression: not name.startswith("Config")
+renderer:
+  type: markdown
+  render_toc: false
