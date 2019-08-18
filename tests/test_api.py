@@ -186,7 +186,7 @@ def post_put_matcher(request):
 
 
 class Gns3ConnectorMock(Gns3Connector):
-    def create_session(self):
+    def _create_session(self):
         self.session = requests.Session()
         self.adapter = requests_mock.Adapter()
         self.session.mount("mock", self.adapter)

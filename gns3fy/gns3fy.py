@@ -82,9 +82,9 @@ class Gns3Connector:
         self.api_calls = 0
 
         # Create session object
-        self.create_session()
+        self._create_session()
 
-    def create_session(self):
+    def _create_session(self):
         """
         Creates the requests.Session object and applies the necessary parameters
         """
@@ -147,12 +147,6 @@ class Gns3Connector:
 
         return _response
 
-    @staticmethod
-    def error_checker(response_obj):
-        "Returns the error if found"
-        err = f"[ERROR][{response_obj.status_code}]: {response_obj.text}"
-        return err if 400 <= response_obj.status_code <= 599 else False
-
     def get_version(self):
         """
         Returns the version information of GNS3 server
@@ -185,18 +179,6 @@ class Gns3Connector:
                 return None
         else:
             raise ValueError("Must provide either a name or project_id")
-
-    # def get_project_by_name(self, name):
-    #     "Retrives a specific project"
-    #     _projects = self.http_call("get", url=f"{self.base_url}/projects").json()
-    #     try:
-    #         return [p for p in _projects if p["name"] == name][0]
-    #     except IndexError:
-    #         return None
-
-    # def get_project_by_id(self, id):
-    #     "Retrives a specific project by id"
-    #     return self.http_call("get", url=f"{self.base_url}/projects/{id}").json()
 
     def get_templates(self):
         """
@@ -566,9 +548,6 @@ class Node:
             # Try to retrieve the node_id
             _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             _response = self.connector.http_call("get", _url)
-            _err = Gns3Connector.error_checker(_response)
-            if _err:
-                raise ValueError(f"{_err}")
 
             extracted = [node for node in _response.json() if node["name"] == self.name]
             if len(extracted) > 1:
@@ -926,9 +905,6 @@ class Project:
             _url = f"{self.connector.base_url}/projects"
             # Get all projects and filter the respective project
             _response = self.connector.http_call("get", _url)
-            _err = Gns3Connector.error_checker(_response)
-            if _err:
-                raise ValueError(f"{_err}")
 
             # Filter the respective project
             for _project in _response.json():

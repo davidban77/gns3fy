@@ -10,7 +10,6 @@ processors:
     expression: not name.endswith("_TYPES")
   - type: filter
     expression: not name.startswith("Config")
-  # - type: filter
-  #   expression: not name.startswith("valid_")
 renderer:
   type: markdown
+  render_toc: false
