@@ -1,9 +1,10 @@
-[![Circle CI](https://circleci.com/gh/davidban77/gns3fy/tree/develop.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/davidban77/gns3fy/tree/develop)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)[![codecov](https://img.shields.io/codecov/c/github/davidban77/gns3fy)](https://codecov.io/gh/davidban77/gns3fy)
+[![Circle CI](https://circleci.com/gh/davidban77/gns3fy/tree/develop.svg?style=shield&circle-token=:circle-token)](https://circleci.com/gh/davidban77/gns3fy/tree/develop)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)[![codecov](https://img.shields.io/codecov/c/github/davidban77/gns3fy)](https://codecov.io/gh/davidban77/gns3fy)[![Total alerts](https://img.shields.io/lgtm/alerts/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/alerts/)[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/context:python)
+
 
 # gns3fy
 Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html).
 
-Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts.
+Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts. Ideal for network CI/CD pipeline tooling.
 
 ## Documentation
 
