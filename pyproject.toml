@@ -27,6 +27,7 @@ pytest-cov = "^2.7"
 mkdocs = "^1.0"
 pydoc-markdown = { git = "https://github.com/NiklasRosenstein/pydoc-markdown.git", branch = "develop", category="dev" }
 mkdocs-cinder = "^0.17.0"
+tox = "^3.13"
 
 [build-system]
 requires = ["poetry>=0.12"]

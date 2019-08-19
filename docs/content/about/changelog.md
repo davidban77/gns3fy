@@ -1,5 +1,11 @@
 # Releases
 
+## 0.3.0
+
+**Added:**
+
+- `tox` for pipeline testing
+
 ## 0.2.0
 
 **New features:**

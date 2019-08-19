@@ -21,14 +21,11 @@ jobs:
       - restore_cache:
           keys:
             - deps-{{ checksum "poetry.lock" }}
+            # - deps-clear
       - run:
           name: Install Dependencies
           command: |
             poetry install
-      - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
-          paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
       - run:
           name: Run flake8
           command: |
@@ -37,6 +34,16 @@ jobs:
           name: Run black formatting check
           command: |
             poetry run black --diff --check .
+      - run:
+          name: Run tox
+          command: |
+            poetry run tox
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          # key: deps-clear
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+            - /home/circleci/.cache/.tox
       - run:
           name: Running tests
           command: |
