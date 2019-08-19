@@ -4,7 +4,8 @@
 
 **Added:**
 
-- `tox` for pipeline testing
+- `tox` for pipeline testing.
+- `projects_summary` and `templates_summary` methods for `Gns3Connector`.
 
 ## 0.2.0
 

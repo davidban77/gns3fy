@@ -18,13 +18,7 @@
         "status": "closed",
         "supplier": null,
         "variables": null,
-        "zoom": 100,
-        "stats": {
-            "drawings": 0,
-            "links": 9,
-            "nodes": 10,
-            "snapshots": 0
-        }
+        "zoom": 100
     },
     {
         "auto_close": false,

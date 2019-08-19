@@ -28,9 +28,25 @@ For example:
 
 ```python
 >>> import gns3fy
+>>> from tabulate import tabulate
 
 # Define the server object to establish the connection
 >>> gns3_server = gns3fy.Gns3Connector("http://<server address>:3080")
+
+# Show the available projects on the server
+>>> print(
+        tabulate(
+            gns3_server.projects_summary(is_print=False),
+            headers=["Project Name", "Project ID", "Total Nodes", "Total Links", "Status"],
+        )
+    )
+"""
+Project Name    Project ID                              Total Nodes    Total Links  Status
+--------------  ------------------------------------  -------------  -------------  --------
+test2           c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
+API_TEST        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
+mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             40  closed
+"""
 
 # Define the lab you want to load and assign the server connector
 >>> lab = gns3fy.Project(name="API_TEST", connector=gns3_server)

@@ -153,6 +153,36 @@ class Gns3Connector:
         """
         return self.http_call("get", url=f"{self.base_url}/version").json()
 
+    def projects_summary(self, is_print=True):
+        """
+        Returns a summary of the projects in the server. If `is_print` is `False`, it
+        will return a list of tuples like:
+
+        `[(name, project_id, total_nodes, total_links, status) ...]`
+        """
+        _projects_summary = []
+        for _p in self.get_projects():
+            # Retrieve the project stats
+            _stats = self.http_call(
+                "get", f"{self.base_url}/projects/{_p['project_id']}/stats"
+            ).json()
+            if is_print:
+                print(
+                    f"{_p['name']}: {_p['project_id']} -- Nodes: {_stats['nodes']} -- "
+                    f"Links: {_stats['links']} -- Status: {_p['status']}"
+                )
+            _projects_summary.append(
+                (
+                    _p["name"],
+                    _p["project_id"],
+                    _stats["nodes"],
+                    _stats["links"],
+                    _p["status"],
+                )
+            )
+
+        return _projects_summary if not is_print else None
+
     def get_projects(self):
         """
         Returns the list of the projects on the server
@@ -179,6 +209,36 @@ class Gns3Connector:
                 return None
         else:
             raise ValueError("Must provide either a name or project_id")
+
+    def templates_summary(self, is_print=True):
+        """
+        Returns a summary of the templates in the server. If `is_print` is `False`, it
+        will return a list of tuples like:
+
+        `[(name, template_id, template_type, builtin, console_type, category) ...]`
+        """
+        _templates_summary = []
+        for _t in self.get_templates():
+            if "console_type" not in _t:
+                _t["console_type"] = "N/A"
+            if is_print:
+                print(
+                    f"{_t['name']}: {_t['template_id']} -- Type: {_t['template_type']}"
+                    f" -- Builtin: {_t['builtin']} -- Console: {_t['console_type']} -- "
+                    f"Category: {_t['category']}"
+                )
+            _templates_summary.append(
+                (
+                    _t["name"],
+                    _t["template_id"],
+                    _t["template_type"],
+                    _t["builtin"],
+                    _t["console_type"],
+                    _t["category"],
+                )
+            )
+
+        return _templates_summary if not is_print else None
 
     def get_templates(self):
         """
