@@ -20,8 +20,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            # - deps-{{ checksum "poetry.lock" }}
-            - deps-clear
+            - deps-{{ checksum "poetry.lock" }}
+            # - deps-clear
       - run:
           name: Install Dependencies
           command: |
@@ -39,8 +39,8 @@ jobs:
           command: |
             poetry run tox
       - save_cache:
-          # key: deps-{{ checksum "poetry.lock" }}
-          key: deps-clear
+          key: deps-{{ checksum "poetry.lock" }}
+          # key: deps-clear
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
             - /home/circleci/.cache/.tox
