@@ -41,6 +41,7 @@ jobs:
           key: deps-{{ checksum "poetry.lock" }}
           paths:
             - /home/circleci/.cache/pypoetry/virtualenvs
+            - /home/circleci/.cache/.tox
       - run:
           name: Running tests
           command: |
