@@ -38,6 +38,10 @@ jobs:
           command: |
             poetry run black --diff --check .
       - run:
+          name: Run tox
+          command: |
+            poetry run tox
+      - run:
           name: Running tests
           command: |
             poetry run pytest --cov-report=xml --cov=gns3fy tests/
