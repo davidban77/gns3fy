@@ -142,33 +142,29 @@
         <li class="first-level active"><a href="#gns3connector-objects">Gns3Connector Objects</a></li>
             <li class="second-level"><a href="#gns3connector__init__">Gns3Connector.__init__()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorcreate_session">Gns3Connector.create_session()</a></li>
-                
             <li class="second-level"><a href="#gns3connectorhttp_call">Gns3Connector.http_call()</a></li>
-                
-            <li class="second-level"><a href="#gns3connectorerror_checker">Gns3Connector.error_checker()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorget_version">Gns3Connector.get_version()</a></li>
                 
+            <li class="second-level"><a href="#gns3connectorprojects_summary">Gns3Connector.projects_summary()</a></li>
+                
             <li class="second-level"><a href="#gns3connectorget_projects">Gns3Connector.get_projects()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorget_project_by_name">Gns3Connector.get_project_by_name()</a></li>
+            <li class="second-level"><a href="#gns3connectorget_project">Gns3Connector.get_project()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorget_project_by_id">Gns3Connector.get_project_by_id()</a></li>
+            <li class="second-level"><a href="#gns3connectortemplates_summary">Gns3Connector.templates_summary()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorget_templates">Gns3Connector.get_templates()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorget_template_by_name">Gns3Connector.get_template_by_name()</a></li>
-                
-            <li class="second-level"><a href="#gns3connectorget_template_by_id">Gns3Connector.get_template_by_id()</a></li>
+            <li class="second-level"><a href="#gns3connectorget_template">Gns3Connector.get_template()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorget_nodes">Gns3Connector.get_nodes()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorget_node_by_id">Gns3Connector.get_node_by_id()</a></li>
+            <li class="second-level"><a href="#gns3connectorget_node">Gns3Connector.get_node()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorget_links">Gns3Connector.get_links()</a></li>
                 
-            <li class="second-level"><a href="#gns3connectorget_link_by_id">Gns3Connector.get_link_by_id()</a></li>
+            <li class="second-level"><a href="#gns3connectorget_link">Gns3Connector.get_link()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorcreate_project">Gns3Connector.create_project()</a></li>
                 
@@ -243,6 +239,7 @@
 </div></div>
         <div class="col-md-9" role="main">
 
+<h1><code>gns3fy</code></h1>
 <h2 id="gns3connector-objects"><code>Gns3Connector</code> Objects</h2>
 <pre><code class="python">def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
 </code></pre>
@@ -271,11 +268,6 @@
 <pre><code class="python">def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
 </code></pre>
 
-<h3 id="gns3connectorcreate_session"><code>Gns3Connector.create_session()</code></h3>
-<pre><code class="python">def create_session(self)
-</code></pre>
-
-<p>Creates the requests.Session object and applies the necessary parameters</p>
 <h3 id="gns3connectorhttp_call"><code>Gns3Connector.http_call()</code></h3>
 <pre><code class="python">def http_call(self, method, url, data=None, json_data=None, headers=None, verify=False, params=None)
 </code></pre>
@@ -292,78 +284,111 @@ patch (<strong>required</strong>)</li>
 <li><code>verify</code>: SSL Verification</li>
 <li><code>params</code>: Dictionary or bytes to be sent in the query string for the Request</li>
 </ul>
-<h3 id="gns3connectorerror_checker"><code>Gns3Connector.error_checker()</code></h3>
-<pre><code class="python">@staticmethod
-def error_checker(response_obj)
-</code></pre>
-
-<p>Returns the error if found</p>
 <h3 id="gns3connectorget_version"><code>Gns3Connector.get_version()</code></h3>
 <pre><code class="python">def get_version(self)
 </code></pre>
 
 <p>Returns the version information of GNS3 server</p>
+<h3 id="gns3connectorprojects_summary"><code>Gns3Connector.projects_summary()</code></h3>
+<pre><code class="python">def projects_summary(self, is_print=True)
+</code></pre>
+
+<p>Returns a summary of the projects in the server. If <code>is_print</code> is <code>False</code>, it
+will return a list of tuples like:</p>
+<p><code>[(name, project_id, total_nodes, total_links, status) ...]</code></p>
 <h3 id="gns3connectorget_projects"><code>Gns3Connector.get_projects()</code></h3>
 <pre><code class="python">def get_projects(self)
 </code></pre>
 
 <p>Returns the list of the projects on the server</p>
-<h3 id="gns3connectorget_project_by_name"><code>Gns3Connector.get_project_by_name()</code></h3>
-<pre><code class="python">def get_project_by_name(self, name)
+<h3 id="gns3connectorget_project"><code>Gns3Connector.get_project()</code></h3>
+<pre><code class="python">def get_project(self, name=None, project_id=None)
 </code></pre>
 
-<p>Retrives a specific project</p>
-<h3 id="gns3connectorget_project_by_id"><code>Gns3Connector.get_project_by_id()</code></h3>
-<pre><code class="python">def get_project_by_id(self, id)
+<p>Retrieves a project from either a name or ID</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code> or <code>project_id</code></li>
+</ul>
+<h3 id="gns3connectortemplates_summary"><code>Gns3Connector.templates_summary()</code></h3>
+<pre><code class="python">def templates_summary(self, is_print=True)
 </code></pre>
 
-<p>Retrives a specific project by id</p>
+<p>Returns a summary of the templates in the server. If <code>is_print</code> is <code>False</code>, it
+will return a list of tuples like:</p>
+<p><code>[(name, template_id, template_type, builtin, console_type, category) ...]</code></p>
 <h3 id="gns3connectorget_templates"><code>Gns3Connector.get_templates()</code></h3>
 <pre><code class="python">def get_templates(self)
 </code></pre>
 
-<p>Returns the templates defined on the server</p>
-<h3 id="gns3connectorget_template_by_name"><code>Gns3Connector.get_template_by_name()</code></h3>
-<pre><code class="python">def get_template_by_name(self, name)
+<p>Returns the templates defined on the server.</p>
+<h3 id="gns3connectorget_template"><code>Gns3Connector.get_template()</code></h3>
+<pre><code class="python">def get_template(self, name=None, template_id=None)
 </code></pre>
 
-<p>Retrives a specific template searching by name</p>
-<h3 id="gns3connectorget_template_by_id"><code>Gns3Connector.get_template_by_id()</code></h3>
-<pre><code class="python">def get_template_by_id(self, id)
-</code></pre>
-
-<p>Retrives a specific template by id</p>
+<p>Retrieves a template from either a name or ID</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code> or <code>template_id</code></li>
+</ul>
 <h3 id="gns3connectorget_nodes"><code>Gns3Connector.get_nodes()</code></h3>
 <pre><code class="python">def get_nodes(self, project_id)
 </code></pre>
 
 <p>Retieves the nodes defined on the project</p>
-<h3 id="gns3connectorget_node_by_id"><code>Gns3Connector.get_node_by_id()</code></h3>
-<pre><code class="python">def get_node_by_id(self, project_id, node_id)
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+</ul>
+<h3 id="gns3connectorget_node"><code>Gns3Connector.get_node()</code></h3>
+<pre><code class="python">def get_node(self, project_id, node_id)
 </code></pre>
 
-<p>Returns the node by locating its ID</p>
+<p>Returns the node by locating its ID.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>node_id</code></li>
+</ul>
 <h3 id="gns3connectorget_links"><code>Gns3Connector.get_links()</code></h3>
 <pre><code class="python">def get_links(self, project_id)
 </code></pre>
 
-<p>Retrieves the links defined in the project</p>
-<h3 id="gns3connectorget_link_by_id"><code>Gns3Connector.get_link_by_id()</code></h3>
-<pre><code class="python">def get_link_by_id(self, project_id, link_id)
+<p>Retrieves the links defined in the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+</ul>
+<h3 id="gns3connectorget_link"><code>Gns3Connector.get_link()</code></h3>
+<pre><code class="python">def get_link(self, project_id, link_id)
 </code></pre>
 
-<p>Returns the link by locating its ID</p>
+<p>Returns the link by locating its ID.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>link_id</code></li>
+</ul>
 <h3 id="gns3connectorcreate_project"><code>Gns3Connector.create_project()</code></h3>
 <pre><code class="python">def create_project(self, kwargs)
 </code></pre>
 
-<p>Pass a dictionary type object with the project parameters to be created.
-Parameter <code>name</code> is mandatory. Returns project</p>
+<p>Pass a dictionary type object with the project parameters to be created.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<p>JSON project information</p>
 <h3 id="gns3connectordelete_project"><code>Gns3Connector.delete_project()</code></h3>
 <pre><code class="python">def delete_project(self, project_id)
 </code></pre>
 
-<p>Deletes a project from server</p>
+<p>Deletes a project from server.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+</ul>
 <h2 id="link-objects"><code>Link</code> Objects</h2>
 <p>GNS3 Link API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/link/projectsprojectidlinks.html">Links Endpoint API information</a></p>
 <p><strong>Attributes:</strong></p>
@@ -778,7 +803,7 @@ will return a list of tuples like:</p>
 <pre><code class="python">def nodes_inventory(self)
 </code></pre>
 
-<p>Returns an inventory-style with the nodes of the project</p>
+<p>Returns an inventory-style dictionary of the nodes</p>
 <p>Example:</p>
 <p><code>{
     "router01": {
@@ -840,6 +865,9 @@ necessary</p>
 <ul>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
+</ul>
+<p><strong>Required Keyword attributes:</strong></p>
+<ul>
 <li><code>name</code></li>
 <li><code>node_type</code></li>
 <li><code>compute_id</code>: Defaults to "local"</li>

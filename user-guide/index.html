@@ -173,48 +173,61 @@
 <h2 id="interact-with-existing-project">Interact with existing Project</h2>
 <h3 id="gns3connector-and-project-objects">Gns3Connector and Project objects</h3>
 <p>Here is an example of defining a connector object and a project that is already configured on a local GNS3 server:</p>
-<pre><code class="python">from gns3fy import Gns3Connector, Project
+<pre><code class="python">&gt;&gt;&gt; from gns3fy import Gns3Connector, Project
+&gt;&gt;&gt; from tabulate import tabulate
 
-server = Gns3Connector(&quot;http://localhost:3080&quot;)
+&gt;&gt;&gt; server = Gns3Connector(&quot;http://localhost:3080&quot;)
 
-lab = Project(name=&quot;API_TEST&quot;, connector=server)
+# To show the available projects on the server
+&gt;&gt;&gt; print(
+        tabulate(
+            server.projects_summary(is_print=False),
+            headers=[&quot;Project Name&quot;, &quot;Project ID&quot;, &quot;Total Nodes&quot;, &quot;Total Links&quot;, &quot;Status&quot;],
+        )
+    )
+&quot;&quot;&quot;
+Project Name    Project ID                              Total Nodes    Total Links  Status
+--------------  ------------------------------------  -------------  -------------  --------
+test2           c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
+API_TEST        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
+mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             40  closed
+&quot;&quot;&quot;
+
+&gt;&gt;&gt; lab = Project(name=&quot;API_TEST&quot;, connector=server)
 
 # Retrieve its information and display
-lab.get()
+&gt;&gt;&gt; lab.get()
 
-print(lab)
-# Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...
+&gt;&gt;&gt; print(lab)
+Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...)
 
 # Access the project attributes
-print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
-# Name: API_TEST -- Status: closed -- Is auto_closed?: False
+&gt;&gt;&gt; print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
+&quot;Name: API_TEST -- Status: closed -- Is auto_closed?: False&quot;
 
 # Open the project
-lab.open()
-print(lab.status)
-# opened
+&gt;&gt;&gt; lab.open()
+&gt;&gt;&gt; lab.status
+opened
 
 # Verify the stats
-print(lab.stats)
-# {'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
+&gt;&gt;&gt; lab.stats
+{'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
 
 # List the names and status of all the nodes in the project
 for node in lab.nodes:
     print(f&quot;Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}&quot;)
-# Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started
-# ...
+&quot;&quot;&quot;
+Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started
+...
+&quot;&quot;&quot;
 </code></pre>
 
 <p>As noted before you can also use the <code>Gns3Connector</code> as an interface object to the GNS3 server REST API.</p>
-<pre><code class="python">In [1]: from gns3fy import Gns3Connector, Project, Node, Link
+<pre><code class="python">&gt;&gt;&gt; server.get_version()
+{'local': False, 'version': '2.2.0b4'}
 
-In [2]: server = Gns3Connector(url=&quot;http://localhost:3080&quot;)
-
-In [3]: server.get_version()
-Out[3]: {'local': False, 'version': '2.2.0b4'}
-
-In [4]: server.get_templates()
-Out[4]:
+&gt;&gt;&gt; server.get_templates()
 [{'adapter_type': 'e1000',
   'adapters': 13,
   'bios_image': '',
@@ -228,38 +241,35 @@ Out[4]:
 
 <h3 id="node-and-link-objects">Node and Link objects</h3>
 <p>You have access to the <code>Node</code> and <code>Link</code> objects as well, and this gives you the ability to start, stop, suspend the individual element in a GNS3 project.</p>
-<pre><code class="python">from gns3fy import Node, Link, Gns3Connector
+<pre><code class="python">...
+&gt;&gt;&gt; PROJECT_ID = &quot;4b21dfb3-675a-4efa-8613-2f7fb32e76fe&quot;
+&gt;&gt;&gt; alpine1 = Node(project_id=PROJECT_ID, name=&quot;alpine-1&quot;, connector=server)
 
-PROJECT_ID = &quot;&lt;some project id&gt;&quot;
-server = Gns3Connector(&quot;http://&lt;server address&gt;:3080&quot;)
-
-alpine1 = Node(project_id=PROJECT_ID, name=&quot;alpine-1&quot;, connector=server)
-
-alpine1.get()
-print(alpine1)
-# Node(name='alpine-1', node_type='docker', node_directory= ...
+&gt;&gt;&gt; alpine1.get()
+&gt;&gt;&gt; print(alpine1)
+Node(name='alpine-1', node_type='docker', node_directory= ...)
 
 # And you can access the attributes the same way as the project
-print(f&quot;Name: {alpine1.name} -- Status: {alpine1.status} -- Console: {alpine1.console}&quot;)
-# Name: alpine-1 -- Status: started -- Console: 5005
+&gt;&gt;&gt; print(f&quot;Name: {alpine1.name} -- Status: {alpine1.status} -- Console: {alpine1.console}&quot;)
+&quot;Name: alpine-1 -- Status: started -- Console: 5005&quot;
 
 # Stop the node and start (you can just restart it as well)
-alpine1.stop()
-print(alpine1.status)
-# stopped
+&gt;&gt;&gt; alpine1.stop()
+&gt;&gt;&gt; alpine1.status
+stopped
 
-alpine1.start()
-print(alpine1.status)
-# started
+&gt;&gt;&gt; alpine1.start()
+&gt;&gt;&gt; alpine1.status
+started
 
 # You can also see the Link objects assigned to this node
-print(alpine1.links)
-# [Link(link_id='4d9f1235-7fd1-466b-ad26-0b4b08beb778', link_type='ethernet', ....
+&gt;&gt;&gt; alpine1.links
+[Link(link_id='4d9f1235-7fd1-466b-ad26-0b4b08beb778', link_type='ethernet', ...)]
 
 # And in the same way you can interact with a Link object
-link1 = alpine1.links[0]
-print(f&quot;Link Type: {link1.link_type} -- Capturing?: {link1.capturing} -- Endpoints: {link1.nodes}&quot;)
-# Link Type: ethernet -- Capturing?: False -- Endpoints: [{'adapter_number': 2, ...
+&gt;&gt;&gt; link1 = alpine1.links[0]
+&gt;&gt;&gt; print(f&quot;Link Type: {link1.link_type} -- Capturing?: {link1.capturing} -- Endpoints: {link1.nodes}&quot;)
+Link Type: ethernet -- Capturing?: False -- Endpoints: [{'adapter_number': 2, ...}]
 </code></pre>
 
 <h2 id="creating-a-new-project">Creating a new Project</h2>
@@ -267,18 +277,13 @@ print(f&quot;Link Type: {link1.link_type} -- Capturing?: {link1.capturing} -- En
 <p>To navigate to some of them and see their value, lets create a simple lab on the server with 2 nodes connected betweem each other.</p>
 <h3 id="project-creation">Project creation</h3>
 <p>Lets start by creating a lab called <code>test_lab</code></p>
-<pre><code class="python">In [1]: from gns3fy import Gns3Connector, Project, Node, Link
+<pre><code class="python">...
+&gt;&gt;&gt; lab = Project(name=&quot;test_lab&quot;, connector=server)
 
-In [2]: server = Gns3Connector(url=&quot;http://localhost:3080&quot;)
+&gt;&gt;&gt; lab.create()
 
-In [3]: lab = Project(name=&quot;test_lab&quot;, connector=server)
-
-In [4]: lab.create()
-
-In [5]:
-
-In [5]: lab
-Out[5]: Project(project_id='e83f1275-3a6f-48f7-88ee-36386ee27a55', name='test_lab', status='opened',...
+&gt;&gt;&gt; lab
+Project(project_id='e83f1275-3a6f-48f7-88ee-36386ee27a55', name='test_lab', status='opened',...)
 </code></pre>
 
 <p>You can see you get the <code>project_id</code>. In GNS3 the project ID is key for all interactions under that project.</p>
@@ -288,17 +293,18 @@ Out[5]: Project(project_id='e83f1275-3a6f-48f7-88ee-36386ee27a55', name='test_la
 </div>
 <h3 id="node-creation">Node creation</h3>
 <p>Next, lets try and create a Ethernet switch node. For this we need to know the template and node type of it.</p>
-<pre><code class="python">In [7]: for template in server.get_templates():
-   ...:     if &quot;switch&quot; in template[&quot;name&quot;]:
-   ...:         print(f&quot;Template: {template['name']} -- ID: {template['template_id']}&quot;)
-   ...:
-   ...:
+<pre><code class="python">...
+&gt;&gt;&gt;  for template in server.get_templates():
+...:     if &quot;switch&quot; in template[&quot;name&quot;]:
+...:         print(f&quot;Template: {template['name']} -- ID: {template['template_id']}&quot;)
+...:
+&quot;&quot;&quot;
 Template: Ethernet switch -- ID: 1966b864-93e7-32d5-965f-001384eec461
 Template: Frame Relay switch -- ID: dd0f6f3a-ba58-3249-81cb-a1dd88407a47
 Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2
+&quot;&quot;&quot;
 
-In [8]: server.get_template_by_name(&quot;Ethernet switch&quot;)
-Out[8]:
+&gt;&gt;&gt; server.get_template_by_name(&quot;Ethernet switch&quot;)
 {'builtin': True,
  'category': 'switch',
  'console_type': 'none',
@@ -309,8 +315,8 @@ Out[8]:
 </code></pre>
 
 <p>By knowing the template information of the device we can create the Node instace of it</p>
-<pre><code class="python">
-In [9]: switch = Node(
+<pre><code class="python">...
+&gt;&gt;&gt; switch = Node(
     project_id=lab.project_id,
     connector=server,
     name=&quot;Ethernet-switch&quot;,
@@ -318,10 +324,10 @@ In [9]: switch = Node(
     template=&quot;Ethernet switch&quot;
 )
 
-In [10]: switch.create()
+&gt;&gt;&gt; switch.create()
 
-In [11]: switch
-Out[11]: Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609-49...
+&gt;&gt;&gt; switch
+Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609-49'...)
 </code></pre>
 
 <div class="admonition note">
@@ -329,7 +335,8 @@ Out[11]: Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c05
 <p>For a complete list of the attibutes you can see the <a href="../api_reference/#node-objects">API Reference</a></p>
 </div>
 <p>Now lets add an docker Alpine host to the project (<strong>NOTE:</strong> The docker image and template needs to be already configured in GNS3)</p>
-<pre><code class="python">In [12]: alpine = Node(
+<pre><code class="python">...
+&gt;&gt;&gt; alpine = Node(
     project_id=lab.project_id,
     connector=server,
     name=&quot;alpine-host&quot;,
@@ -337,13 +344,12 @@ Out[11]: Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c05
     template=&quot;alpine&quot;
 )
 
-In [13]: alpine.create()
+&gt;&gt;&gt; alpine.create()
 
-In [14]: alpine
-Out[14]: Node(name='alpine-host', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b...
+&gt;&gt;&gt; alpine
+Node(name='alpine-host', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b'...)
 
-In [15]: alpine.properties
-Out[15]:
+&gt;&gt;&gt; alpine.properties
 {'adapters': 2,
  'aux': 5026,
  'category': 'guest',
@@ -362,8 +368,7 @@ Out[15]:
  'symbol': ':/symbols/affinity/circle/gray/docker.svg',
  'usage': ''}
 
-In [16]: alpine.ports
-Out[16]:
+&gt;&gt;&gt; alpine.ports
 [{'adapter_number': 0,
   'data_link_types': {'Ethernet': 'DLT_EN10MB'},
   'link_type': 'ethernet',
@@ -380,25 +385,27 @@ Out[16]:
 
 <p>You can access all of the host attributes and see their specifications based on the template defined on the server.</p>
 <p>To update the <code>lab</code> object with their latest nodes added</p>
-<pre><code class="python">In [17]: lab.get()
+<pre><code class="python">...
+&gt;&gt;&gt; lab.get()
 
 # I have shorten the output shown
-In [18]: lab.nodes
-Out[18]:
+&gt;&gt;&gt; lab.nodes
+&quot;&quot;&quot;
 [Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609...
 Node(name='alpine-host1', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b...
 ]
+&quot;&quot;&quot;
 </code></pre>
 
 <h3 id="link-creation">Link creation</h3>
 <p>Next lets create a link between the switch and the alpine host.</p>
 <p><code>Switch Etherner0 &lt;--&gt; Alpine Eth1</code></p>
-<pre><code class="python">
-In [15]: lab.create_link('Ethernet-switch', 'Ethernet0', 'alpine-host1', 'eth1')
-Created Link-ID: b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce -- Type: ethernet
+<pre><code class="python">...
+&gt;&gt;&gt; lab.create_link('Ethernet-switch', 'Ethernet0', 'alpine-host1', 'eth1')
+&quot;Created Link-ID: b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce -- Type: ethernet&quot;
 
-In [16]: lab.links
-Out[16]: [Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet', project_id='6e7
+&gt;&gt;&gt; lab.links
+[Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet', project_id='6e7'...)]
 </code></pre>
 
 <div class="admonition note">
@@ -412,9 +419,8 @@ Out[16]: [Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethern
 <li><code>adapter_number</code></li>
 <li><code>port_number</code></li>
 </ul>
-<pre><code class="python">
-In [17]: switch.ports
-Out[17]:
+<pre><code class="python">...
+&gt;&gt;&gt; switch.ports
 [{'adapter_number': 0,
   'data_link_types': {'Ethernet': 'DLT_EN10MB'},
   'link_type': 'ethernet',
@@ -429,8 +435,7 @@ Out[17]:
   'short_name': 'e1'},
   ...
 
-In [18]: alpine.ports
-Out[18]:
+&gt;&gt;&gt; alpine.ports
 [{'adapter_number': 0,
   'data_link_types': {'Ethernet': 'DLT_EN10MB'},
   'link_type': 'ethernet',
@@ -446,27 +451,26 @@ Out[18]:
 </code></pre>
 
 <p>Gettings this information from both nodes we can create the Link.</p>
-<pre><code class="python">
-In [19]: nodes = [
+<pre><code class="python">...
+&gt;&gt;&gt; nodes = [
     dict(node_id=switch.node_id, adapter_number=0, port_number=1),
     dict(node_id=alpine.node_id, adapter_number=0, port_number=0)
 ]
 
-In [20]: extra_link = Link(project_id=lab.project_id, connector=server, nodes=nodes)
+&gt;&gt;&gt; extra_link = Link(project_id=lab.project_id, connector=server, nodes=nodes)
 
-In [21]: extra_link.create()
+&gt;&gt;&gt; extra_link.create()
 
-In [22]: extra_link
-Out[22]: Link(link_id='edf38e1a-67e7-4060-8493-0e222ec22072', link_type='ethernet', project_id='6e75bca5...
+&gt;&gt;&gt; extra_link
+Link(link_id='edf38e1a-67e7-4060-8493-0e222ec22072', link_type='ethernet', project_id='6e75bca5'...)
 </code></pre>
 
 <p>You can get the latest link information on the project</p>
-<pre><code class="python">
-In [41]: lab.get_links()
+<pre><code class="python">...
+&gt;&gt;&gt; lab.get_links()
 
 # You can see the 2 links created earlier
-In [42]: lab.links
-Out[42]:
+&gt;&gt;&gt; lab.links
 [Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet'...
 Link(link_id='=', link_type='ethernet'...]
 </code></pre>
@@ -482,38 +486,75 @@ Link(link_id='=', link_type='ethernet'...]
 <h3 id="get-nodes-and-links-summary">Get Nodes and Links summary</h3>
 <p>For a given project you can use <code>nodes_summary</code> and <code>links_summary</code>, that if used with a library like <code>tabulate</code> you can obtain the following:</p>
 <pre><code class="python">...
-from tabulate import tabulate
+&gt;&gt;&gt; from tabulate import tabulate
 
-nodes_summary = lab.nodes_summary(is_print=False)
+&gt;&gt;&gt; nodes_summary = lab.nodes_summary(is_print=False)
 
-print(
-    tabulate(nodes_summary, headers=[&quot;Node&quot;, &quot;Status&quot;, &quot;Console Port&quot;, &quot;ID&quot;])
-)
-# Node              Status      Console Port  ID
-# ----------------  --------  --------------  ------------------------------------
-# Ethernetswitch-1  started             5000  da28e1c0-9465-4f7c-b42c-49b2f4e1c64d
-# IOU1              started             5001  de23a89a-aa1f-446a-a950-31d4bf98653c
-# IOU2              started             5002  0d10d697-ef8d-40af-a4f3-fafe71f5458b
-# vEOS-4.21.5F-1    started             5003  8283b923-df0e-4bc1-8199-be6fea40f500
-# alpine-1          started             5005  ef503c45-e998-499d-88fc-2765614b313e
-# Cloud-1           started                   cde85a31-c97f-4551-9596-a3ed12c08498
+&gt;&gt;&gt; print(
+...     tabulate(nodes_summary, headers=[&quot;Node&quot;, &quot;Status&quot;, &quot;Console Port&quot;, &quot;ID&quot;])
+... )
+&quot;&quot;&quot;
+Node              Status      Console Port  ID
+----------------  --------  --------------  ------------------------------------
+Ethernetswitch-1  started             5000  da28e1c0-9465-4f7c-b42c-49b2f4e1c64d
+IOU1              started             5001  de23a89a-aa1f-446a-a950-31d4bf98653c
+IOU2              started             5002  0d10d697-ef8d-40af-a4f3-fafe71f5458b
+vEOS-4.21.5F-1    started             5003  8283b923-df0e-4bc1-8199-be6fea40f500
+alpine-1          started             5005  ef503c45-e998-499d-88fc-2765614b313e
+Cloud-1           started                   cde85a31-c97f-4551-9596-a3ed12c08498
+&quot;&quot;&quot;
+&gt;&gt;&gt; links_summary = lab.links_summary(is_print=False)
+&gt;&gt;&gt; print(
+...     tabulate(links_summary, headers=[&quot;Node A&quot;, &quot;Port A&quot;, &quot;Node B&quot;, &quot;Port B&quot;])
+... )
+&quot;&quot;&quot;
+Node A          Port A       Node B            Port B
+--------------  -----------  ----------------  -----------
+IOU1            Ethernet1/0  IOU2              Ethernet1/0
+vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0
+vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0
+Cloud-1         eth1         Ethernetswitch-1  Ethernet7
+&quot;&quot;&quot;
+</code></pre>
 
-links_summary = lab.links_summary(is_print=False)
-print(
-    tabulate(links_summary, headers=[&quot;Node A&quot;, &quot;Port A&quot;, &quot;Node B&quot;, &quot;Port B&quot;])
-)
-# Node A          Port A       Node B            Port B
-# --------------  -----------  ----------------  -----------
-# IOU1            Ethernet1/0  IOU2              Ethernet1/0
-# vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0
-# vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0
-# Cloud-1         eth1         Ethernetswitch-1  Ethernet7
+<p>I have shown the <code>projects_summary</code> earlier, here is another one that is helpful</p>
+<pre><code class="python">...
+&gt;&gt;&gt; print(
+        tabulate(
+            server.templates_summary(is_print=False),
+            headers=[
+                &quot;Template Name&quot;,
+                &quot;Template ID&quot;,
+                &quot;Type&quot;,
+                &quot;Builtin&quot;,
+                &quot;Console&quot;,
+                &quot;Category&quot;,
+            ],
+        )
+    )
+
+&quot;&quot;&quot;
+Template Name       Template ID                           Type                Builtin    Console    Category
+------------------  ------------------------------------  ------------------  ---------  ---------  ----------
+IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router
+IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch
+vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router
+alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest
+Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest
+NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest
+VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest
+Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch
+Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch
+Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
+ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
+&quot;&quot;&quot;
 </code></pre>
 
 <h3 id="manipulate-a-node-from-a-project">Manipulate a Node from a Project</h3>
 <p>The <code>Project</code> object gives you all the nodes configured on it. This is typically saved under <code>Project.nodes</code> as a list of <code>Node</code> instances.</p>
 <p>When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the <code>Gns3Connector</code> by default if you follow the procedure below.</p>
-<pre><code class="python">&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://&lt;address&gt;:3080&quot;)]
+<pre><code class="python">...
+&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://localhost:3080&quot;)]
 &gt;&gt;&gt; print(server)
 '&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
 &gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=server)

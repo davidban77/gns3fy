@@ -139,7 +139,8 @@
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#020">0.2.0</a></li>
+        <li class="first-level active"><a href="#030">0.3.0</a></li>
+        <li class="first-level "><a href="#020">0.2.0</a></li>
         <li class="first-level "><a href="#011">0.1.1</a></li>
         <li class="first-level "><a href="#010">0.1.0</a></li>
     </ul>
@@ -147,6 +148,12 @@
         <div class="col-md-9" role="main">
 
 <h1>Releases</h1>
+<h2 id="030">0.3.0</h2>
+<p><strong>Added:</strong></p>
+<ul>
+<li><code>tox</code> for pipeline testing.</li>
+<li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>.</li>
+</ul>
 <h2 id="020">0.2.0</h2>
 <p><strong>New features:</strong></p>
 <ul>
@@ -155,6 +162,12 @@
 <li>Added some commodity methods like <code>nodes_summary</code></li>
 <li>Created the <code>docs</code></li>
 <li>Improved the tests and coverage</li>
+<li>Added CircleCI with the following checks:<ul>
+<li>flake8</li>
+<li>black formatting</li>
+<li>pytest</li>
+</ul>
+</li>
 </ul>
 <h2 id="011">0.1.1</h2>
 <p><strong>Enhancement</strong>

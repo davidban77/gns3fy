@@ -158,38 +158,38 @@
 <h3 id="development-version">Development version</h3>
 <p>Use <a href="https://github.com/sdispater/poetry">poetry</a> to install the package when cloning it.</p>
 <h2 id="quick-start">Quick Start</h2>
-<pre><code>import gns3fy
+<pre><code class="python">&gt;&gt;&gt; import gns3fy
 
 # Define the server object to establish the connection
-gns3_server = gns3fy.Gns3Connector(&quot;http://&lt;server address&gt;:3080&quot;)
+&gt;&gt;&gt; gns3_server = gns3fy.Gns3Connector(&quot;http://&lt;server address&gt;:3080&quot;)
 
 # Define the lab you want to load and assign the server connector
-lab = gns3fy.Project(name=&quot;API_TEST&quot;, connector=gns3_server)
+&gt;&gt;&gt; lab = gns3fy.Project(name=&quot;API_TEST&quot;, connector=gns3_server)
 
 # Retrieve its information and display
-lab.get()
-
-print(lab)
-# Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...
+&gt;&gt;&gt; lab.get()
+&gt;&gt;&gt; print(lab)
+&quot;Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...)&quot;
 
 # Access the project attributes
-print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
-# Name: API_TEST -- Status: closed -- Is auto_closed?: False
+&gt;&gt;&gt; print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
+&quot;Name: API_TEST -- Status: closed -- Is auto_closed?: False&quot;
 
 # Open the project
-lab.open()
-print(lab.status)
-# opened
+&gt;&gt;&gt; lab.open()
+&gt;&gt;&gt; lab.status
+opened
 
 # Verify the stats
-print(lab.stats)
-# {'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
+&gt;&gt;&gt; lab.stats
+{'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
 
 # List the names and status of all the nodes in the project
-for node in lab.nodes:
-    print(f&quot;Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}&quot;)
-# Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started
-# ...
+&gt;&gt;&gt; for node in lab.nodes:
+...    print(f&quot;Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}&quot;)
+
+&quot;Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started&quot;
+...
 </code></pre>
 
 <h2 id="release-notes">Release Notes</h2>
@@ -285,5 +285,5 @@ for node in lab.nodes:
 
 <!--
 MkDocs version : 1.0.4
-Build Date UTC : 2019-08-17 15:31:58
+Build Date UTC : 2019-08-19 21:56:06
 -->
