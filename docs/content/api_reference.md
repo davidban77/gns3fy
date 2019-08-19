@@ -66,6 +66,17 @@ def get_version(self)
 
 Returns the version information of GNS3 server
 
+### `Gns3Connector.projects_summary()`
+
+```python
+def projects_summary(self, is_print=True)
+```
+
+Returns a summary of the projects in the server. If `is_print` is `False`, it
+will return a list of tuples like:
+
+`[(name, project_id, total_nodes, total_links, status) ...]`
+
 ### `Gns3Connector.get_projects()`
 
 ```python
@@ -85,6 +96,17 @@ Retrieves a project from either a name or ID
 **Required Attributes:**
 
 - `name` or `project_id`
+
+### `Gns3Connector.templates_summary()`
+
+```python
+def templates_summary(self, is_print=True)
+```
+
+Returns a summary of the templates in the server. If `is_print` is `False`, it
+will return a list of tuples like:
+
+`[(name, template_id, template_type, builtin, console_type, category) ...]`
 
 ### `Gns3Connector.get_templates()`
 
