@@ -41,6 +41,10 @@ jobs:
           name: Run tox
           command: |
             poetry run tox
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - ".tox"
       - run:
           name: Running tests
           command: |
