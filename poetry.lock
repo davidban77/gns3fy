@@ -380,7 +380,7 @@ description = "Data validation and settings management using python 3.6 type hin
 name = "pydantic"
 optional = false
 python-versions = ">=3.6"
-version = "0.31.1"
+version = "0.32.2"
 
 [[package]]
 category = "main"
@@ -399,7 +399,6 @@ six = ">=0.11.0"
 reference = "468cace9378a64a267848c07c21a5aedbfab2cf3"
 type = "git"
 url = "https://github.com/NiklasRosenstein/pydoc-markdown.git"
-
 [[package]]
 category = "dev"
 description = "passive checker of Python programs"
@@ -588,7 +587,7 @@ python-versions = ">=2.7"
 version = "0.5.2"
 
 [metadata]
-content-hash = "4cee1b2f41354238e93ca2624f0a74ce68a5016c04d2946c607b5bf09667c9f3"
+content-hash = "adb092ecae44255e15947e155f4f43383bda8680832051aed4763c70716a49ae"
 python-versions = "^3.7"
 
 [metadata.hashes]
@@ -630,7 +629,7 @@ prompt-toolkit = ["11adf3389a996a6d45cc277580d0d53e8a5afd281d0c9ec71b28e6f121463
 ptyprocess = ["923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0", "d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"]
 py = ["64f65755aee5b381cea27766a3a147c3f15b9b6b9ac88676de66ba2ae36793fa", "dc639b046a6e2cff5bbe40194ad65936d6ba360b52b3c3fe1d08a82dd50b5e53"]
 pycodestyle = ["95a2219d12372f05704562a14ec30bc76b05a5b297b21a5dfe3f6fac3491ae56", "e40a936c9a450ad81df37f549d676d127b1b66000a6c500caa2b085bc0ca976c"]
-pydantic = ["08dd1503f0524b78d03df76daf8b66ae213b9eaa0f072ad89d05a981e7aeaad2", "2b5db9a3e976fad1ddcb5e2daf4de87017f6b429e8e4871d3f52c5f004f7eaf7", "68085bebf700c2dbdf0ccdd5f09a4b19c13ced26b9bdd3447920f710fcd98c57", "772300e1efbd1271aade7bb03127c51bf8a2f705c861a8f5e82e0bc97f1f125e", "8bf39547da39abf5e02c79ed13ed377e65a095e2a71069ac7ce625de97840e63", "9324efe3eaa10cca3a488dc8ede1e0907f64394949fc6b51ced68cd2c8c30048"]
+pydantic = ["18598557f0d9ab46173045910ed50458c4fb4d16153c23346b504d7a5b679f77", "6a9335c968e13295430a208487e74d69fef40168b72dea8d975765d14e2da660", "6f5eb88fe4c21380aa064b7d249763fc6306f0b001d7e7d52d80866d1afc9ed3", "bc6c6a78647d7a65a493e1107572d993f26a652c49183201e3c7d23924bf7311", "e1a63b4e6bf8820833cb6fa239ffbe8eec57ccdd7d66359eff20e68a83c1deeb", "ede2d65ae33788d4e26e12b330b4a32c53cb14131c65bca3a59f037c73f6ee7a"]
 pydoc-markdown = []
 pyflakes = ["17dbeb2e3f4d772725c777fabc446d5634d1038f234e77343108ce445ea69ce0", "d976835886f8c5b31d47970ed689944a0262b5f3afa00a5a7b4dc81e5449f8a2"]
 pygments = ["71e430bc85c88a430f000ac1d9b331d2407f681d6f6aec95e8bcfbc3df5b0127", "881c4c157e45f30af185c1ffe8d549d48ac9127433f2c380c24b84572ad66297"]
