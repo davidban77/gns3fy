@@ -1278,7 +1278,7 @@ class Project:
 
         `{
             "router01": {
-                "hostname": "127.0.0.1",
+                "server": "127.0.0.1",
                 "name": "router01",
                 "console_port": 5077,
                 "type": "vEOS"
@@ -1295,17 +1295,19 @@ class Project:
             self.get_nodes()
 
         _nodes_inventory = {}
-        _hostname = urlparse(self.connector.base_url).hostname
+        _server = urlparse(self.connector.base_url).hostname
 
         for _n in self.nodes:
 
             _nodes_inventory.update(
                 {
                     _n.name: {
-                        "hostname": _hostname,
+                        "server": _server,
                         "name": _n.name,
                         "console_port": _n.console,
+                        "console_type": _n.console_type,
                         "type": _n.node_type,
+                        "template": _n.template
                     }
                 }
             )
