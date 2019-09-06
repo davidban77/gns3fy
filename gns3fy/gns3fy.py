@@ -1307,7 +1307,7 @@ class Project:
                         "console_port": _n.console,
                         "console_type": _n.console_type,
                         "type": _n.node_type,
-                        "template": _n.template
+                        "template": _n.template,
                     }
                 }
             )
