@@ -1054,10 +1054,12 @@ class TestProject:
     def test_nodes_inventory(self, api_test_project):
         nodes_inventory = api_test_project.nodes_inventory()
         assert {
-            "hostname": "gns3server",
+            "server": "gns3server",
             "name": "alpine-1",
             "console_port": 5005,
+            "console_type": "telnet",
             "type": "docker",
+            "template": None,
         } == nodes_inventory["alpine-1"]
 
     def test_links_summary(self, api_test_project):
