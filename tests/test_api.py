@@ -1058,7 +1058,7 @@ class TestProject:
             "name": "alpine-1",
             "console_port": 5005,
             "console_type": "telnet",
-            "template": "docker",
+            "template": None,
         } == nodes_inventory["alpine-1"]
 
     def test_links_summary(self, api_test_project):
