@@ -1054,7 +1054,7 @@ class TestProject:
     def test_nodes_inventory(self, api_test_project):
         nodes_inventory = api_test_project.nodes_inventory()
         assert {
-            "name": "gns3server",
+            "server": "gns3server",
             "name": "alpine-1",
             "console_port": 5005,
             "type": "docker",
