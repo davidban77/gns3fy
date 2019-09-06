@@ -1058,6 +1058,7 @@ class TestProject:
             "name": "alpine-1",
             "console_port": 5005,
             "console_type": "telnet",
+            "type": 'docker',
             "template": None,
         } == nodes_inventory["alpine-1"]
 
