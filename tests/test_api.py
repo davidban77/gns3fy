@@ -1057,7 +1057,8 @@ class TestProject:
             "server": "gns3server",
             "name": "alpine-1",
             "console_port": 5005,
-            "type": "docker",
+            "console_type": "telnet",
+            "template": "docker",
         } == nodes_inventory["alpine-1"]
 
     def test_links_summary(self, api_test_project):
