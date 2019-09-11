@@ -787,7 +787,7 @@ class Node:
         # Update object
         self._update(_response.json())
 
-    def create(self, **kwargs):
+    def create(self):
         """
         Creates a node.
 
@@ -801,10 +801,6 @@ class Node:
         - `connector`
         - `compute_id`: Defaults to "local"
         - `template` or `template_id` - if not passed as arguments
-
-        **Optional Node instance attributes:**
-
-        - `kwargs`: Dictionary with attributes.
         """
         if self.node_id:
             raise ValueError("Node already created")
@@ -1437,18 +1433,20 @@ class Project:
 
     def create_node(self, **kwargs):
         """
-        Creates a node.
+        Creates a node. To know available parameters see `Node` object, specifically
+        the `create` method. The most basic example would be:
 
-        **Required Attributes:**
+        ```python
+        project.create_node(name='test-switch01', template='Ethernet switch')
+        ```
+
+        **Required Project instance attributes:**
 
         - `project_id`
         - `connector`
 
-        **Required Keyword attributes:**
+        **Required keyword aguments:**
 
-        - `name`
-        - `node_type`
-        - `compute_id`: Defaults to "local"
         - `template` or `template_id`
         """
         if not self.nodes:
@@ -1456,7 +1454,7 @@ class Project:
 
         _node = Node(project_id=self.project_id, connector=self.connector, **kwargs)
 
-        _node.create(**kwargs)
+        _node.create()
         self.nodes.append(_node)
         print(
             f"Created: {_node.name} -- Type: {_node.node_type} -- "
