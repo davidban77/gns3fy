@@ -177,12 +177,11 @@ By knowing the template information of the device we can create the Node instace
 ```python
 ...
 >>> switch = Node(
-    project_id=lab.project_id,
-    connector=server,
-    name="Ethernet-switch",
-    node_type="ethernet_switch",
-    template="Ethernet switch"
-)
+...:    project_id=lab.project_id,
+...:    connector=server,
+...:    name="Ethernet-switch",
+...:    template="Ethernet switch"
+...:)
 
 >>> switch.create()
 
@@ -198,12 +197,11 @@ Now lets add an docker Alpine host to the project (**NOTE:** The docker image an
 ```python
 ...
 >>> alpine = Node(
-    project_id=lab.project_id,
-    connector=server,
-    name="alpine-host",
-    node_type="docker",
-    template="alpine"
-)
+...:    project_id=lab.project_id,
+...:    connector=server,
+...:    name="alpine-host",
+...:    template="alpine"
+...:)
 
 >>> alpine.create()
 
@@ -358,6 +356,104 @@ You can see the final result if you open the lab on your GNS3 client:
 
 Here are some examples of what you can do with the library
 
+### Manipulate a Node from a Project instance
+
+The `Project` object gives you all the nodes configured on it. This is typically saved under `Project.nodes` as a list of `Node` instances.
+
+When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the `Gns3Connector` by default if you follow the procedure below.
+
+```python
+...
+>>> server = Gns3Connector(url="http://localhost:3080")]
+>>> print(server)
+'<gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10>'
+>>> lab = Project(name="lab", connector=server)
+
+# Retrieve the lab information and print the amount of nodes configured
+>>> lab.get()
+>>> print(len(lab.nodes))
+2
+
+# Assign one of the nodes to a varaible and start manipulating it
+>>> node_1 = lab.nodes[0]
+>>> print(node_1.status)
+'stopped'
+
+>>> node_1.start()
+>>> print(node_1.status)
+'started'
+>>> print(node_1.connector)
+'<gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10>'
+```
+
+`node_1` has the same connector object as reference for interaction with the server.
+
+The same can be done with a `Link` by interacting with the `Project.links` attribute.
+
+
+### Check existing templates and projects available
+
+The templates and projects configured on the GNS3 server can be viewed by using the `templates_summary` and `projects_summary`.
+
+```python
+...
+>>> from tabulate import tabulate
+>>> templates_summary = server.templates_summary(is_print=False)
+>>> print(
+        tabulate(
+            server.templates_summary(is_print=False),
+            headers=[
+                "Template Name",
+                "Template ID",
+                "Type",
+                "Builtin",
+                "Console",
+                "Category",
+            ],
+        )
+    )
+
+"""
+Template Name       Template ID                           Type                Builtin    Console    Category
+------------------  ------------------------------------  ------------------  ---------  ---------  ----------
+IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router
+IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch
+vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router
+alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest
+Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest
+NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest
+VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest
+Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch
+Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch
+Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
+ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
+"""
+
+>>> projects_summary = server.projects_summary(is_print=False)
+>>> print(
+        tabulate(
+            server.projects_summary(is_print=False),
+            headers=[
+                "Project Name",
+                "Project ID",
+                "Total Nodes",
+                "Total Links",
+                "Status",
+            ],
+        )
+    )
+
+"""
+Project name    Project ID                              Total Nodes    Total Links  Status
+--------------  ------------------------------------  -------------  -------------  --------
+mgmt_network    c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
+ospf_lab        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
+[API] New test  f5de5917-0ac5-4850-82b1-1d7e3c777fa1              0              0  closed
+test_ansible    5599f8f5-9074-4372-b20e-e96eb3bd27c6              4              4  opened
+"""
+```
+
+
 ### Get Nodes and Links summary
 
 For a given project you can use `nodes_summary` and `links_summary`, that if used with a library like `tabulate` you can obtain the following:
@@ -429,37 +525,3 @@ Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  Tr
 ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
 """
 ```
-
-### Manipulate a Node from a Project
-
-The `Project` object gives you all the nodes configured on it. This is typically saved under `Project.nodes` as a list of `Node` instances.
-
-When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the `Gns3Connector` by default if you follow the procedure below.
-
-```python
-...
->>> server = Gns3Connector(url="http://localhost:3080")]
->>> print(server)
-'<gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10>'
->>> lab = Project(name="lab", connector=server)
-
-# Retrieve the lab information and print the amount of nodes configured
->>> lab.get()
->>> print(len(lab.nodes))
-2
-
-# Assign one of the nodes to a varaible and start manipulating it
->>> node_1 = lab.nodes[0]
->>> print(node_1.status)
-'stopped'
-
->>> node_1.start()
->>> print(node_1.status)
-'started'
->>> print(node_1.connector)
-'<gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10>'
-```
-
-`node_1` has the same connector object as reference for interaction with the server.
-
-The same can be done with a `Link` by interacting with the `Project.links` attribute.

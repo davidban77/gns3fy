@@ -763,10 +763,14 @@ class Node:
 
     def update(self, **kwargs):
         """
-        Updates the project instance by passing the keyword arguments of the attributes
-        you want to be updated
+        Updates the node instance by passing the keyword arguments of the attributes
+        you want updated
 
-        Example: `lab.update(auto_close=True)`
+        Example:
+
+        ```python
+        router01.update(name="router01-CSX")
+        ```
 
         This will update the project `auto_close` attribute to `True`
 
@@ -1031,9 +1035,13 @@ class Project:
     def update(self, **kwargs):
         """
         Updates the project instance by passing the keyword arguments of the attributes
-        you want to be updated
+        you want updated
 
-        Example: `lab.update(auto_close=True)`
+        Example:
+
+        ```python
+        lab.update(auto_close=True)
+        ```
 
         This will update the project `auto_close` attribute to `True`
 
