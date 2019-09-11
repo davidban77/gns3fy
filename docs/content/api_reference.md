@@ -423,10 +423,32 @@ Suspends the node.
 - `connector`
 - `node_id`
 
+### `Node.update()`
+
+```python
+def update(self, kwargs)
+```
+
+Updates the node instance by passing the keyword arguments of the attributes
+you want updated
+
+Example:
+
+```python
+router01.update(name="router01-CSX")
+```
+
+This will update the project `auto_close` attribute to `True`
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+
 ### `Node.create()`
 
 ```python
-def create(self, extra_properties={})
+def create(self)
 ```
 
 Creates a node.
@@ -435,14 +457,12 @@ By default it will fetch the nodes properties for creation based on the
 `template` or `template_id` attribute supplied. This can be overriden/updated
 by sending a dictionary of the properties under `extra_properties`.
 
-**Required Attributes:**
+**Required Node instance attributes:**
 
 - `project_id`
 - `connector`
 - `compute_id`: Defaults to "local"
-- `name`
-- `node_type`
-- `template` or `template_id`
+- `template` or `template_id` - if not passed as arguments
 
 ### `Node.delete()`
 
@@ -540,9 +560,13 @@ def update(self, kwargs)
 ```
 
 Updates the project instance by passing the keyword arguments of the attributes
-you want to be updated
+you want updated
 
-Example: `lab.update(auto_close=True)`
+Example:
+
+```python
+lab.update(auto_close=True)
+```
 
 This will update the project `auto_close` attribute to `True`
 
@@ -722,7 +746,7 @@ Example:
 
 `{
     "router01": {
-        "hostname": "127.0.0.1",
+        "server": "127.0.0.1",
         "name": "router01",
         "console_port": 5077,
         "type": "vEOS"
@@ -787,21 +811,23 @@ necessary
 ### `Project.create_node()`
 
 ```python
-def create_node(self, name=None, kwargs)
+def create_node(self, kwargs)
 ```
 
-Creates a node.
+Creates a node. To know available parameters see `Node` object, specifically
+the `create` method. The most basic example would be:
 
-**Required Attributes:**
+```python
+project.create_node(name='test-switch01', template='Ethernet switch')
+```
+
+**Required Project instance attributes:**
 
 - `project_id`
 - `connector`
 
-**Required Keyword attributes:**
+**Required keyword aguments:**
 
-- `name`
-- `node_type`
-- `compute_id`: Defaults to "local"
 - `template` or `template_id`
 
 ### `Project.create_link()`

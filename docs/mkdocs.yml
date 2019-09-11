@@ -1,11 +1,19 @@
 site_name: gns3fy
+site_url: https://davidban77.github.io/gns3fy/
+site_description: GNS3 REST API python library.
+site_author: David Flores
 repo_url: https://github.com/davidban77/gns3fy/
+edit_uri: edit/develop/docs/content/
 docs_dir: "content"
-theme: cinder
+# theme: cinder
+theme:
+  name: cinder
+
 markdown_extensions:
   - toc:
       toc_depth: 2-4
   - admonition
+
 nav:
   - Overview: index.md
   - User Guide: user-guide.md
@@ -13,3 +21,5 @@ nav:
   - About:
     - Release Notes: about/changelog.md
     - License: about/license.md
+
+copyright: 'Copyright &copy; 2019 David Flores'

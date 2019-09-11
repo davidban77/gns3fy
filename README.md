@@ -8,7 +8,7 @@ Its main objective is to interact with the GNS3 server in a programatic way, so 
 
 ## Documentation
 
-Check out the [Documentation](https://davidban77.github.io/gns3fy/) to explore use cases, and the API Reference
+Check out the [Documentation](https://davidban77.github.io/gns3fy/) to explore use cases and the API Reference
 
 ## Install
 
