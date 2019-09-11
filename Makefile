@@ -6,3 +6,9 @@ docs-generate:
 
 docs-show:
 	cd docs; mkdocs serve
+
+test:
+	poetry run flake8 .
+	poetry run black --diff --check .
+	poetry run tox
+	poetry run pytest --cov-report=xml --cov=gns3fy tests/

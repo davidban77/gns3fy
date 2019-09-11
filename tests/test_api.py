@@ -96,6 +96,13 @@ def post_put_matcher(request):
             resp.status_code = 204
             resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith(
+            f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"
+        ):
+            _returned = json_api_test_node()
+            resp.status_code = 201
+            resp.json = lambda: _returned
+            return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
             if not any(x in _data for x in ("compute_id", "name", "node_type")):
@@ -182,6 +189,25 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: {**_returned, **_data}
             return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}"):
+            _data = request.json()
+            _returned = json_api_test_node()
+            # Update the node data based on the _data sent on the request
+            for sitem in _data:
+                if sitem in _returned:
+                    if isinstance(_returned[sitem], list):
+                        continue
+                    elif isinstance(_returned[sitem], dict):
+                        for k, v in _data[sitem].items():
+                            if k in _returned[sitem]:
+                                _returned[sitem][k] = v
+                    else:
+                        _returned[sitem] = _data[sitem]
+            if _data.get("name") != "alpine-1":
+                _returned.update(node_id="NEW_NODE_ID")
+            resp.status_code = 200
+            resp.json = lambda: _returned
+            return resp
     return None
 
 
@@ -235,6 +261,12 @@ class Gns3ConnectorMock(Gns3Connector):
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
             json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 0},
+        )
+        # Extra project
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/c9dc56bf-37b9-453b-8f95-2845ce8908e3/stats",
+            json={"drawings": 0, "links": 9, "nodes": 10, "snapshots": 0},
         )
         self.adapter.register_uri(
             "POST",
@@ -512,6 +544,70 @@ class TestGns3Connector:
         response = gns3_server.delete_project(project_id=CPROJECT["id"])
         assert response is None
 
+    def test_projects_summary(self, gns3_server):
+        projects_summary = gns3_server.projects_summary(is_print=False)
+        assert (
+            str(projects_summary)
+            == "[('test2', 'c9dc56bf-37b9-453b-8f95-2845ce8908e3', 10, 9, 'closed'), "
+            "('API_TEST', '4b21dfb3-675a-4efa-8613-2f7fb32e76fe', 6, 4, 'opened')]"
+        )
+
+    def test_projects_summary_print(self, capsys, gns3_server):
+        gns3_server.projects_summary(is_print=True)
+        captured = capsys.readouterr()
+        assert captured.out == (
+            "test2: c9dc56bf-37b9-453b-8f95-2845ce8908e3 -- Nodes: 10 -- Links: 9 -- "
+            "Status: closed\nAPI_TEST: 4b21dfb3-675a-4efa-8613-2f7fb32e76fe -- Nodes: "
+            "6 -- Links: 4 -- Status: opened\n"
+        )
+
+    def test_templates_summary(self, gns3_server):
+        templates_summary = gns3_server.templates_summary(is_print=False)
+        assert (
+            str(templates_summary)
+            == "[('IOU-L3', '8504c605-7914-4a8f-9cd4-a2638382db0e', 'iou', False, "
+            "'telnet', 'router'), ('IOU-L2', '92cccfb2-6401-48f2-8964-3c75323be3cb', "
+            "'iou', False, 'telnet', 'switch'), ('vEOS', 'c6203d4b-d0ce-4951-bf18-"
+            "c44369d46804', 'qemu', False, 'telnet', 'router'), ('alpine', "
+            "'847e5333-6ac9-411f-a400-89838584371b', 'docker', False, 'telnet', 'guest'"
+            "), ('Cloud', '39e257dc-8412-3174-b6b3-0ee3ed6a43e9', 'cloud', True, 'N/A'"
+            ", 'guest'), ('NAT', 'df8f4ea9-33b7-3e96-86a2-c39bc9bb649c', 'nat', True, '"
+            "N/A', 'guest'), ('VPCS', '19021f99-e36f-394d-b4a1-8aaa902ab9cc', 'vpcs', "
+            "True, 'N/A', 'guest'), ('Ethernet switch', '1966b864-93e7-32d5-965f-"
+            "001384eec461', 'ethernet_switch', True, 'none', 'switch'), ('Ethernet hub"
+            "', 'b4503ea9-d6b6-3695-9fe4-1db3b39290b0', 'ethernet_hub', True, 'N/A', '"
+            "switch'), ('Frame Relay switch', 'dd0f6f3a-ba58-3249-81cb-a1dd88407a47', "
+            "'frame_relay_switch', True, 'N/A', 'switch'), ('ATM switch', "
+            "'aaa764e2-b383-300f-8a0e-3493bbfdb7d2', 'atm_switch', True, 'N/A', 'switch"
+            "')]"
+        )
+
+    def test_templates_summary_print(self, capsys, gns3_server):
+        gns3_server.templates_summary(is_print=True)
+        captured = capsys.readouterr()
+        assert captured.out == (
+            "IOU-L3: 8504c605-7914-4a8f-9cd4-a2638382db0e -- Type: iou -- Builtin: "
+            "False -- Console: telnet -- Category: router\nIOU-L2: "
+            "92cccfb2-6401-48f2-8964-3c75323be3cb -- Type: iou -- Builtin: False -- "
+            "Console: telnet -- Category: switch\nvEOS: c6203d4b-d0ce-4951-bf18-"
+            "c44369d46804 -- Type: qemu -- Builtin: False -- Console: telnet -- "
+            "Category: router\nalpine: 847e5333-6ac9-411f-a400-89838584371b -- Type: "
+            "docker -- Builtin: False -- Console: telnet -- Category: guest\nCloud: "
+            "39e257dc-8412-3174-b6b3-0ee3ed6a43e9 -- Type: cloud -- Builtin: True -- "
+            "Console: N/A -- Category: guest\nNAT: df8f4ea9-33b7-3e96-86a2-"
+            "c39bc9bb649c -- Type: nat -- Builtin: True -- Console: N/A -- Category: "
+            "guest\nVPCS: 19021f99-e36f-394d-b4a1-8aaa902ab9cc -- Type: vpcs -- Builtin"
+            ": True -- Console: N/A -- Category: guest\nEthernet switch: "
+            "1966b864-93e7-32d5-965f-001384eec461 -- Type: ethernet_switch -- Builtin: "
+            "True -- Console: none -- Category: switch\nEthernet hub: "
+            "b4503ea9-d6b6-3695-9fe4-1db3b39290b0 -- Type: ethernet_hub -- Builtin: "
+            "True -- Console: N/A -- Category: switch\nFrame Relay switch: "
+            "dd0f6f3a-ba58-3249-81cb-a1dd88407a47 -- Type: frame_relay_switch -- "
+            "Builtin: True -- Console: N/A -- Category: switch\nATM switch: "
+            "aaa764e2-b383-300f-8a0e-3493bbfdb7d2 -- Type: atm_switch -- Builtin: True "
+            "-- Console: N/A -- Category: switch\n"
+        )
+
     def test_wrong_server_url(self, gns3_server):
         gns3_server.base_url = "WRONG URL"
         with pytest.raises(requests.exceptions.InvalidURL):
@@ -719,13 +815,11 @@ class TestNode:
             connector=gns3_server,
             project_id=CPROJECT["id"],
             template=CTEMPLATE["name"],
+            properties=dict(console_http_port=8080),
         )
-        node.create(extra_properties={"console_http_port": 8080})
+        node.create()
         assert "alpine-1" == node.name
-        # NOTE: The image name of alpine in teh template is different than the one
-        # defined on the node properties, which has the version alpine:latest.
-        # Need to keep an eye
-        assert "alpine" == node.properties["image"]
+        assert "alpine:latest" == node.properties["image"]
         assert node.properties["console_http_port"] == 8080
 
     def test_error_create_with_invalid_parameter_type(self, gns3_server):
@@ -743,31 +837,16 @@ class TestNode:
         "params,expected",
         [
             ({"project_id": "SOME_ID"}, "Gns3Connector not assigned under 'connector'"),
-            ({"connector": "SOME_CONN"}, "Need to submit project_id"),
             (
-                {
-                    "connector": "SOME_CONN",
-                    "project_id": "SOME_ID",
-                    "compute_id": "SOME_ID",
-                },
-                "Need to submit name",
+                {"connector": "SOME_CONN"},
+                "Node object needs to have project_id attribute",
             ),
             (
                 {
                     "connector": "SOME_CONN",
                     "project_id": "SOME_ID",
                     "compute_id": "SOME_ID",
-                    "name": "SOME_NAME",
-                },
-                "Need to submit node_type",
-            ),
-            (
-                {
-                    "connector": "SOME_CONN",
-                    "project_id": "SOME_ID",
-                    "compute_id": "SOME_ID",
-                    "name": "SOME_NAME",
-                    "node_type": "docker",
+                    "template": "SOME_TEMPLATE",
                     "node_id": "SOME_ID",
                 },
                 "Node already created",
@@ -780,7 +859,7 @@ class TestNode:
                     "name": "SOME_NAME",
                     "node_type": "docker",
                 },
-                "You must provide template or template_id",
+                "Need either 'template' of 'template_id'",
             ),
         ],
     )
@@ -968,13 +1047,28 @@ class TestProject:
             "'cde85a31-c97f-4551-9596-a3ed12c08498')]"
         )
 
+    def test_nodes_summary_print(self, capsys, api_test_project):
+        api_test_project.nodes_summary(is_print=True)
+        captured = capsys.readouterr()
+        assert captured.out == (
+            "Ethernetswitch-1: started -- Console: 5000 -- ID: "
+            "da28e1c0-9465-4f7c-b42c-49b2f4e1c64d\nIOU1: started -- Console: 5001 -- ID"
+            ": de23a89a-aa1f-446a-a950-31d4bf98653c\nIOU2: started -- Console: 5002 -- "
+            "ID: 0d10d697-ef8d-40af-a4f3-fafe71f5458b\nvEOS: started -- Console: 5003 "
+            "-- ID: 8283b923-df0e-4bc1-8199-be6fea40f500\nalpine-1: started -- Console"
+            ": 5005 -- ID: ef503c45-e998-499d-88fc-2765614b313e\nCloud-1: started -- "
+            "Console: None -- ID: cde85a31-c97f-4551-9596-a3ed12c08498\n"
+        )
+
     def test_nodes_inventory(self, api_test_project):
         nodes_inventory = api_test_project.nodes_inventory()
         assert {
-            "hostname": "gns3server",
+            "server": "gns3server",
             "name": "alpine-1",
             "console_port": 5005,
+            "console_type": "telnet",
             "type": "docker",
+            "template": None,
         } == nodes_inventory["alpine-1"]
 
     def test_links_summary(self, api_test_project):
@@ -985,6 +1079,16 @@ class TestProject:
             "'Ethernet1/0', 'IOU2', 'Ethernet1/0'), ('vEOS', 'Management1', "
             "'Ethernetswitch-1', 'Ethernet0'), ('vEOS', 'Ethernet1', 'alpine-1', "
             "'eth0'), ('Cloud-1', 'eth1', 'Ethernetswitch-1', 'Ethernet7')]"
+        )
+
+    def test_links_summary_print(self, capsys, api_test_project):
+        api_test_project.links_summary(is_print=True)
+        captured = capsys.readouterr()
+        assert captured.out == (
+            "IOU1: Ethernet0/0 ---- Ethernetswitch-1: Ethernet1\nIOU1: Ethernet1/0 "
+            "---- IOU2: Ethernet1/0\nvEOS: Management1 ---- Ethernetswitch-1: Ethernet0"
+            "\nvEOS: Ethernet1 ---- alpine-1: eth0\nCloud-1: eth1 ---- Ethernetswitch-"
+            "1: Ethernet7\n"
         )
 
     def test_get_node_by_name(self, api_test_project):
@@ -1005,23 +1109,14 @@ class TestProject:
 
     def test_create_node(self, api_test_project):
         api_test_project.create_node(
-            name="alpine-2", node_type="docker", template=CTEMPLATE["name"]
+            name="alpine-2", console=5077, template=CTEMPLATE["name"]
         )
         alpine2 = api_test_project.get_node(name="alpine-2")
+        print(api_test_project.nodes_summary())
         assert alpine2.console == 5077
         assert alpine2.name == "alpine-2"
         assert alpine2.node_type == "docker"
         assert alpine2.node_id == "NEW_NODE_ID"
-
-    def test_error_create_node_with_equal_name(self, api_test_project):
-        with pytest.raises(ValueError, match="Node with equal name found"):
-            api_test_project.create_node(
-                name="alpine-1",
-                node_type="docker",
-                template=CTEMPLATE["name"],
-                connector=gns3_server,
-                project_id=CPROJECT["id"],
-            )
 
     def test_create_link(self, api_test_project):
         api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
