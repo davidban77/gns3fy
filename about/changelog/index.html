@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    
-    
+    <meta name="description" content="GNS3 REST API python library.">
+    <meta name="author" content="David Flores">
+    <link rel="canonical" href="https://davidban77.github.io/gns3fy/about/changelog/">
     <link rel="../../img/favicon.ico">
 
     
@@ -127,7 +127,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/davidban77/gns3fy/edit/master/docs/about/changelog.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                        <a href="https://github.com/davidban77/gns3fy/edit/develop/docs/content/about/changelog.md"><i class="fab fa-github"></i> Edit on GitHub</a>
                     </li>
             </ul>
         </div>
@@ -147,12 +147,18 @@
 </div></div>
         <div class="col-md-9" role="main">
 
+<h1>Upgrading</h1>
+<pre><code>pip install -U gns3fy
+</code></pre>
+
 <h1>Releases</h1>
 <h2 id="030">0.3.0</h2>
-<p><strong>Added:</strong></p>
+<p><strong>Enhacement:</strong></p>
 <ul>
-<li><code>tox</code> for pipeline testing.</li>
-<li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>.</li>
+<li><code>tox</code> for pipeline testing. https://github.com/davidban77/gns3fy/pull/15</li>
+<li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>. https://github.com/davidban77/gns3fy/pull/17</li>
+<li>Improved <code>nodes_inventory</code> method. https://github.com/davidban77/gns3fy/pull/23</li>
+<li>Refactor of <code>Node</code> creation, basically changed the API endpoint from Node to Template. https://github.com/davidban77/gns3fy/pull/27</li>
 </ul>
 <h2 id="020">0.2.0</h2>
 <p><strong>New features:</strong></p>
@@ -170,7 +176,7 @@
 </li>
 </ul>
 <h2 id="011">0.1.1</h2>
-<p><strong>Enhancement</strong>
+<p><strong>Enhancement:</strong>
 - Adding <code>Gns3Connector</code> method <code>get_version</code></p>
 <h2 id="010">0.1.0</h2>
 <ul>
@@ -184,6 +190,8 @@
         
         <hr>
         <p>
+        <small>Copyright &copy; 2019 David Flores<br></small>
+        
         <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
 
         

@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    
-    
+    <meta name="description" content="GNS3 REST API python library.">
+    <meta name="author" content="David Flores">
+    <link rel="canonical" href="https://davidban77.github.io/gns3fy/user-guide/">
     <link rel="../img/favicon.ico">
 
     
@@ -127,7 +127,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/davidban77/gns3fy/edit/master/docs/user-guide.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                        <a href="https://github.com/davidban77/gns3fy/edit/develop/docs/content/user-guide.md"><i class="fab fa-github"></i> Edit on GitHub</a>
                     </li>
             </ul>
         </div>
@@ -152,9 +152,11 @@
             <li class="second-level"><a href="#link-creation">Link creation</a></li>
                 
         <li class="first-level "><a href="#examples">Examples</a></li>
-            <li class="second-level"><a href="#get-nodes-and-links-summary">Get Nodes and Links summary</a></li>
+            <li class="second-level"><a href="#manipulate-a-node-from-a-project-instance">Manipulate a Node from a Project instance</a></li>
                 
-            <li class="second-level"><a href="#manipulate-a-node-from-a-project">Manipulate a Node from a Project</a></li>
+            <li class="second-level"><a href="#check-existing-templates-and-projects-available">Check existing templates and projects available</a></li>
+                
+            <li class="second-level"><a href="#get-nodes-and-links-summary">Get Nodes and Links summary</a></li>
                 
     </ul>
 </div></div>
@@ -317,12 +319,11 @@ Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2
 <p>By knowing the template information of the device we can create the Node instace of it</p>
 <pre><code class="python">...
 &gt;&gt;&gt; switch = Node(
-    project_id=lab.project_id,
-    connector=server,
-    name=&quot;Ethernet-switch&quot;,
-    node_type=&quot;ethernet_switch&quot;,
-    template=&quot;Ethernet switch&quot;
-)
+...:    project_id=lab.project_id,
+...:    connector=server,
+...:    name=&quot;Ethernet-switch&quot;,
+...:    template=&quot;Ethernet switch&quot;
+...:)
 
 &gt;&gt;&gt; switch.create()
 
@@ -337,12 +338,11 @@ Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', 
 <p>Now lets add an docker Alpine host to the project (<strong>NOTE:</strong> The docker image and template needs to be already configured in GNS3)</p>
 <pre><code class="python">...
 &gt;&gt;&gt; alpine = Node(
-    project_id=lab.project_id,
-    connector=server,
-    name=&quot;alpine-host&quot;,
-    node_type=&quot;docker&quot;,
-    template=&quot;alpine&quot;
-)
+...:    project_id=lab.project_id,
+...:    connector=server,
+...:    name=&quot;alpine-host&quot;,
+...:    template=&quot;alpine&quot;
+...:)
 
 &gt;&gt;&gt; alpine.create()
 
@@ -483,6 +483,93 @@ Link(link_id='=', link_type='ethernet'...]
 </div>
 <h2 id="examples">Examples</h2>
 <p>Here are some examples of what you can do with the library</p>
+<h3 id="manipulate-a-node-from-a-project-instance">Manipulate a Node from a Project instance</h3>
+<p>The <code>Project</code> object gives you all the nodes configured on it. This is typically saved under <code>Project.nodes</code> as a list of <code>Node</code> instances.</p>
+<p>When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the <code>Gns3Connector</code> by default if you follow the procedure below.</p>
+<pre><code class="python">...
+&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://localhost:3080&quot;)]
+&gt;&gt;&gt; print(server)
+'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
+&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=server)
+
+# Retrieve the lab information and print the amount of nodes configured
+&gt;&gt;&gt; lab.get()
+&gt;&gt;&gt; print(len(lab.nodes))
+2
+
+# Assign one of the nodes to a varaible and start manipulating it
+&gt;&gt;&gt; node_1 = lab.nodes[0]
+&gt;&gt;&gt; print(node_1.status)
+'stopped'
+
+&gt;&gt;&gt; node_1.start()
+&gt;&gt;&gt; print(node_1.status)
+'started'
+&gt;&gt;&gt; print(node_1.connector)
+'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
+</code></pre>
+
+<p><code>node_1</code> has the same connector object as reference for interaction with the server.</p>
+<p>The same can be done with a <code>Link</code> by interacting with the <code>Project.links</code> attribute.</p>
+<h3 id="check-existing-templates-and-projects-available">Check existing templates and projects available</h3>
+<p>The templates and projects configured on the GNS3 server can be viewed by using the <code>templates_summary</code> and <code>projects_summary</code>.</p>
+<pre><code class="python">...
+&gt;&gt;&gt; from tabulate import tabulate
+&gt;&gt;&gt; templates_summary = server.templates_summary(is_print=False)
+&gt;&gt;&gt; print(
+        tabulate(
+            server.templates_summary(is_print=False),
+            headers=[
+                &quot;Template Name&quot;,
+                &quot;Template ID&quot;,
+                &quot;Type&quot;,
+                &quot;Builtin&quot;,
+                &quot;Console&quot;,
+                &quot;Category&quot;,
+            ],
+        )
+    )
+
+&quot;&quot;&quot;
+Template Name       Template ID                           Type                Builtin    Console    Category
+------------------  ------------------------------------  ------------------  ---------  ---------  ----------
+IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router
+IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch
+vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router
+alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest
+Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest
+NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest
+VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest
+Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch
+Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch
+Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
+ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
+&quot;&quot;&quot;
+
+&gt;&gt;&gt; projects_summary = server.projects_summary(is_print=False)
+&gt;&gt;&gt; print(
+        tabulate(
+            server.projects_summary(is_print=False),
+            headers=[
+                &quot;Project Name&quot;,
+                &quot;Project ID&quot;,
+                &quot;Total Nodes&quot;,
+                &quot;Total Links&quot;,
+                &quot;Status&quot;,
+            ],
+        )
+    )
+
+&quot;&quot;&quot;
+Project name    Project ID                              Total Nodes    Total Links  Status
+--------------  ------------------------------------  -------------  -------------  --------
+mgmt_network    c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
+ospf_lab        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
+[API] New test  f5de5917-0ac5-4850-82b1-1d7e3c777fa1              0              0  closed
+test_ansible    5599f8f5-9074-4372-b20e-e96eb3bd27c6              4              4  opened
+&quot;&quot;&quot;
+</code></pre>
+
 <h3 id="get-nodes-and-links-summary">Get Nodes and Links summary</h3>
 <p>For a given project you can use <code>nodes_summary</code> and <code>links_summary</code>, that if used with a library like <code>tabulate</code> you can obtain the following:</p>
 <pre><code class="python">...
@@ -548,36 +635,7 @@ Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        Tr
 Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
 ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
 &quot;&quot;&quot;
-</code></pre>
-
-<h3 id="manipulate-a-node-from-a-project">Manipulate a Node from a Project</h3>
-<p>The <code>Project</code> object gives you all the nodes configured on it. This is typically saved under <code>Project.nodes</code> as a list of <code>Node</code> instances.</p>
-<p>When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the <code>Gns3Connector</code> by default if you follow the procedure below.</p>
-<pre><code class="python">...
-&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://localhost:3080&quot;)]
-&gt;&gt;&gt; print(server)
-'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
-&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=server)
-
-# Retrieve the lab information and print the amount of nodes configured
-&gt;&gt;&gt; lab.get()
-&gt;&gt;&gt; print(len(lab.nodes))
-2
-
-# Assign one of the nodes to a varaible and start manipulating it
-&gt;&gt;&gt; node_1 = lab.nodes[0]
-&gt;&gt;&gt; print(node_1.status)
-'stopped'
-
-&gt;&gt;&gt; node_1.start()
-&gt;&gt;&gt; print(node_1.status)
-'started'
-&gt;&gt;&gt; print(node_1.connector)
-'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
-</code></pre>
-
-<p><code>node_1</code> has the same connector object as reference for interaction with the server.</p>
-<p>The same can be done with a <code>Link</code> by interacting with the <code>Project.links</code> attribute.</p></div>
+</code></pre></div>
         
         
     </div>
@@ -586,6 +644,8 @@ ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          Tr
         
         <hr>
         <p>
+        <small>Copyright &copy; 2019 David Flores<br></small>
+        
         <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
 
         

@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    
-    
+    <meta name="description" content="GNS3 REST API python library.">
+    <meta name="author" content="David Flores">
+    <link rel="canonical" href="https://davidban77.github.io/gns3fy/api_reference/">
     <link rel="../img/favicon.ico">
 
     
@@ -127,7 +127,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="https://github.com/davidban77/gns3fy/edit/master/docs/api_reference.md"><i class="fab fa-github"></i> Edit on GitHub</a>
+                        <a href="https://github.com/davidban77/gns3fy/edit/develop/docs/content/api_reference.md"><i class="fab fa-github"></i> Edit on GitHub</a>
                     </li>
             </ul>
         </div>
@@ -189,6 +189,8 @@
             <li class="second-level"><a href="#nodereload">Node.reload()</a></li>
                 
             <li class="second-level"><a href="#nodesuspend">Node.suspend()</a></li>
+                
+            <li class="second-level"><a href="#nodeupdate">Node.update()</a></li>
                 
             <li class="second-level"><a href="#nodecreate">Node.create()</a></li>
                 
@@ -565,22 +567,36 @@ attribute</p>
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
+<h3 id="nodeupdate"><code>Node.update()</code></h3>
+<pre><code class="python">def update(self, kwargs)
+</code></pre>
+
+<p>Updates the node instance by passing the keyword arguments of the attributes
+you want updated</p>
+<p>Example:</p>
+<pre><code class="python">router01.update(name=&quot;router01-CSX&quot;)
+</code></pre>
+
+<p>This will update the project <code>auto_close</code> attribute to <code>True</code></p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
 <h3 id="nodecreate"><code>Node.create()</code></h3>
-<pre><code class="python">def create(self, extra_properties={})
+<pre><code class="python">def create(self)
 </code></pre>
 
 <p>Creates a node.</p>
 <p>By default it will fetch the nodes properties for creation based on the
 <code>template</code> or <code>template_id</code> attribute supplied. This can be overriden/updated
 by sending a dictionary of the properties under <code>extra_properties</code>.</p>
-<p><strong>Required Attributes:</strong></p>
+<p><strong>Required Node instance attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 <li><code>compute_id</code>: Defaults to "local"</li>
-<li><code>name</code></li>
-<li><code>node_type</code></li>
-<li><code>template</code> or <code>template_id</code></li>
+<li><code>template</code> or <code>template_id</code> - if not passed as arguments</li>
 </ul>
 <h3 id="nodedelete"><code>Node.delete()</code></h3>
 <pre><code class="python">def delete(self)
@@ -662,8 +678,11 @@ information</a></p>
 </code></pre>
 
 <p>Updates the project instance by passing the keyword arguments of the attributes
-you want to be updated</p>
-<p>Example: <code>lab.update(auto_close=True)</code></p>
+you want updated</p>
+<p>Example:</p>
+<pre><code class="python">lab.update(auto_close=True)
+</code></pre>
+
 <p>This will update the project <code>auto_close</code> attribute to <code>True</code></p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
@@ -807,7 +826,7 @@ will return a list of tuples like:</p>
 <p>Example:</p>
 <p><code>{
     "router01": {
-        "hostname": "127.0.0.1",
+        "server": "127.0.0.1",
         "name": "router01",
         "console_port": 5077,
         "type": "vEOS"
@@ -857,20 +876,21 @@ necessary</p>
 <p><strong>NOTE:</strong> Run method <code>get_links()</code> manually to refresh list of links if
 necessary</p>
 <h3 id="projectcreate_node"><code>Project.create_node()</code></h3>
-<pre><code class="python">def create_node(self, name=None, kwargs)
+<pre><code class="python">def create_node(self, kwargs)
 </code></pre>
 
-<p>Creates a node.</p>
-<p><strong>Required Attributes:</strong></p>
+<p>Creates a node. To know available parameters see <code>Node</code> object, specifically
+the <code>create</code> method. The most basic example would be:</p>
+<pre><code class="python">project.create_node(name='test-switch01', template='Ethernet switch')
+</code></pre>
+
+<p><strong>Required Project instance attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><strong>Required Keyword attributes:</strong></p>
+<p><strong>Required keyword aguments:</strong></p>
 <ul>
-<li><code>name</code></li>
-<li><code>node_type</code></li>
-<li><code>compute_id</code>: Defaults to "local"</li>
 <li><code>template</code> or <code>template_id</code></li>
 </ul>
 <h3 id="projectcreate_link"><code>Project.create_link()</code></h3>
@@ -897,6 +917,8 @@ port)</li>
         
         <hr>
         <p>
+        <small>Copyright &copy; 2019 David Flores<br></small>
+        
         <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
 
         
