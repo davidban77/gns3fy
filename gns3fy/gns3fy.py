@@ -761,7 +761,33 @@ class Node:
         else:
             self.get()
 
-    def create(self, extra_properties={}):
+    def update(self, **kwargs):
+        """
+        Updates the project instance by passing the keyword arguments of the attributes
+        you want to be updated
+
+        Example: `lab.update(auto_close=True)`
+
+        This will update the project `auto_close` attribute to `True`
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        self._verify_before_action()
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
+        )
+
+        # TODO: Verify that the passed kwargs are supported ones
+        _response = self.connector.http_call("put", _url, json_data=kwargs)
+
+        # Update object
+        self._update(_response.json())
+
+    def create(self, **kwargs):
         """
         Creates a node.
 
@@ -769,66 +795,59 @@ class Node:
         `template` or `template_id` attribute supplied. This can be overriden/updated
         by sending a dictionary of the properties under `extra_properties`.
 
-        **Required Attributes:**
+        **Required Node instance attributes:**
 
         - `project_id`
         - `connector`
         - `compute_id`: Defaults to "local"
-        - `name`
-        - `node_type`
-        - `template` or `template_id`
+        - `template` or `template_id` - if not passed as arguments
+
+        **Optional Node instance attributes:**
+
+        - `kwargs`: Dictionary with attributes.
         """
+        if self.node_id:
+            raise ValueError("Node already created")
         if not self.connector:
             raise ValueError("Gns3Connector not assigned under 'connector'")
         if not self.project_id:
-            raise ValueError("Need to submit project_id")
-        if not self.name:
-            raise ValueError("Need to submit name")
-        if not self.node_type:
-            raise ValueError("Need to submit node_type")
-        if self.node_id:
-            raise ValueError("Node already created")
+            raise ValueError("Node object needs to have project_id attribute")
+        if not self.template_id:
+            if self.template:
+                self.template_id = self.connector.get_template(name=self.template).get(
+                    "template_id"
+                )
+            else:
+                raise ValueError("Need either 'template' of 'template_id'")
 
-        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-
-        data = {
+        cached_data = {
             k: v
             for k, v in self.__dict__.items()
             if k
-            not in ("project_id", "template", "links", "connector", "__initialised__")
+            not in (
+                "project_id",
+                "template",
+                "template_id",
+                "links",
+                "connector",
+                "__initialised__",
+            )
             if v is not None
         }
 
-        # Fetch template for properties
-        if self.template_id:
-            _properties = self.connector.get_template(template_id=self.template_id)
-        elif self.template:
-            _properties = self.connector.get_template(name=self.template)
-        else:
-            raise ValueError("You must provide template or template_id")
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/"
+            f"templates/{self.template_id}"
+        )
 
-        # Delete not needed fields
-        for _field in (
-            "compute_id",
-            "default_name_format",
-            "template_type",
-            "template_id",
-            "builtin",
-            "name",  # Needs to be deleted because it overrides the name of host
-        ):
-            try:
-                _properties.pop(_field)
-            except KeyError:
-                continue
-
-        # Override/Merge extra properties
-        if extra_properties:
-            _properties.update(**extra_properties)
-        data.update(properties=_properties)
-
-        _response = self.connector.http_call("post", _url, json_data=data)
+        _response = self.connector.http_call(
+            "post", _url, json_data=dict(x=0, y=0, compute_id=self.compute_id)
+        )
 
         self._update(_response.json())
+
+        # Update the node attributes based on cached data
+        self.update(**cached_data)
 
     def delete(self):
         """
@@ -1416,7 +1435,7 @@ class Project:
         """
         return self._search_link(key="link_id", value=link_id)
 
-    def create_node(self, name=None, **kwargs):
+    def create_node(self, **kwargs):
         """
         Creates a node.
 
@@ -1435,19 +1454,9 @@ class Project:
         if not self.nodes:
             self.get_nodes()
 
-        # Even though GNS3 allow same name to be pushed because it automatically
-        # generates a new name if matches an exising node, here is verified beforehand
-        # and forces developer to create new name.
-        _matches = [(_n.name, _n.node_id) for _n in self.nodes if name == _n.name]
-        if _matches:
-            raise ValueError(
-                f"Node with equal name found: {_matches[0][0]} - ID: {_matches[0][-1]}"
-            )
+        _node = Node(project_id=self.project_id, connector=self.connector, **kwargs)
 
-        _node = Node(
-            project_id=self.project_id, connector=self.connector, name=name, **kwargs
-        )
-        _node.create()
+        _node.create(**kwargs)
         self.nodes.append(_node)
         print(
             f"Created: {_node.name} -- Type: {_node.node_type} -- "
