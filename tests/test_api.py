@@ -96,6 +96,13 @@ def post_put_matcher(request):
             resp.status_code = 204
             resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith(
+            f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"
+        ):
+            _returned = json_api_test_node()
+            resp.status_code = 201
+            resp.json = lambda: _returned
+            return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
             if not any(x in _data for x in ("compute_id", "name", "node_type")):
@@ -181,6 +188,25 @@ def post_put_matcher(request):
             _returned = json_api_test_project()
             resp.status_code = 200
             resp.json = lambda: {**_returned, **_data}
+            return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}"):
+            _data = request.json()
+            _returned = json_api_test_node()
+            # Update the node data based on the _data sent on the request
+            for sitem in _data:
+                if sitem in _returned:
+                    if isinstance(_returned[sitem], list):
+                        continue
+                    elif isinstance(_returned[sitem], dict):
+                        for k, v in _data[sitem].items():
+                            if k in _returned[sitem]:
+                                _returned[sitem][k] = v
+                    else:
+                        _returned[sitem] = _data[sitem]
+            if _data.get("name") != "alpine-1":
+                _returned.update(node_id="NEW_NODE_ID")
+            resp.status_code = 200
+            resp.json = lambda: _returned
             return resp
     return None
 
@@ -789,13 +815,11 @@ class TestNode:
             connector=gns3_server,
             project_id=CPROJECT["id"],
             template=CTEMPLATE["name"],
+            properties=dict(console_http_port=8080),
         )
-        node.create(extra_properties={"console_http_port": 8080})
+        node.create()
         assert "alpine-1" == node.name
-        # NOTE: The image name of alpine in teh template is different than the one
-        # defined on the node properties, which has the version alpine:latest.
-        # Need to keep an eye
-        assert "alpine" == node.properties["image"]
+        assert "alpine:latest" == node.properties["image"]
         assert node.properties["console_http_port"] == 8080
 
     def test_error_create_with_invalid_parameter_type(self, gns3_server):
@@ -813,31 +837,16 @@ class TestNode:
         "params,expected",
         [
             ({"project_id": "SOME_ID"}, "Gns3Connector not assigned under 'connector'"),
-            ({"connector": "SOME_CONN"}, "Need to submit project_id"),
             (
-                {
-                    "connector": "SOME_CONN",
-                    "project_id": "SOME_ID",
-                    "compute_id": "SOME_ID",
-                },
-                "Need to submit name",
+                {"connector": "SOME_CONN"},
+                "Node object needs to have project_id attribute",
             ),
             (
                 {
                     "connector": "SOME_CONN",
                     "project_id": "SOME_ID",
                     "compute_id": "SOME_ID",
-                    "name": "SOME_NAME",
-                },
-                "Need to submit node_type",
-            ),
-            (
-                {
-                    "connector": "SOME_CONN",
-                    "project_id": "SOME_ID",
-                    "compute_id": "SOME_ID",
-                    "name": "SOME_NAME",
-                    "node_type": "docker",
+                    "template": "SOME_TEMPLATE",
                     "node_id": "SOME_ID",
                 },
                 "Node already created",
@@ -850,7 +859,7 @@ class TestNode:
                     "name": "SOME_NAME",
                     "node_type": "docker",
                 },
-                "You must provide template or template_id",
+                "Need either 'template' of 'template_id'",
             ),
         ],
     )
@@ -1100,23 +1109,14 @@ class TestProject:
 
     def test_create_node(self, api_test_project):
         api_test_project.create_node(
-            name="alpine-2", node_type="docker", template=CTEMPLATE["name"]
+            name="alpine-2", console=5077, template=CTEMPLATE["name"]
         )
         alpine2 = api_test_project.get_node(name="alpine-2")
+        print(api_test_project.nodes_summary())
         assert alpine2.console == 5077
         assert alpine2.name == "alpine-2"
         assert alpine2.node_type == "docker"
         assert alpine2.node_id == "NEW_NODE_ID"
-
-    def test_error_create_node_with_equal_name(self, api_test_project):
-        with pytest.raises(ValueError, match="Node with equal name found"):
-            api_test_project.create_node(
-                name="alpine-1",
-                node_type="docker",
-                template=CTEMPLATE["name"],
-                connector=gns3_server,
-                project_id=CPROJECT["id"],
-            )
 
     def test_create_link(self, api_test_project):
         api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
