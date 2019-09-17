@@ -119,11 +119,7 @@ class Gns3Connector:
         """
         if data:
             _response = getattr(self.session, method.lower())(
-                url,
-                data=data,
-                headers=headers,
-                params=params,
-                verify=verify,
+                url, data=data, headers=headers, params=params, verify=verify
             )
 
         elif json_data:
@@ -1195,9 +1191,7 @@ class Project:
         """
         self._verify_before_action()
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
 
         return self.connector.http_call("get", _url).text
 
@@ -1226,9 +1220,7 @@ class Project:
         """
         self._verify_before_action()
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
 
         self.connector.http_call("post", _url, data=data)
 
