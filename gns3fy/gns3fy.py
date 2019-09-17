@@ -1,6 +1,6 @@
 import time
 import requests
-from urllib.parse import urlencode, urlparse
+from urllib.parse import urlparse
 from requests import HTTPError
 from dataclasses import field
 from typing import Optional, Any, Dict, List
@@ -119,12 +119,7 @@ class Gns3Connector:
         """
         if data:
             _response = getattr(self.session, method.lower())(
-                url,
-                data=urlencode(data),
-                # data=data,
-                headers=headers,
-                params=params,
-                verify=verify,
+                url, data=data, headers=headers, params=params, verify=verify
             )
 
         elif json_data:
@@ -872,6 +867,56 @@ class Node:
         self.node_id = None
         self.name = None
 
+    def get_file(self, path):
+        """
+        Retrieve a file in the node directory.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `path`: Node's relative path of the file
+        """
+        self._verify_before_action()
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
+            f"/files/{path}"
+        )
+
+        return self.connector.http_call("get", _url).text
+
+    def write_file(self, path, data):
+        """
+        Places a file content on a specified node file path. Used mainly for docker
+        images. Example to update an alpine docker network interfaces:
+
+        ```python
+        >>> data = '''
+            auto eth0
+            iface eth0 inet dhcp
+            '''
+
+        >>> alpine_node.write_file(path='/etc/network/interfaces', data=data)
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `path`: Node's relative path of the file
+        - `data`: Data to be included in the file
+        ```
+
+        """
+        self._verify_before_action()
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
+            f"/files/{path}"
+        )
+
+        self.connector.http_call("post", _url, data=data)
+
 
 @dataclass(config=Config)
 class Project:
@@ -1132,6 +1177,52 @@ class Project:
 
         # Update object
         self.stats = _response.json()
+
+    def get_file(self, path):
+        """
+        Retrieve a file in the project directory. Beware you have warranty to be able to
+        access only to file global to the project.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `path`: Project's relative path of the file
+        """
+        self._verify_before_action()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
+
+        return self.connector.http_call("get", _url).text
+
+    def write_file(self, path, data):
+        """
+        Places a file content on a specified project file path. Beware you have warranty
+        to be able to access only to file global to the project.
+
+        Example to create a README.txt for the project:
+
+        ```python
+        >>> data = '''
+            This is a README description!
+            '''
+
+        >>> project.write_file(path='README.txt', data=data)
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `path`: Project's relative path of the file
+        - `data`: Data to be included in the file
+        ```
+
+        """
+        self._verify_before_action()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
+
+        self.connector.http_call("post", _url, data=data)
 
     def get_nodes(self):
         """
