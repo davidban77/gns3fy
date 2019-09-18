@@ -13,3 +13,9 @@ test:
 	poetry run black --diff --check .
 	poetry run tox
 	poetry run pytest --cov-report=xml --cov=gns3fy tests/
+
+build:
+	poetry build
+
+publish:
+	poetry publish

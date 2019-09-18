@@ -6,6 +6,12 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.4.1
+
+**Fix:**
+
+- Dependency of python to start at version 3.6
+
 ## 0.4.0
 
 **New features:**
