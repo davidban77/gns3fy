@@ -4,6 +4,12 @@ gns3fy is a Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/i
 
 Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts.
 
+## Use cases
+
+Here are some examples where gns3fy is used in a programmatic way:
+
+- [Ansible-collection-gns3](https://galaxy.ansible.com/davidban77/gns3): Useful for CI/CD pipelines to interact with GNS3 server using Ansible. It can create/delete projects, nodes and links in an ansible playbook.
+
 ## Install
 
 ```
