@@ -479,6 +479,47 @@ and `name` when executed successfully
 - `connector`
 - `node_id`
 
+### `Node.get_file()`
+
+```python
+def get_file(self, path)
+```
+
+Retrieve a file in the node directory.
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+- `path`: Node's relative path of the file
+
+### `Node.write_file()`
+
+```python
+def write_file(self, path, data)
+```
+
+Places a file content on a specified node file path. Used mainly for docker
+images.
+
+Example to update an alpine docker network interfaces:
+
+```python
+>>> data = '''
+    auto eth0
+    iface eth0 inet dhcp
+    '''
+
+>>> alpine_node.write_file(path='/etc/network/interfaces', data=data)
+```
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+- `path`: Node's relative path of the file
+- `data`: Data to be included in the file
+
 ## `Project` Objects
 
 GNS3 Project API object. For more information visit: [Project Endpoint API
@@ -627,6 +668,47 @@ Retrieve the stats of the project.
 
 - `project_id`
 - `connector`
+
+### `Project.get_file()`
+
+```python
+def get_file(self, path)
+```
+
+Retrieve a file in the project directory. Beware you have warranty to be able to
+access only to file global to the project.
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+- `path`: Project's relative path of the file
+
+### `Project.write_file()`
+
+```python
+def write_file(self, path, data)
+```
+
+Places a file content on a specified project file path. Beware you have warranty
+to be able to access only to file global to the project.
+
+Example to create a README.txt for the project:
+
+```python
+>>> data = '''
+    This is a README description!
+    '''
+
+>>> project.write_file(path='README.txt', data=data)
+```
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+- `path`: Project's relative path of the file
+- `data`: Data to be included in the file
 
 ### `Project.get_nodes()`
 

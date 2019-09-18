@@ -892,7 +892,9 @@ class Node:
     def write_file(self, path, data):
         """
         Places a file content on a specified node file path. Used mainly for docker
-        images. Example to update an alpine docker network interfaces:
+        images.
+
+        Example to update an alpine docker network interfaces:
 
         ```python
         >>> data = '''
@@ -901,6 +903,7 @@ class Node:
             '''
 
         >>> alpine_node.write_file(path='/etc/network/interfaces', data=data)
+        ```
 
         **Required Attributes:**
 
@@ -908,8 +911,6 @@ class Node:
         - `connector`
         - `path`: Node's relative path of the file
         - `data`: Data to be included in the file
-        ```
-
         """
         self._verify_before_action()
 
@@ -1211,6 +1212,7 @@ class Project:
             '''
 
         >>> project.write_file(path='README.txt', data=data)
+        ```
 
         **Required Attributes:**
 
@@ -1218,8 +1220,6 @@ class Project:
         - `connector`
         - `path`: Project's relative path of the file
         - `data`: Data to be included in the file
-        ```
-
         """
         self._verify_before_action()
 
