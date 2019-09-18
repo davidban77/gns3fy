@@ -15,6 +15,7 @@ Check out the [Documentation](https://davidban77.github.io/gns3fy/) to explore u
 Here are some examples where gns3fy is used in a programmatic way:
 
 - [Ansible-collection-gns3](https://galaxy.ansible.com/davidban77/gns3): Useful for CI/CD pipelines to interact with GNS3 server using Ansible. It can create/delete projects, nodes and links in an ansible playbook.
+- Terraform: Soming soon... (although it might be a Go version of it)
 
 ## Install
 
