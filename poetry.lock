@@ -289,7 +289,7 @@ description = "Toolbox with useful Python classes and type magic."
 name = "nr.types"
 optional = false
 python-versions = "*"
-version = "3.0.1"
+version = "2.5.5"
 
 [package.dependencies]
 six = "*"
