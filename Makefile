@@ -1,3 +1,4 @@
+# Needs to be on master branch
 docs-publish:
 	cd docs; mkdocs gh-deploy -m "[ci skip]"
 
