@@ -6,9 +6,19 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.4.0
+
+**New features:**
+
+- Added `get_file` and `write_file` methods to `Node` and `Project`. Useful for interacting with files that reside on the server like README files, `/etc/network/interfaces` file for docker nodes, among other cases
+
+**Fix:**
+
+- A "template not found" message, when creating a `Node` specifiying a missing/wrong template name.
+
 ## 0.3.0
 
-**Enhacement:**
+**Enhancement:**
 
 - `tox` for pipeline testing. https://github.com/davidban77/gns3fy/pull/15
 - `projects_summary` and `templates_summary` methods for `Gns3Connector`. https://github.com/davidban77/gns3fy/pull/17

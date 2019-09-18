@@ -47,6 +47,12 @@ def version_data():
     return data
 
 
+def files_data():
+    with open(DATA_FILES / "files.txt") as fdata:
+        data = fdata.read()
+    return data
+
+
 def json_api_test_project():
     "Fetches the API_TEST project response"
     return next((_p for _p in projects_data() if _p["project_id"] == CPROJECT["id"]))
@@ -103,6 +109,9 @@ def post_put_matcher(request):
             resp.status_code = 201
             resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/files/README.txt"):
+            resp.status_code = 200
+            return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
             if not any(x in _data for x in ("compute_id", "name", "node_type")):
@@ -151,6 +160,11 @@ def post_put_matcher(request):
             _returned.update(status="stopped")
             resp.status_code = 200
             resp.json = lambda: _returned
+            return resp
+        elif request.path_url.endswith(
+            f"/{CPROJECT['id']}/nodes/{CNODE['id']}/files//etc/network/interfaces"
+        ):
+            resp.status_code = 201
             return resp
         elif request.path_url.endswith(
             f"/{CPROJECT['id']}/nodes/{CNODE['id']}/suspend"
@@ -262,6 +276,19 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
             json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 0},
         )
+        # Get a project README file info
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/files/README.txt",
+            text="\nThis is a README\n",
+            status_code=200,
+        )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/files//dummy/path",
+            json={"message": f"404: Not found", "status": 404},
+            status_code=404,
+        )
         # Extra project
         self.adapter.register_uri(
             "GET",
@@ -319,6 +346,26 @@ class Gns3ConnectorMock(Gns3Connector):
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/nodes/" "7777-4444-0000",
             json={"message": "Node ID 7777-4444-0000 doesn't exist", "status": 404},
+            status_code=404,
+        )
+        # Get a docker file interfaces info
+        self.adapter.register_uri(
+            "GET",
+            (
+                f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/"
+                "files//etc/network/interfaces"
+            ),
+            text=files_data(),
+            status_code=204,
+        )
+        dummy_path_url = (
+            f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/"
+            "files//dummy/path"
+        )
+        self.adapter.register_uri(
+            "GET",
+            dummy_path_url,
+            json={"message": f"{dummy_path_url} not found", "status": 404},
             status_code=404,
         )
         self.adapter.register_uri(
@@ -861,6 +908,16 @@ class TestNode:
                 },
                 "Need either 'template' of 'template_id'",
             ),
+            (
+                {
+                    "connector": "CHANGE_TO_FIXTURE",
+                    "project_id": CPROJECT["id"],
+                    "compute_id": "local",
+                    "name": "alpine-2",
+                    "template": "alpine-dummy",
+                },
+                "Template alpine-dummy not found",
+            ),
         ],
     )
     def test_error_create_with_no_required_param(self, params, expected, gns3_server):
@@ -869,6 +926,20 @@ class TestNode:
             node.connector = gns3_server
         with pytest.raises(ValueError, match=expected):
             node.create()
+
+    def test_get_file(self, api_test_node):
+        text_data = api_test_node.get_file(path="/etc/network/interfaces")
+        assert "iface eth1 inet dhcp" in text_data
+
+    def test_error_get_file_wrong_path(self, api_test_node):
+        with pytest.raises(HTTPError, match="/dummy/path not found"):
+            api_test_node.get_file(path="/dummy/path")
+
+    # TODO: Need to make these tests with a "real mocked API" that can accept changes
+    def test_write_file(self, api_test_node):
+        data = "auto eth0\niface eth0 inet dhcp\n"
+        r = api_test_node.write_file(path="/etc/network/interfaces", data=data)
+        assert r is None
 
     def test_delete(self, api_test_node):
         api_test_node.delete()
@@ -1148,3 +1219,17 @@ class TestProject:
     ):
         with pytest.raises(ValueError, match=expected):
             api_test_project.create_link(*link)
+
+    def test_get_file(self, api_test_project):
+        text_data = api_test_project.get_file(path="README.txt")
+        assert "This is a README" in text_data
+
+    def test_error_get_file_wrong_path(self, api_test_project):
+        with pytest.raises(HTTPError, match="Not found"):
+            api_test_project.get_file(path="/dummy/path")
+
+    # TODO: Need to make these tests with a "real mocked API" that can accept changes
+    def test_write_file(self, api_test_project):
+        data = "NEW README INFO!\n"
+        r = api_test_project.write_file(path="README.txt", data=data)
+        assert r is None

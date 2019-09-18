@@ -5,9 +5,7 @@ site_author: David Flores
 repo_url: https://github.com/davidban77/gns3fy/
 edit_uri: edit/develop/docs/content/
 docs_dir: "content"
-# theme: cinder
-theme:
-  name: cinder
+theme: cinder
 
 markdown_extensions:
   - toc:
