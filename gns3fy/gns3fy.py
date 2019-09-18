@@ -809,6 +809,9 @@ class Node:
             raise ValueError("Node object needs to have project_id attribute")
         if not self.template_id:
             if self.template:
+                _template = self.connector.get_template(name=self.template)
+                if _template is None:
+                    raise ValueError(f"Template {self.template} not found")
                 self.template_id = self.connector.get_template(name=self.template).get(
                     "template_id"
                 )

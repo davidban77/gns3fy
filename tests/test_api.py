@@ -908,6 +908,16 @@ class TestNode:
                 },
                 "Need either 'template' of 'template_id'",
             ),
+            (
+                {
+                    "connector": "CHANGE_TO_FIXTURE",
+                    "project_id": CPROJECT["id"],
+                    "compute_id": "local",
+                    "name": "alpine-2",
+                    "template": "alpine-dummy",
+                },
+                "Template alpine-dummy not found",
+            ),
         ],
     )
     def test_error_create_with_no_required_param(self, params, expected, gns3_server):
