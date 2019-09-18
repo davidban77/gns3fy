@@ -196,6 +196,10 @@
                 
             <li class="second-level"><a href="#nodedelete">Node.delete()</a></li>
                 
+            <li class="second-level"><a href="#nodeget_file">Node.get_file()</a></li>
+                
+            <li class="second-level"><a href="#nodewrite_file">Node.write_file()</a></li>
+                
         <li class="first-level "><a href="#project-objects">Project Objects</a></li>
             <li class="second-level"><a href="#projectget">Project.get()</a></li>
                 
@@ -210,6 +214,10 @@
             <li class="second-level"><a href="#projectopen">Project.open()</a></li>
                 
             <li class="second-level"><a href="#projectget_stats">Project.get_stats()</a></li>
+                
+            <li class="second-level"><a href="#projectget_file">Project.get_file()</a></li>
+                
+            <li class="second-level"><a href="#projectwrite_file">Project.write_file()</a></li>
                 
             <li class="second-level"><a href="#projectget_nodes">Project.get_nodes()</a></li>
                 
@@ -610,6 +618,39 @@ and <code>name</code> when executed successfully</p>
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
+<h3 id="nodeget_file"><code>Node.get_file()</code></h3>
+<pre><code class="python">def get_file(self, path)
+</code></pre>
+
+<p>Retrieve a file in the node directory.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>path</code>: Node's relative path of the file</li>
+</ul>
+<h3 id="nodewrite_file"><code>Node.write_file()</code></h3>
+<pre><code class="python">def write_file(self, path, data)
+</code></pre>
+
+<p>Places a file content on a specified node file path. Used mainly for docker
+images.</p>
+<p>Example to update an alpine docker network interfaces:</p>
+<pre><code class="python">&gt;&gt;&gt; data = '''
+    auto eth0
+    iface eth0 inet dhcp
+    '''
+
+&gt;&gt;&gt; alpine_node.write_file(path='/etc/network/interfaces', data=data)
+</code></pre>
+
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>path</code>: Node's relative path of the file</li>
+<li><code>data</code>: Data to be included in the file</li>
+</ul>
 <h2 id="project-objects"><code>Project</code> Objects</h2>
 <p>GNS3 Project API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html">Project Endpoint API
 information</a></p>
@@ -729,6 +770,39 @@ you want updated</p>
 <ul>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
+</ul>
+<h3 id="projectget_file"><code>Project.get_file()</code></h3>
+<pre><code class="python">def get_file(self, path)
+</code></pre>
+
+<p>Retrieve a file in the project directory. Beware you have warranty to be able to
+access only to file global to the project.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>path</code>: Project's relative path of the file</li>
+</ul>
+<h3 id="projectwrite_file"><code>Project.write_file()</code></h3>
+<pre><code class="python">def write_file(self, path, data)
+</code></pre>
+
+<p>Places a file content on a specified project file path. Beware you have warranty
+to be able to access only to file global to the project.</p>
+<p>Example to create a README.txt for the project:</p>
+<pre><code class="python">&gt;&gt;&gt; data = '''
+    This is a README description!
+    '''
+
+&gt;&gt;&gt; project.write_file(path='README.txt', data=data)
+</code></pre>
+
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+<li><code>path</code>: Project's relative path of the file</li>
+<li><code>data</code>: Data to be included in the file</li>
 </ul>
 <h3 id="projectget_nodes"><code>Project.get_nodes()</code></h3>
 <pre><code class="python">def get_nodes(self)

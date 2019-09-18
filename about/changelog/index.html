@@ -139,7 +139,8 @@
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#030">0.3.0</a></li>
+        <li class="first-level active"><a href="#040">0.4.0</a></li>
+        <li class="first-level "><a href="#030">0.3.0</a></li>
         <li class="first-level "><a href="#020">0.2.0</a></li>
         <li class="first-level "><a href="#011">0.1.1</a></li>
         <li class="first-level "><a href="#010">0.1.0</a></li>
@@ -152,8 +153,17 @@
 </code></pre>
 
 <h1>Releases</h1>
+<h2 id="040">0.4.0</h2>
+<p><strong>New features:</strong></p>
+<ul>
+<li>Added <code>get_file</code> and <code>write_file</code> methods to <code>Node</code> and <code>Project</code>. Useful for interacting with files that reside on the server like README files, <code>/etc/network/interfaces</code> file for docker nodes, among other cases</li>
+</ul>
+<p><strong>Fix:</strong></p>
+<ul>
+<li>A "template not found" message, when creating a <code>Node</code> specifiying a missing/wrong template name.</li>
+</ul>
 <h2 id="030">0.3.0</h2>
-<p><strong>Enhacement:</strong></p>
+<p><strong>Enhancement:</strong></p>
 <ul>
 <li><code>tox</code> for pipeline testing. https://github.com/davidban77/gns3fy/pull/15</li>
 <li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>. https://github.com/davidban77/gns3fy/pull/17</li>
