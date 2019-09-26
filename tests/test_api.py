@@ -273,9 +273,7 @@ class Gns3ConnectorMock(Gns3Connector):
             status_code=404,
         )
         self.adapter.register_uri(
-            "DELETE",
-            f"{self.base_url}/templates/{CTEMPLATE['id']}",
-            status_code=204,
+            "DELETE", f"{self.base_url}/templates/{CTEMPLATE['id']}", status_code=204
         )
         ############
         # Projects #
