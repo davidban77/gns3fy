@@ -196,6 +196,12 @@ def post_put_matcher(request):
                 _returned.update(link_id="NEW_LINK_ID")
                 resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith("/templates"):
+            _data = request.json()
+            if _data["name"] == "alpinev2":
+                resp.status_code = 201
+                resp.json = lambda: _data
+                return resp
     elif request.method == "PUT":
         if request.path_url.endswith(f"/{CPROJECT['id']}"):
             _data = request.json()
@@ -222,6 +228,12 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith(f"/templates/{CTEMPLATE['id']}"):
+            _data = request.json()
+            if _data["category"] == "switch":
+                resp.status_code = 200
+                resp.json = lambda: _data
+                return resp
     return None
 
 
@@ -259,6 +271,11 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/templates/7777-4444-0000",
             json={"message": "Template ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/templates/{CTEMPLATE['id']}",
+            status_code=204,
         )
         ############
         # Projects #
@@ -488,6 +505,36 @@ class TestGns3Connector:
     def test_error_template_name_not_found(self, gns3_server):
         # NOTE: Should it give the same output as the one above?
         response = gns3_server.get_template(name="NOTE_FOUND")
+        assert response is None
+
+    def test_create_template(self, gns3_server):
+        new_template = json_api_test_template()
+        assert new_template["name"] == "alpine"
+        # Create a new template from previous one
+        new_template["name"] = "alpinev2"
+        new_template.pop("compute_id")
+        # Create template
+        response = gns3_server.create_template(**new_template)
+        assert response["name"] == "alpinev2"
+        assert response["template_type"] == "docker"
+        assert response["category"] == "guest"
+
+    def test_error_create_template_already_used(self, gns3_server):
+        with pytest.raises(ValueError, match="Template already used: alpine"):
+            gns3_server.create_template(**json_api_test_template())
+
+    def test_update_template(self, gns3_server):
+        template = json_api_test_template()
+        assert template["category"] == "guest"
+        # Change an attribute
+        template["category"] = "switch"
+        # Update
+        response = gns3_server.update_template(**template)
+        assert response["name"] == "alpine"
+        assert response["category"] == "switch"
+
+    def test_delete_template(self, gns3_server):
+        response = gns3_server.delete_template(name=CTEMPLATE["name"])
         assert response is None
 
     def test_get_projects(self, gns3_server):

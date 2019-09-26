@@ -262,6 +262,68 @@ class Gns3Connector:
         else:
             raise ValueError("Must provide either a name or template_id")
 
+    def update_template(self, name=None, template_id=None, **kwargs):
+        """
+        Updates a template by giving its name or UUID. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templatestemplateid.html#put-v2-templates-template-id)
+
+        **Required Attributes:**
+
+        - `name` or `template_id`
+        """
+        _template = self.get_template(name=name, template_id=template_id)
+        _template.update(**kwargs)
+
+        response = self.http_call(
+            "put",
+            url=f"{self.base_url}/templates/{_template['template_id']}",
+            json_data=_template,
+        )
+
+        return response.json()
+
+    def create_template(self, **kwargs):
+        """
+        Creates a template by giving its attributes. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templates.html#post-v2-templates)
+
+        **Required Attributes:**
+
+        - `name`
+        - `compute_id` by default is 'local'
+        - `template_type`
+        """
+        _template = self.get_template(name=kwargs["name"])
+        if _template:
+            raise ValueError(f"Template already used: {kwargs['name']}")
+
+        if "compute_id" not in kwargs:
+            kwargs["compute_id"] = "local"
+
+        response = self.http_call(
+            "post", url=f"{self.base_url}/templates", json_data=kwargs
+        )
+
+        return response.json()
+
+    def delete_template(self, name=None, template_id=None):
+        """
+        Deletes a template by giving its attributes. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templatestemplateid.html#id16)
+
+        **Required Attributes:**
+
+        - `name` or `template_id`
+        """
+        if name and not template_id:
+            _template = self.get_template(name=name)
+            template_id = _template["template_id"]
+
+        self.http_call("delete", url=f"{self.base_url}/templates/{template_id}")
+
     def get_nodes(self, project_id):
         """
         Retieves the nodes defined on the project

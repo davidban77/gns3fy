@@ -525,3 +525,70 @@ Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  Tr
 ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
 """
 ```
+
+### Migrate templates between GNS3 servers
+
+You may need to backup your current templates configuration of one server to another, or just want to standardize the templates used across your GNS3 server.
+
+Here is a simple script that shows an example of how to achive it with `Gns3Connector`.
+
+`migrate_gns3_templates.py`
+
+```python
+from gns3fy import Gns3Connector
+
+OLD_URL = "http://gns3server01:3080"
+NEW_URL = "http://gns3server02:3080"
+
+def main()
+    # Define the server objects
+    old_server = Gns3Connector(url=OLD_URL)
+    new_server = Gns3Connector(url=NEW_URL)
+
+    # Retrive their current templates
+    old_server_templates = old_server.get_templates()
+    new_server_templates = new_server.get_templates()
+
+    # Now pass the templates
+    for template in old_server_templates:
+        # Bypass templates already configured on new server
+        if any(template["name"] == x["name"] for x in new_server_templates):
+            print(f"Template: {template['name']} already present. Skipping...")
+            continue
+
+        # Pass template
+        new_server.create_template(**template)
+        print(f"Template: {template['name']} passed!")
+
+if __name__ == '__main__':
+    main()
+```
+
+It can produce an output similar to this:
+
+`python migrate_gns3_templates.py`
+
+```
+Template: vEOS-4.21.5F passed!
+Template: Junos vMX passed!
+Template: alpine passed!
+Template: Cloud already present. Skipping...
+Template: NAT already present. Skipping...
+Template: VPCS already present. Skipping...
+Template: Ethernet switch already present. Skipping...
+Template: Ethernet hub already present. Skipping...
+Template: Frame Relay switch already present. Skipping...
+Template: ATM switch already present. Skipping...
+Template: netautomator passed!
+Template: Cisco IOSv 15.7(3)M3 passed!
+Template: Cisco IOSvL2 15.2.1 passed!
+Template: Cisco IOSvL2 15.2(20170321:233949) passed!
+Template: Cisco IOS XRv 9000 6.5.1 passed!
+Template: Cisco IOS XRv 6.1.3 passed!
+Template: Cisco NX-OSv 7.3.0 passed!
+Template: Cisco ASAv 9.9.2 passed!
+Template: Cisco CSR1000v 16.9.4 passed!
+Template: Cumulus VX 3.7.8 passed!
+Template: Cisco NX-OSv 9000 7.0.3.I7.4 passed!
+Template: Arista vEOS 4.21.5F passed!
+```
