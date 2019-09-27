@@ -10,6 +10,8 @@ pip install -U gns3fy
 
 **New features:**
 
+- Extended templates functionality with `create_template`, `update_template` and `delete_template`. Which can be used for migrating templates between GNS3 servers
+
 - Added compute endpoint get method from the REST API:
     - `get_computes`: Retrieves attributes and characteristics of the GNS3 server compute that will run the emulations.
     - `get_compute_images`: Lists images configured for a specific emulator on a compute.
