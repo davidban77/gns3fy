@@ -15,6 +15,8 @@ CPROJECT = {"name": "API_TEST", "id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe"}
 CNODE = {"name": "alpine-1", "id": "ef503c45-e998-499d-88fc-2765614b313e"}
 CTEMPLATE = {"name": "alpine", "id": "847e5333-6ac9-411f-a400-89838584371b"}
 CLINK = {"link_type": "ethernet", "id": "4d9f1235-7fd1-466b-ad26-0b4b08beb778"}
+CCOMPUTE = {"id": "local"}
+CIMAGE = {"filename": "vEOS-lab-4.21.5F.vmdk"}
 
 
 def links_data():
@@ -47,6 +49,24 @@ def version_data():
     return data
 
 
+def computes_data():
+    with open(DATA_FILES / "computes.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
+def compute_qemu_images_data():
+    with open(DATA_FILES / "compute_qemu_images.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
+def compute_ports_data():
+    with open(DATA_FILES / "compute_ports.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
 def files_data():
     with open(DATA_FILES / "files.txt") as fdata:
         data = fdata.read()
@@ -66,6 +86,11 @@ def json_api_test_node():
 def json_api_test_template():
     "Fetches the alpine template response"
     return next((_t for _t in templates_data() if _t["template_id"] == CTEMPLATE["id"]))
+
+
+def json_api_test_compute():
+    "Fetches the alpine template response"
+    return next((_t for _t in computes_data() if _t["compute_id"] == CCOMPUTE["id"]))
 
 
 def json_api_test_link():
@@ -255,16 +280,33 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET", f"{self.base_url}/version", json=version_data()
         )
-        # Templates
+        ############
+        # Computes #
+        ############
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes", json=computes_data()
+        )
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes/local", json=json_api_test_compute()
+        )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/computes/local/qemu/images",
+            json=compute_qemu_images_data(),
+        )
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes/local/ports", json=compute_ports_data()
+        )
+        #############
+        # Templates #
+        #############
         self.adapter.register_uri(
             "GET", f"{self.base_url}/templates", json=templates_data()
         )
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/templates/{CTEMPLATE['id']}",
-            json=next(
-                (_t for _t in templates_data() if _t["template_id"] == CTEMPLATE["id"])
-            ),
+            json=json_api_test_template(),
         )
         self.adapter.register_uri(
             "GET",
@@ -699,6 +741,37 @@ class TestGns3Connector:
             "aaa764e2-b383-300f-8a0e-3493bbfdb7d2 -- Type: atm_switch -- Builtin: True "
             "-- Console: N/A -- Category: switch\n"
         )
+
+    def test_get_computes(self, gns3_server):
+        response = gns3_server.get_computes()
+        assert isinstance(response, list)
+        assert response[0]["compute_id"] == "local"
+        assert response[0]["host"] == "127.0.0.1"
+        assert response[0]["name"] == "Main server"
+
+    def test_get_compute(self, gns3_server):
+        response = gns3_server.get_compute(compute_id="local")
+        assert response["compute_id"] == "local"
+        assert response["host"] == "127.0.0.1"
+        assert response["name"] == "Main server"
+
+    def test_get_compute_qemu_images(self, gns3_server):
+        response = gns3_server.get_compute_images(emulator="qemu", compute_id="local")
+        for index, n in enumerate(
+            [
+                ("cumulus-linux-3.7.8-vx-amd64-qemu.qcow2", 619_249_664),
+                ("iosxrv-k9-demo-6.1.3.qcow2", 428_588_544),
+                ("nxosv.9.3.1.qcow2", 1_435_041_792),
+                ("vEOS-lab-4.21.5F.vmdk", 383_778_816),
+            ]
+        ):
+            assert n[0] == response[index]["filename"]
+            assert n[1] == response[index]["filesize"]
+
+    def test_get_compute_ports(self, gns3_server):
+        response = gns3_server.get_compute_ports(compute_id="local")
+        assert response["console_port_range"] == [5000, 10000]
+        assert response["udp_port_range"] == [10000, 20000]
 
     def test_wrong_server_url(self, gns3_server):
         gns3_server.base_url = "WRONG URL"

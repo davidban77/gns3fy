@@ -401,6 +401,60 @@ class Gns3Connector:
         self.http_call("delete", _url)
         return
 
+    def get_computes(self):
+        """
+        Returns a list of computes.
+
+        **Returns:**
+
+        List of dictionaries of the computes attributes like cpu/memory usage
+        """
+        _url = f"{self.base_url}/computes"
+        return self.http_call("get", _url).json()
+
+    def get_compute(self, compute_id="local"):
+        """
+        Returns a compute.
+
+        **Returns:**
+
+        Dictionary of the compute attributes like cpu/memory usage
+        """
+        _url = f"{self.base_url}/computes/{compute_id}"
+        return self.http_call("get", _url).json()
+
+    def get_compute_images(self, emulator, compute_id="local"):
+        """
+        Returns a list of images available for a compute.
+
+        **Required Attributes:**
+
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+        - `compute_id` By default is 'local'
+
+        **Returns:**
+
+        List of dictionaries with images available for the compute for the specified
+        emulator
+        """
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
+        return self.http_call("get", _url).json()
+
+    def get_compute_ports(self, compute_id="local"):
+        """
+        Returns ports used and configured by a compute.
+
+        **Required Attributes:**
+
+        - `compute_id` By default is 'local'
+
+        **Returns:**
+
+        Dictionary of `console_ports` used and range, as well as the `udp_ports`
+        """
+        _url = f"{self.base_url}/computes/{compute_id}/ports"
+        return self.http_call("get", _url).json()
+
 
 @dataclass(config=Config)
 class Link:
