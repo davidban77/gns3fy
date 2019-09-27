@@ -1,0 +1,26 @@
+[
+    {
+        "filename": "cumulus-linux-3.7.8-vx-amd64-qemu.qcow2",
+        "filesize": 619249664,
+        "md5sum": "20d59d1f28321908fcb80f123456789f",
+        "path": "cumulus-linux-3.7.8-vx-amd64-qemu.qcow2"
+    },
+    {
+        "filename": "iosxrv-k9-demo-6.1.3.qcow2",
+        "filesize": 428588544,
+        "md5sum": "1693b5d22a398587dd0fed123456789f",
+        "path": "iosxrv-k9-demo-6.1.3.qcow2"
+    },
+    {
+        "filename": "nxosv.9.3.1.qcow2",
+        "filesize": 1435041792,
+        "md5sum": "148fd38cb1ff78df2883f8123456789f",
+        "path": "nxosv.9.3.1.qcow2"
+    },
+    {
+        "filename": "vEOS-lab-4.21.5F.vmdk",
+        "filesize": 383778816,
+        "md5sum": "5bfd3f1b7b994c73084a38123456789f",
+        "path": "vEOS-lab-4.21.5F.vmdk"
+    }
+]
