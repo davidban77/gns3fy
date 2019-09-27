@@ -128,6 +128,50 @@ Retrieves a template from either a name or ID
 
 - `name` or `template_id`
 
+### `Gns3Connector.update_template()`
+
+```python
+def update_template(self, name=None, template_id=None, kwargs)
+```
+
+Updates a template by giving its name or UUID. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templatestemplateid.html#put-v2-templates-template-id)
+
+**Required Attributes:**
+
+- `name` or `template_id`
+
+### `Gns3Connector.create_template()`
+
+```python
+def create_template(self, kwargs)
+```
+
+Creates a template by giving its attributes. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templates.html#post-v2-templates)
+
+**Required Attributes:**
+
+- `name`
+- `compute_id` by default is 'local'
+- `template_type`
+
+### `Gns3Connector.delete_template()`
+
+```python
+def delete_template(self, name=None, template_id=None)
+```
+
+Deletes a template by giving its attributes. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templatestemplateid.html#id16)
+
+**Required Attributes:**
+
+- `name` or `template_id`
+
 ### `Gns3Connector.get_nodes()`
 
 ```python
@@ -205,6 +249,64 @@ Deletes a project from server.
 **Required Attributes:**
 
 - `project_id`
+
+### `Gns3Connector.get_computes()`
+
+```python
+def get_computes(self)
+```
+
+Returns a list of computes.
+
+**Returns:**
+
+List of dictionaries of the computes attributes like cpu/memory usage
+
+### `Gns3Connector.get_compute()`
+
+```python
+def get_compute(self, compute_id="local")
+```
+
+Returns a compute.
+
+**Returns:**
+
+Dictionary of the compute attributes like cpu/memory usage
+
+### `Gns3Connector.get_compute_images()`
+
+```python
+def get_compute_images(self, emulator, compute_id="local")
+```
+
+Returns a list of images available for a compute.
+
+**Required Attributes:**
+
+- `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+- `compute_id` By default is 'local'
+
+**Returns:**
+
+List of dictionaries with images available for the compute for the specified
+emulator
+
+### `Gns3Connector.get_compute_ports()`
+
+```python
+def get_compute_ports(self, compute_id="local")
+```
+
+Returns ports used and configured by a compute.
+
+**Required Attributes:**
+
+- `compute_id` By default is 'local'
+
+**Returns:**
+
+Dictionary of `console_ports` used and range, as well as the `udp_ports`
 
 ## `Link` Objects
 

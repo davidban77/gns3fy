@@ -6,6 +6,15 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.5.0
+
+**New features:**
+
+- Added compute endpoint get method from the REST API:
+    - `get_computes`: Retrieves attributes and characteristics of the GNS3 server compute that will run the emulations.
+    - `get_compute_images`: Lists images configured for a specific emulator on a compute.
+    - `get_compute_ports`: Lists configured and used console ports and UDP ports on a compute.
+
 ## 0.4.1
 
 **Fix:**

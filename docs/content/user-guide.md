@@ -592,3 +592,44 @@ Template: Cumulus VX 3.7.8 passed!
 Template: Cisco NX-OSv 9000 7.0.3.I7.4 passed!
 Template: Arista vEOS 4.21.5F passed!
 ```
+
+### Check server CPU and Memory usage
+
+You can use the `get_compute` method to retrieve information about the GNS3 server that is running the emulations.
+
+Here is an example of getting the CPU and Memory average usage for a period of time and use that information to determine if a hungre service router can be turned on.
+
+```python
+import time
+from gns3fy import Gns3Connector, Project
+
+server = Gns3Connector(url="http://gns3server")
+
+lab = Project(name="test_lab", connector=server)
+
+lab.get()
+
+hungry_router = lab.get_node(name="hungry_router")
+
+# Get the CPU and Memory usage and calculate its average
+cpu_usage = []
+memory_usage = []
+for index in range(5):
+    compute_attrs = server.get_compute(compute_id="local")
+    cpu_usage.append(compute_attrs.get("cpu_usage_percent"))
+    memory_usage.append(compute_attrs.get("memory_usage_percent"))
+    time.sleep(1)
+
+cpu_avg = round(sum(cpu_usage) / len(cpu_usage), 2)
+mem_avg = round(sum(memory_usage) / len(memory_usage), 2)
+
+# If CPU is less than 40% and Memory is less than 50% turnup the nodes
+if cpu_avg <= 40.0 and mem_avg <= 50.0:
+    hungry_router.start()
+    print("All good! starting hungry router")
+else:
+    print(
+        f"Hungry router does not have enough resources. CPU avg: {cpu_avg}%"
+        f" Memory avg: {mem_avg}%"
+    )
+```
