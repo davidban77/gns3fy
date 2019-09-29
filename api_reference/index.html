@@ -158,6 +158,12 @@
                 
             <li class="second-level"><a href="#gns3connectorget_template">Gns3Connector.get_template()</a></li>
                 
+            <li class="second-level"><a href="#gns3connectorupdate_template">Gns3Connector.update_template()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorcreate_template">Gns3Connector.create_template()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectordelete_template">Gns3Connector.delete_template()</a></li>
+                
             <li class="second-level"><a href="#gns3connectorget_nodes">Gns3Connector.get_nodes()</a></li>
                 
             <li class="second-level"><a href="#gns3connectorget_node">Gns3Connector.get_node()</a></li>
@@ -169,6 +175,14 @@
             <li class="second-level"><a href="#gns3connectorcreate_project">Gns3Connector.create_project()</a></li>
                 
             <li class="second-level"><a href="#gns3connectordelete_project">Gns3Connector.delete_project()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_computes">Gns3Connector.get_computes()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_compute">Gns3Connector.get_compute()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_compute_images">Gns3Connector.get_compute_images()</a></li>
+                
+            <li class="second-level"><a href="#gns3connectorget_compute_ports">Gns3Connector.get_compute_ports()</a></li>
                 
         <li class="first-level "><a href="#link-objects">Link Objects</a></li>
             <li class="second-level"><a href="#linkget">Link.get()</a></li>
@@ -244,6 +258,14 @@
             <li class="second-level"><a href="#projectcreate_node">Project.create_node()</a></li>
                 
             <li class="second-level"><a href="#projectcreate_link">Project.create_link()</a></li>
+                
+            <li class="second-level"><a href="#projectget_snapshots">Project.get_snapshots()</a></li>
+                
+            <li class="second-level"><a href="#projectget_snapshot">Project.get_snapshot()</a></li>
+                
+            <li class="second-level"><a href="#projectcreate_snapshot">Project.create_snapshot()</a></li>
+                
+            <li class="second-level"><a href="#projectdelete_snapshot">Project.delete_snapshot()</a></li>
                 
     </ul>
 </div></div>
@@ -341,6 +363,41 @@ will return a list of tuples like:</p>
 <ul>
 <li><code>name</code> or <code>template_id</code></li>
 </ul>
+<h3 id="gns3connectorupdate_template"><code>Gns3Connector.update_template()</code></h3>
+<pre><code class="python">def update_template(self, name=None, template_id=None, kwargs)
+</code></pre>
+
+<p>Updates a template by giving its name or UUID. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templatestemplateid.html#put-v2-templates-template-id)</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code> or <code>template_id</code></li>
+</ul>
+<h3 id="gns3connectorcreate_template"><code>Gns3Connector.create_template()</code></h3>
+<pre><code class="python">def create_template(self, kwargs)
+</code></pre>
+
+<p>Creates a template by giving its attributes. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templates.html#post-v2-templates)</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code></li>
+<li><code>compute_id</code> by default is 'local'</li>
+<li><code>template_type</code></li>
+</ul>
+<h3 id="gns3connectordelete_template"><code>Gns3Connector.delete_template()</code></h3>
+<pre><code class="python">def delete_template(self, name=None, template_id=None)
+</code></pre>
+
+<p>Deletes a template by giving its attributes. For more information [API INFO]
+(http://api.gns3.net/en/2.2/api/v2/controller/template/
+templatestemplateid.html#id16)</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>name</code> or <code>template_id</code></li>
+</ul>
 <h3 id="gns3connectorget_nodes"><code>Gns3Connector.get_nodes()</code></h3>
 <pre><code class="python">def get_nodes(self, project_id)
 </code></pre>
@@ -399,6 +456,44 @@ will return a list of tuples like:</p>
 <ul>
 <li><code>project_id</code></li>
 </ul>
+<h3 id="gns3connectorget_computes"><code>Gns3Connector.get_computes()</code></h3>
+<pre><code class="python">def get_computes(self)
+</code></pre>
+
+<p>Returns a list of computes.</p>
+<p><strong>Returns:</strong></p>
+<p>List of dictionaries of the computes attributes like cpu/memory usage</p>
+<h3 id="gns3connectorget_compute"><code>Gns3Connector.get_compute()</code></h3>
+<pre><code class="python">def get_compute(self, compute_id=&quot;local&quot;)
+</code></pre>
+
+<p>Returns a compute.</p>
+<p><strong>Returns:</strong></p>
+<p>Dictionary of the compute attributes like cpu/memory usage</p>
+<h3 id="gns3connectorget_compute_images"><code>Gns3Connector.get_compute_images()</code></h3>
+<pre><code class="python">def get_compute_images(self, emulator, compute_id=&quot;local&quot;)
+</code></pre>
+
+<p>Returns a list of images available for a compute.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>emulator</code>: the likes of 'qemu', 'iou', 'docker' ...</li>
+<li><code>compute_id</code> By default is 'local'</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p>List of dictionaries with images available for the compute for the specified
+emulator</p>
+<h3 id="gns3connectorget_compute_ports"><code>Gns3Connector.get_compute_ports()</code></h3>
+<pre><code class="python">def get_compute_ports(self, compute_id=&quot;local&quot;)
+</code></pre>
+
+<p>Returns ports used and configured by a compute.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>compute_id</code> By default is 'local'</li>
+</ul>
+<p><strong>Returns:</strong></p>
+<p>Dictionary of <code>console_ports</code> used and range, as well as the <code>udp_ports</code></p>
 <h2 id="link-objects"><code>Link</code> Objects</h2>
 <p>GNS3 Link API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/link/projectsprojectidlinks.html">Links Endpoint API information</a></p>
 <p><strong>Attributes:</strong></p>
@@ -932,8 +1027,9 @@ will return a list of tuples like:</p>
 <ul>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
-<li><code>name</code> or <code>node_id</code></li>
 </ul>
+<p><strong>Required keyword arguments:</strong>
+- <code>name</code> or <code>node_id</code></p>
 <p><strong>NOTE:</strong> Run method <code>get_nodes()</code> manually to refresh list of nodes if
 necessary</p>
 <h3 id="projectget_link"><code>Project.get_link()</code></h3>
@@ -982,6 +1078,56 @@ port)</li>
 <li><code>node_b</code>: Node name of the B side</li>
 <li><code>port_b</code>: Port name of the B side (must match the <code>name</code> attribute of the
 port)</li>
+</ul>
+<h3 id="projectget_snapshots"><code>Project.get_snapshots()</code></h3>
+<pre><code class="python">def get_snapshots(self)
+</code></pre>
+
+<p>Retrieves list of snapshots of the project</p>
+<p><strong>Required Project instance attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<h3 id="projectget_snapshot"><code>Project.get_snapshot()</code></h3>
+<pre><code class="python">def get_snapshot(self, name=None, snapshot_id=None)
+</code></pre>
+
+<p>Returns the Snapshot by searching for the <code>name</code> or the <code>snapshot_id</code>.</p>
+<p><strong>Required Attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<p><strong>Required keyword arguments:</strong>
+- <code>name</code> or <code>snapshot_id</code></p>
+<h3 id="projectcreate_snapshot"><code>Project.create_snapshot()</code></h3>
+<pre><code class="python">def create_snapshot(self, name)
+</code></pre>
+
+<p>Creates a snapshot of the project</p>
+<p><strong>Required Project instance attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<p><strong>Required keyword aguments:</strong></p>
+<ul>
+<li><code>name</code></li>
+</ul>
+<h3 id="projectdelete_snapshot"><code>Project.delete_snapshot()</code></h3>
+<pre><code class="python">def delete_snapshot(self, snapshot_id)
+</code></pre>
+
+<p>Deletes a snapshot of the project</p>
+<p><strong>Required Project instance attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<p><strong>Required keyword aguments:</strong></p>
+<ul>
+<li><code>snapshot_id</code></li>
 </ul></div>
         
         

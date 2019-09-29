@@ -139,7 +139,9 @@
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#040">0.4.0</a></li>
+        <li class="first-level active"><a href="#050">0.5.0</a></li>
+        <li class="first-level "><a href="#041">0.4.1</a></li>
+        <li class="first-level "><a href="#040">0.4.0</a></li>
         <li class="first-level "><a href="#030">0.3.0</a></li>
         <li class="first-level "><a href="#020">0.2.0</a></li>
         <li class="first-level "><a href="#011">0.1.1</a></li>
@@ -153,6 +155,34 @@
 </code></pre>
 
 <h1>Releases</h1>
+<h2 id="050">0.5.0</h2>
+<p><strong>New features:</strong></p>
+<ul>
+<li>
+<p>Extended templates functionality with <code>create_template</code>, <code>update_template</code> and <code>delete_template</code>. Which can be used for migrating templates between GNS3 servers</p>
+</li>
+<li>
+<p>Added compute endpoint get method from the REST API. <a href="http://api.gns3.net/en/2.2/api/v2/controller/compute.html">Compute endpoint</a></p>
+<ul>
+<li><code>get_computes</code>: Retrieves attributes and characteristics of the GNS3 server compute that will run the emulations.</li>
+<li><code>get_compute_images</code>: Lists images configured for a specific emulator on a compute.</li>
+<li><code>get_compute_ports</code>: Lists configured and used console ports and UDP ports on a compute.</li>
+</ul>
+</li>
+<li>
+<p>Added projects snapshots attribute and methods. <a href="http://api.gns3.net/en/2.2/api/v2/controller/snapshot.html">Snapshots endpoint</a></p>
+<ul>
+<li><code>snapshots</code>: Attribute that stores snapshots names, IDs and created times of a project. Updated by the <code>get_snapshots</code> method.</li>
+<li><code>get_snapshot</code>: Retrieves an specific snapshot information.</li>
+<li><code>create_snapshot</code> and <code>delete_snapshot</code>: Creates/Delete an specific snapshot</li>
+</ul>
+</li>
+</ul>
+<h2 id="041">0.4.1</h2>
+<p><strong>Fix:</strong></p>
+<ul>
+<li>Dependency of python to start at version 3.6</li>
+</ul>
 <h2 id="040">0.4.0</h2>
 <p><strong>New features:</strong></p>
 <ul>
