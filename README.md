@@ -18,6 +18,7 @@ Here are some examples where gns3fy is used in a programmatic way:
 - Terraform: Soming soon... (although it might be a Go version of it)
 - [Migrate templates between GNS3 servers](https://davidban77.github.io/gns3fy/user-guide/#migrate-templates-between-gns3-servers)
 - [Check server usage](https://davidban77.github.io/gns3fy/user-guide/#check-server-cpu-and-memory-usage) before turning up resource-hungry nodes
+- [Manipulate project snapshots](https://davidban77.github.io/gns3fy/user-guide/#create-and-list-project-snapshots) like create, delete or list the snapshots configured for the project.
 
 ## Install
 
