@@ -37,6 +37,12 @@ def projects_data():
     return data
 
 
+def projects_snaphot_data():
+    with open(DATA_FILES / "project_snapshots.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
 def templates_data():
     with open(DATA_FILES / "templates.json") as fdata:
         data = json.load(fdata)
@@ -136,6 +142,14 @@ def post_put_matcher(request):
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/files/README.txt"):
             resp.status_code = 200
+            return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/snapshots"):
+            _data = request.json()
+            if _data.get("name") == "snap2":
+                _returned = projects_snaphot_data()[-1]
+                resp.json = lambda: _returned
+                resp.status_code = 201
+                return resp
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
@@ -331,7 +345,7 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
-            json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 0},
+            json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 2},
         )
         # Get a project README file info
         self.adapter.register_uri(
@@ -346,11 +360,29 @@ class Gns3ConnectorMock(Gns3Connector):
             json={"message": f"404: Not found", "status": 404},
             status_code=404,
         )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots",
+            json=projects_snaphot_data(),
+            status_code=200,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/"
+            "44e08d78-0ee4-4b8f-bad4-117aa67cb759",
+            status_code=204,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/dummmy",
+            json={"message": "Snapshot ID dummy doesn't exist", "status": 404},
+            status_code=404,
+        )
         # Extra project
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/c9dc56bf-37b9-453b-8f95-2845ce8908e3/stats",
-            json={"drawings": 0, "links": 9, "nodes": 10, "snapshots": 0},
+            json={"drawings": 0, "links": 9, "nodes": 10, "snapshots": 2},
         )
         self.adapter.register_uri(
             "POST",
@@ -1114,7 +1146,7 @@ class TestProject:
             "drawings": 0,
             "links": 4,
             "nodes": 6,
-            "snapshots": 0,
+            "snapshots": 2,
         } == api_test_project.stats
 
     @pytest.mark.parametrize(
@@ -1163,7 +1195,7 @@ class TestProject:
             "drawings": 0,
             "links": 4,
             "nodes": 6,
-            "snapshots": 0,
+            "snapshots": 2,
         } == api_test_project.stats
 
     def test_get_nodes(self, api_test_project):
@@ -1237,6 +1269,7 @@ class TestProject:
         )
 
     def test_nodes_summary_print(self, capsys, api_test_project):
+        api_test_project.nodes = []
         api_test_project.nodes_summary(is_print=True)
         captured = capsys.readouterr()
         assert captured.out == (
@@ -1250,6 +1283,7 @@ class TestProject:
         )
 
     def test_nodes_inventory(self, api_test_project):
+        api_test_project.nodes = []
         nodes_inventory = api_test_project.nodes_inventory()
         assert {
             "server": "gns3server",
@@ -1271,6 +1305,8 @@ class TestProject:
         )
 
     def test_links_summary_print(self, capsys, api_test_project):
+        api_test_project.nodes = []
+        api_test_project.links = []
         api_test_project.links_summary(is_print=True)
         captured = capsys.readouterr()
         assert captured.out == (
@@ -1281,6 +1317,7 @@ class TestProject:
         )
 
     def test_get_node_by_name(self, api_test_project):
+        api_test_project.nodes = []
         switch = api_test_project.get_node(name="IOU1")
         assert switch.name == "IOU1"
         assert switch.status == "started"
@@ -1293,21 +1330,24 @@ class TestProject:
         assert host.console == 5005
 
     def test_get_link_by_id(self, api_test_project):
+        api_test_project.links = []
         link = api_test_project.get_link(link_id=CLINK["id"])
         assert "ethernet" == link.link_type
 
     def test_create_node(self, api_test_project):
+        api_test_project.nodes = []
         api_test_project.create_node(
             name="alpine-2", console=5077, template=CTEMPLATE["name"]
         )
         alpine2 = api_test_project.get_node(name="alpine-2")
-        print(api_test_project.nodes_summary())
         assert alpine2.console == 5077
         assert alpine2.name == "alpine-2"
         assert alpine2.node_type == "docker"
         assert alpine2.node_id == "NEW_NODE_ID"
 
     def test_create_link(self, api_test_project):
+        api_test_project.nodes = []
+        api_test_project.links = []
         api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
         link = api_test_project.get_link(link_id="NEW_LINK_ID")
         assert link.link_id == "NEW_LINK_ID"
@@ -1351,3 +1391,46 @@ class TestProject:
         data = "NEW README INFO!\n"
         r = api_test_project.write_file(path="README.txt", data=data)
         assert r is None
+
+    def test_get_snapshots(self, api_test_project):
+        api_test_project.get_snapshots()
+        assert isinstance(api_test_project.snapshots, list)
+        assert api_test_project.snapshots[0]["name"] == "snap1"
+        assert (
+            api_test_project.snapshots[0]["snapshot_id"]
+            == "7fb725fd-efbf-4e90-a259-95f12addf5a2"
+        )
+
+    def test_get_snapshot(self, api_test_project):
+        api_test_project.snapshots = None
+        snap1 = api_test_project.get_snapshot(
+            snapshot_id="7fb725fd-efbf-4e90-a259-95f12addf5a2"
+        )
+        assert snap1["name"] == "snap1"
+        assert snap1["created_at"] == 1_569_707_990
+
+    def test_error_get_snapshot_not_provided(self, api_test_project):
+        with pytest.raises(ValueError, match="name or snapshot_id must be provided"):
+            api_test_project.get_snapshot()
+
+    def test_error_get_snapshot_not_found(self, api_test_project):
+        dummy = api_test_project.get_snapshot(name="dummy")
+        assert dummy is None
+
+    def test_create_snapshot(self, api_test_project):
+        api_test_project.snapshots = None
+        api_test_project.create_snapshot(name="snap2")
+        snap2 = api_test_project.get_snapshot(name="snap2")
+        assert snap2["name"] == "snap2"
+        assert snap2["snapshot_id"] == "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+        assert snap2["created_at"] == 1_569_707_994
+
+    def test_delete_snapshot(self, api_test_project):
+        response = api_test_project.delete_snapshot(
+            "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+        )
+        assert response is None
+
+    def test_error_delete_snapshot_not_found(self, api_test_project):
+        with pytest.raises(HTTPError, match="Snapshot ID dummy doesn't exist"):
+            api_test_project.delete_snapshot(snapshot_id="dummmy")

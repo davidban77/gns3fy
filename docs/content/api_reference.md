@@ -970,6 +970,8 @@ Returns the Node object by searching for the `name` or the `node_id`.
 
 - `project_id`
 - `connector`
+
+**Required keyword arguments:**
 - `name` or `node_id`
 
 **NOTE:** Run method `get_nodes()` manually to refresh list of nodes if
@@ -1032,4 +1034,67 @@ port)
 - `node_b`: Node name of the B side
 - `port_b`: Port name of the B side (must match the `name` attribute of the
 port)
+
+### `Project.get_snapshots()`
+
+```python
+def get_snapshots(self)
+```
+
+Retrieves list of snapshots of the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+### `Project.get_snapshot()`
+
+```python
+def get_snapshot(self, name=None, snapshot_id=None)
+```
+
+Returns the Snapshot by searching for the `name` or the `snapshot_id`.
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword arguments:**
+- `name` or `snapshot_id`
+
+### `Project.create_snapshot()`
+
+```python
+def create_snapshot(self, name)
+```
+
+Creates a snapshot of the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword aguments:**
+
+- `name`
+
+### `Project.delete_snapshot()`
+
+```python
+def delete_snapshot(self, snapshot_id)
+```
+
+Deletes a snapshot of the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword aguments:**
+
+- `snapshot_id`
 

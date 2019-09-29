@@ -1,0 +1,14 @@
+[
+    {
+        "created_at": 1569707990,
+        "name": "snap1",
+        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "snapshot_id": "7fb725fd-efbf-4e90-a259-95f12addf5a2"
+    },
+    {
+        "created_at": 1569707994,
+        "name": "snap2",
+        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "snapshot_id": "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+    }
+]

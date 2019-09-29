@@ -633,3 +633,38 @@ else:
         f" Memory avg: {mem_avg}%"
     )
 ```
+
+### Create and list project snapshots
+
+There is an attribute called `snapshots` under the `Project` instance, which stores snapshots information about that project.
+
+You can create, delete and also search for specific snapshots of a project. See the [API reference](api_reference.md#projectget_snapshots)
+
+Here is a snippet that creates and shows information about the snapshots configured on a project.
+
+```python
+from datetime import datetime
+from gns3fy import Gns3Connector, Project
+
+lab = Project(name="test3", connector=Gns3Connector(url="http://gns3server01:3080"))
+
+lab.get()
+
+# Create snapshot
+lab.create_snapshot(name="snap3")
+
+# Show configured snapshots
+for snapshot in lab.snapshots:
+    _time = datetime.utcfromtimestamp(snapshot['created_at']).strftime('%Y-%m-%d %H:%M:%S')
+    print(f"Snapshot: {snapshot['name']}, created at: {_time}")
+```
+
+It prints something similar to this:
+
+```
+Created snapshot: snap3
+
+Snapshot: snap1, created at: 2019-09-28 20:59:50
+Snapshot: snap2, created at: 2019-09-28 20:59:54
+Snapshot: snap3, created at: 2019-09-29 08:44:28
+```
