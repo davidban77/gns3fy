@@ -1105,6 +1105,7 @@ class Project:
     zoom: Optional[int] = None
 
     stats: Optional[Dict[str, Any]] = None
+    snapshots: Optional[List[Dict]] = None
     nodes: List[Node] = field(default_factory=list, repr=False)
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
@@ -1164,6 +1165,8 @@ class Project:
 
         if get_stats:
             self.get_stats()
+            if self.stats.get("snapshots", 0) > 0:
+                self.get_snapshots()
         if get_nodes:
             self.get_nodes()
         if get_links:
@@ -1611,6 +1614,8 @@ class Project:
 
         - `project_id`
         - `connector`
+
+        **Required keyword arguments:**
         - `name` or `node_id`
 
         **NOTE:** Run method `get_nodes()` manually to refresh list of nodes if
@@ -1755,3 +1760,99 @@ class Project:
         _link.create()
         self.links.append(_link)
         print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
+
+    def get_snapshots(self):
+        """
+        Retrieves list of snapshots of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        self._verify_before_action()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
+
+        response = self.connector.http_call("get", _url)
+        self.snapshots = response.json()
+
+    def _search_snapshot(self, key, value):
+        "Performs a search based on a key and value"
+        if not self.snapshots:
+            self.get_snapshots()
+
+        try:
+            return next(_p for _p in self.snapshots if _p[key] == value)
+        except StopIteration:
+            return None
+
+    def get_snapshot(self, name=None, snapshot_id=None):
+        """
+        Returns the Snapshot by searching for the `name` or the `snapshot_id`.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword arguments:**
+        - `name` or `snapshot_id`
+        """
+        if snapshot_id:
+            return self._search_snapshot(key="snapshot_id", value=snapshot_id)
+        elif name:
+            return self._search_snapshot(key="name", value=name)
+        else:
+            raise ValueError("name or snapshot_id must be provided")
+
+    def create_snapshot(self, name):
+        """
+        Creates a snapshot of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `name`
+        """
+        self._verify_before_action()
+
+        if not self.snapshots:
+            self.get_snapshots()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
+
+        response = self.connector.http_call("post", _url, json_data=dict(name=name))
+
+        _snapshot = response.json()
+
+        self.snapshots.append(_snapshot)
+        print(f"Created snapshot: {_snapshot['name']}")
+
+    def delete_snapshot(self, snapshot_id):
+        """
+        Deletes a snapshot of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `snapshot_id`
+        """
+        self._verify_before_action()
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
+            f"{snapshot_id}"
+        )
+
+        self.connector.http_call("delete", _url)
+
+        self.get_snapshots()
