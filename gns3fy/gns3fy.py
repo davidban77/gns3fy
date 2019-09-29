@@ -262,6 +262,68 @@ class Gns3Connector:
         else:
             raise ValueError("Must provide either a name or template_id")
 
+    def update_template(self, name=None, template_id=None, **kwargs):
+        """
+        Updates a template by giving its name or UUID. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templatestemplateid.html#put-v2-templates-template-id)
+
+        **Required Attributes:**
+
+        - `name` or `template_id`
+        """
+        _template = self.get_template(name=name, template_id=template_id)
+        _template.update(**kwargs)
+
+        response = self.http_call(
+            "put",
+            url=f"{self.base_url}/templates/{_template['template_id']}",
+            json_data=_template,
+        )
+
+        return response.json()
+
+    def create_template(self, **kwargs):
+        """
+        Creates a template by giving its attributes. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templates.html#post-v2-templates)
+
+        **Required Attributes:**
+
+        - `name`
+        - `compute_id` by default is 'local'
+        - `template_type`
+        """
+        _template = self.get_template(name=kwargs["name"])
+        if _template:
+            raise ValueError(f"Template already used: {kwargs['name']}")
+
+        if "compute_id" not in kwargs:
+            kwargs["compute_id"] = "local"
+
+        response = self.http_call(
+            "post", url=f"{self.base_url}/templates", json_data=kwargs
+        )
+
+        return response.json()
+
+    def delete_template(self, name=None, template_id=None):
+        """
+        Deletes a template by giving its attributes. For more information [API INFO]
+        (http://api.gns3.net/en/2.2/api/v2/controller/template/
+        templatestemplateid.html#id16)
+
+        **Required Attributes:**
+
+        - `name` or `template_id`
+        """
+        if name and not template_id:
+            _template = self.get_template(name=name)
+            template_id = _template["template_id"]
+
+        self.http_call("delete", url=f"{self.base_url}/templates/{template_id}")
+
     def get_nodes(self, project_id):
         """
         Retieves the nodes defined on the project
@@ -338,6 +400,60 @@ class Gns3Connector:
         _url = f"{self.base_url}/projects/{project_id}"
         self.http_call("delete", _url)
         return
+
+    def get_computes(self):
+        """
+        Returns a list of computes.
+
+        **Returns:**
+
+        List of dictionaries of the computes attributes like cpu/memory usage
+        """
+        _url = f"{self.base_url}/computes"
+        return self.http_call("get", _url).json()
+
+    def get_compute(self, compute_id="local"):
+        """
+        Returns a compute.
+
+        **Returns:**
+
+        Dictionary of the compute attributes like cpu/memory usage
+        """
+        _url = f"{self.base_url}/computes/{compute_id}"
+        return self.http_call("get", _url).json()
+
+    def get_compute_images(self, emulator, compute_id="local"):
+        """
+        Returns a list of images available for a compute.
+
+        **Required Attributes:**
+
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+        - `compute_id` By default is 'local'
+
+        **Returns:**
+
+        List of dictionaries with images available for the compute for the specified
+        emulator
+        """
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
+        return self.http_call("get", _url).json()
+
+    def get_compute_ports(self, compute_id="local"):
+        """
+        Returns ports used and configured by a compute.
+
+        **Required Attributes:**
+
+        - `compute_id` By default is 'local'
+
+        **Returns:**
+
+        Dictionary of `console_ports` used and range, as well as the `udp_ports`
+        """
+        _url = f"{self.base_url}/computes/{compute_id}/ports"
+        return self.http_call("get", _url).json()
 
 
 @dataclass(config=Config)
@@ -989,6 +1105,7 @@ class Project:
     zoom: Optional[int] = None
 
     stats: Optional[Dict[str, Any]] = None
+    snapshots: Optional[List[Dict]] = None
     nodes: List[Node] = field(default_factory=list, repr=False)
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
@@ -1048,6 +1165,8 @@ class Project:
 
         if get_stats:
             self.get_stats()
+            if self.stats.get("snapshots", 0) > 0:
+                self.get_snapshots()
         if get_nodes:
             self.get_nodes()
         if get_links:
@@ -1495,6 +1614,8 @@ class Project:
 
         - `project_id`
         - `connector`
+
+        **Required keyword arguments:**
         - `name` or `node_id`
 
         **NOTE:** Run method `get_nodes()` manually to refresh list of nodes if
@@ -1639,3 +1760,99 @@ class Project:
         _link.create()
         self.links.append(_link)
         print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
+
+    def get_snapshots(self):
+        """
+        Retrieves list of snapshots of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        self._verify_before_action()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
+
+        response = self.connector.http_call("get", _url)
+        self.snapshots = response.json()
+
+    def _search_snapshot(self, key, value):
+        "Performs a search based on a key and value"
+        if not self.snapshots:
+            self.get_snapshots()
+
+        try:
+            return next(_p for _p in self.snapshots if _p[key] == value)
+        except StopIteration:
+            return None
+
+    def get_snapshot(self, name=None, snapshot_id=None):
+        """
+        Returns the Snapshot by searching for the `name` or the `snapshot_id`.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword arguments:**
+        - `name` or `snapshot_id`
+        """
+        if snapshot_id:
+            return self._search_snapshot(key="snapshot_id", value=snapshot_id)
+        elif name:
+            return self._search_snapshot(key="name", value=name)
+        else:
+            raise ValueError("name or snapshot_id must be provided")
+
+    def create_snapshot(self, name):
+        """
+        Creates a snapshot of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `name`
+        """
+        self._verify_before_action()
+
+        if not self.snapshots:
+            self.get_snapshots()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
+
+        response = self.connector.http_call("post", _url, json_data=dict(name=name))
+
+        _snapshot = response.json()
+
+        self.snapshots.append(_snapshot)
+        print(f"Created snapshot: {_snapshot['name']}")
+
+    def delete_snapshot(self, snapshot_id):
+        """
+        Deletes a snapshot of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `snapshot_id`
+        """
+        self._verify_before_action()
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
+            f"{snapshot_id}"
+        )
+
+        self.connector.http_call("delete", _url)
+
+        self.get_snapshots()

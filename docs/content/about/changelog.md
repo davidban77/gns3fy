@@ -6,6 +6,22 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.5.0
+
+**New features:**
+
+- Extended templates functionality with `create_template`, `update_template` and `delete_template`. Which can be used for migrating templates between GNS3 servers
+
+- Added compute endpoint get method from the REST API. [Compute endpoint](http://api.gns3.net/en/2.2/api/v2/controller/compute.html)
+    - `get_computes`: Retrieves attributes and characteristics of the GNS3 server compute that will run the emulations.
+    - `get_compute_images`: Lists images configured for a specific emulator on a compute.
+    - `get_compute_ports`: Lists configured and used console ports and UDP ports on a compute.
+
+- Added projects snapshots attribute and methods. [Snapshots endpoint](http://api.gns3.net/en/2.2/api/v2/controller/snapshot.html)
+    - `snapshots`: Attribute that stores snapshots names, IDs and created times of a project. Updated by the `get_snapshots` method.
+    - `get_snapshot`: Retrieves an specific snapshot information.
+    - `create_snapshot` and `delete_snapshot`: Creates/Delete an specific snapshot
+
 ## 0.4.1
 
 **Fix:**

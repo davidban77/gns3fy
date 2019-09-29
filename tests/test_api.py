@@ -15,6 +15,8 @@ CPROJECT = {"name": "API_TEST", "id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe"}
 CNODE = {"name": "alpine-1", "id": "ef503c45-e998-499d-88fc-2765614b313e"}
 CTEMPLATE = {"name": "alpine", "id": "847e5333-6ac9-411f-a400-89838584371b"}
 CLINK = {"link_type": "ethernet", "id": "4d9f1235-7fd1-466b-ad26-0b4b08beb778"}
+CCOMPUTE = {"id": "local"}
+CIMAGE = {"filename": "vEOS-lab-4.21.5F.vmdk"}
 
 
 def links_data():
@@ -35,6 +37,12 @@ def projects_data():
     return data
 
 
+def projects_snaphot_data():
+    with open(DATA_FILES / "project_snapshots.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
 def templates_data():
     with open(DATA_FILES / "templates.json") as fdata:
         data = json.load(fdata)
@@ -43,6 +51,24 @@ def templates_data():
 
 def version_data():
     with open(DATA_FILES / "version.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
+def computes_data():
+    with open(DATA_FILES / "computes.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
+def compute_qemu_images_data():
+    with open(DATA_FILES / "compute_qemu_images.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
+def compute_ports_data():
+    with open(DATA_FILES / "compute_ports.json") as fdata:
         data = json.load(fdata)
     return data
 
@@ -66,6 +92,11 @@ def json_api_test_node():
 def json_api_test_template():
     "Fetches the alpine template response"
     return next((_t for _t in templates_data() if _t["template_id"] == CTEMPLATE["id"]))
+
+
+def json_api_test_compute():
+    "Fetches the alpine template response"
+    return next((_t for _t in computes_data() if _t["compute_id"] == CCOMPUTE["id"]))
 
 
 def json_api_test_link():
@@ -111,6 +142,14 @@ def post_put_matcher(request):
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/files/README.txt"):
             resp.status_code = 200
+            return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/snapshots"):
+            _data = request.json()
+            if _data.get("name") == "snap2":
+                _returned = projects_snaphot_data()[-1]
+                resp.json = lambda: _returned
+                resp.status_code = 201
+                return resp
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
@@ -196,6 +235,12 @@ def post_put_matcher(request):
                 _returned.update(link_id="NEW_LINK_ID")
                 resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith("/templates"):
+            _data = request.json()
+            if _data["name"] == "alpinev2":
+                resp.status_code = 201
+                resp.json = lambda: _data
+                return resp
     elif request.method == "PUT":
         if request.path_url.endswith(f"/{CPROJECT['id']}"):
             _data = request.json()
@@ -222,6 +267,12 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: _returned
             return resp
+        elif request.path_url.endswith(f"/templates/{CTEMPLATE['id']}"):
+            _data = request.json()
+            if _data["category"] == "switch":
+                resp.status_code = 200
+                resp.json = lambda: _data
+                return resp
     return None
 
 
@@ -243,22 +294,42 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET", f"{self.base_url}/version", json=version_data()
         )
-        # Templates
+        ############
+        # Computes #
+        ############
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes", json=computes_data()
+        )
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes/local", json=json_api_test_compute()
+        )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/computes/local/qemu/images",
+            json=compute_qemu_images_data(),
+        )
+        self.adapter.register_uri(
+            "GET", f"{self.base_url}/computes/local/ports", json=compute_ports_data()
+        )
+        #############
+        # Templates #
+        #############
         self.adapter.register_uri(
             "GET", f"{self.base_url}/templates", json=templates_data()
         )
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/templates/{CTEMPLATE['id']}",
-            json=next(
-                (_t for _t in templates_data() if _t["template_id"] == CTEMPLATE["id"])
-            ),
+            json=json_api_test_template(),
         )
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/templates/7777-4444-0000",
             json={"message": "Template ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
+        )
+        self.adapter.register_uri(
+            "DELETE", f"{self.base_url}/templates/{CTEMPLATE['id']}", status_code=204
         )
         ############
         # Projects #
@@ -274,7 +345,7 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
-            json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 0},
+            json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 2},
         )
         # Get a project README file info
         self.adapter.register_uri(
@@ -289,11 +360,29 @@ class Gns3ConnectorMock(Gns3Connector):
             json={"message": f"404: Not found", "status": 404},
             status_code=404,
         )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots",
+            json=projects_snaphot_data(),
+            status_code=200,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/"
+            "44e08d78-0ee4-4b8f-bad4-117aa67cb759",
+            status_code=204,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/dummmy",
+            json={"message": "Snapshot ID dummy doesn't exist", "status": 404},
+            status_code=404,
+        )
         # Extra project
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/c9dc56bf-37b9-453b-8f95-2845ce8908e3/stats",
-            json={"drawings": 0, "links": 9, "nodes": 10, "snapshots": 0},
+            json={"drawings": 0, "links": 9, "nodes": 10, "snapshots": 2},
         )
         self.adapter.register_uri(
             "POST",
@@ -490,6 +579,36 @@ class TestGns3Connector:
         response = gns3_server.get_template(name="NOTE_FOUND")
         assert response is None
 
+    def test_create_template(self, gns3_server):
+        new_template = json_api_test_template()
+        assert new_template["name"] == "alpine"
+        # Create a new template from previous one
+        new_template["name"] = "alpinev2"
+        new_template.pop("compute_id")
+        # Create template
+        response = gns3_server.create_template(**new_template)
+        assert response["name"] == "alpinev2"
+        assert response["template_type"] == "docker"
+        assert response["category"] == "guest"
+
+    def test_error_create_template_already_used(self, gns3_server):
+        with pytest.raises(ValueError, match="Template already used: alpine"):
+            gns3_server.create_template(**json_api_test_template())
+
+    def test_update_template(self, gns3_server):
+        template = json_api_test_template()
+        assert template["category"] == "guest"
+        # Change an attribute
+        template["category"] = "switch"
+        # Update
+        response = gns3_server.update_template(**template)
+        assert response["name"] == "alpine"
+        assert response["category"] == "switch"
+
+    def test_delete_template(self, gns3_server):
+        response = gns3_server.delete_template(name=CTEMPLATE["name"])
+        assert response is None
+
     def test_get_projects(self, gns3_server):
         response = gns3_server.get_projects()
         for index, n in enumerate(
@@ -654,6 +773,37 @@ class TestGns3Connector:
             "aaa764e2-b383-300f-8a0e-3493bbfdb7d2 -- Type: atm_switch -- Builtin: True "
             "-- Console: N/A -- Category: switch\n"
         )
+
+    def test_get_computes(self, gns3_server):
+        response = gns3_server.get_computes()
+        assert isinstance(response, list)
+        assert response[0]["compute_id"] == "local"
+        assert response[0]["host"] == "127.0.0.1"
+        assert response[0]["name"] == "Main server"
+
+    def test_get_compute(self, gns3_server):
+        response = gns3_server.get_compute(compute_id="local")
+        assert response["compute_id"] == "local"
+        assert response["host"] == "127.0.0.1"
+        assert response["name"] == "Main server"
+
+    def test_get_compute_qemu_images(self, gns3_server):
+        response = gns3_server.get_compute_images(emulator="qemu", compute_id="local")
+        for index, n in enumerate(
+            [
+                ("cumulus-linux-3.7.8-vx-amd64-qemu.qcow2", 619_249_664),
+                ("iosxrv-k9-demo-6.1.3.qcow2", 428_588_544),
+                ("nxosv.9.3.1.qcow2", 1_435_041_792),
+                ("vEOS-lab-4.21.5F.vmdk", 383_778_816),
+            ]
+        ):
+            assert n[0] == response[index]["filename"]
+            assert n[1] == response[index]["filesize"]
+
+    def test_get_compute_ports(self, gns3_server):
+        response = gns3_server.get_compute_ports(compute_id="local")
+        assert response["console_port_range"] == [5000, 10000]
+        assert response["udp_port_range"] == [10000, 20000]
 
     def test_wrong_server_url(self, gns3_server):
         gns3_server.base_url = "WRONG URL"
@@ -996,7 +1146,7 @@ class TestProject:
             "drawings": 0,
             "links": 4,
             "nodes": 6,
-            "snapshots": 0,
+            "snapshots": 2,
         } == api_test_project.stats
 
     @pytest.mark.parametrize(
@@ -1045,7 +1195,7 @@ class TestProject:
             "drawings": 0,
             "links": 4,
             "nodes": 6,
-            "snapshots": 0,
+            "snapshots": 2,
         } == api_test_project.stats
 
     def test_get_nodes(self, api_test_project):
@@ -1119,6 +1269,7 @@ class TestProject:
         )
 
     def test_nodes_summary_print(self, capsys, api_test_project):
+        api_test_project.nodes = []
         api_test_project.nodes_summary(is_print=True)
         captured = capsys.readouterr()
         assert captured.out == (
@@ -1132,6 +1283,7 @@ class TestProject:
         )
 
     def test_nodes_inventory(self, api_test_project):
+        api_test_project.nodes = []
         nodes_inventory = api_test_project.nodes_inventory()
         assert {
             "server": "gns3server",
@@ -1153,6 +1305,8 @@ class TestProject:
         )
 
     def test_links_summary_print(self, capsys, api_test_project):
+        api_test_project.nodes = []
+        api_test_project.links = []
         api_test_project.links_summary(is_print=True)
         captured = capsys.readouterr()
         assert captured.out == (
@@ -1163,6 +1317,7 @@ class TestProject:
         )
 
     def test_get_node_by_name(self, api_test_project):
+        api_test_project.nodes = []
         switch = api_test_project.get_node(name="IOU1")
         assert switch.name == "IOU1"
         assert switch.status == "started"
@@ -1175,21 +1330,24 @@ class TestProject:
         assert host.console == 5005
 
     def test_get_link_by_id(self, api_test_project):
+        api_test_project.links = []
         link = api_test_project.get_link(link_id=CLINK["id"])
         assert "ethernet" == link.link_type
 
     def test_create_node(self, api_test_project):
+        api_test_project.nodes = []
         api_test_project.create_node(
             name="alpine-2", console=5077, template=CTEMPLATE["name"]
         )
         alpine2 = api_test_project.get_node(name="alpine-2")
-        print(api_test_project.nodes_summary())
         assert alpine2.console == 5077
         assert alpine2.name == "alpine-2"
         assert alpine2.node_type == "docker"
         assert alpine2.node_id == "NEW_NODE_ID"
 
     def test_create_link(self, api_test_project):
+        api_test_project.nodes = []
+        api_test_project.links = []
         api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
         link = api_test_project.get_link(link_id="NEW_LINK_ID")
         assert link.link_id == "NEW_LINK_ID"
@@ -1233,3 +1391,46 @@ class TestProject:
         data = "NEW README INFO!\n"
         r = api_test_project.write_file(path="README.txt", data=data)
         assert r is None
+
+    def test_get_snapshots(self, api_test_project):
+        api_test_project.get_snapshots()
+        assert isinstance(api_test_project.snapshots, list)
+        assert api_test_project.snapshots[0]["name"] == "snap1"
+        assert (
+            api_test_project.snapshots[0]["snapshot_id"]
+            == "7fb725fd-efbf-4e90-a259-95f12addf5a2"
+        )
+
+    def test_get_snapshot(self, api_test_project):
+        api_test_project.snapshots = None
+        snap1 = api_test_project.get_snapshot(
+            snapshot_id="7fb725fd-efbf-4e90-a259-95f12addf5a2"
+        )
+        assert snap1["name"] == "snap1"
+        assert snap1["created_at"] == 1_569_707_990
+
+    def test_error_get_snapshot_not_provided(self, api_test_project):
+        with pytest.raises(ValueError, match="name or snapshot_id must be provided"):
+            api_test_project.get_snapshot()
+
+    def test_error_get_snapshot_not_found(self, api_test_project):
+        dummy = api_test_project.get_snapshot(name="dummy")
+        assert dummy is None
+
+    def test_create_snapshot(self, api_test_project):
+        api_test_project.snapshots = None
+        api_test_project.create_snapshot(name="snap2")
+        snap2 = api_test_project.get_snapshot(name="snap2")
+        assert snap2["name"] == "snap2"
+        assert snap2["snapshot_id"] == "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+        assert snap2["created_at"] == 1_569_707_994
+
+    def test_delete_snapshot(self, api_test_project):
+        response = api_test_project.delete_snapshot(
+            "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+        )
+        assert response is None
+
+    def test_error_delete_snapshot_not_found(self, api_test_project):
+        with pytest.raises(HTTPError, match="Snapshot ID dummy doesn't exist"):
+            api_test_project.delete_snapshot(snapshot_id="dummmy")

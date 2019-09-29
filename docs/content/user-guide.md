@@ -525,3 +525,146 @@ Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  Tr
 ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
 """
 ```
+
+### Migrate templates between GNS3 servers
+
+You may need to backup your current templates configuration of one server to another, or just want to standardize the templates used across your GNS3 server.
+
+Here is a simple script that shows an example of how to achive it with `Gns3Connector`.
+
+`migrate_gns3_templates.py`
+
+```python
+from gns3fy import Gns3Connector
+
+OLD_URL = "http://gns3server01:3080"
+NEW_URL = "http://gns3server02:3080"
+
+def main()
+    # Define the server objects
+    old_server = Gns3Connector(url=OLD_URL)
+    new_server = Gns3Connector(url=NEW_URL)
+
+    # Retrive their current templates
+    old_server_templates = old_server.get_templates()
+    new_server_templates = new_server.get_templates()
+
+    # Now pass the templates
+    for template in old_server_templates:
+        # Bypass templates already configured on new server
+        if any(template["name"] == x["name"] for x in new_server_templates):
+            print(f"Template: {template['name']} already present. Skipping...")
+            continue
+
+        # Pass template
+        new_server.create_template(**template)
+        print(f"Template: {template['name']} passed!")
+
+if __name__ == '__main__':
+    main()
+```
+
+It can produce an output similar to this:
+
+`python migrate_gns3_templates.py`
+
+```
+Template: vEOS-4.21.5F passed!
+Template: Junos vMX passed!
+Template: alpine passed!
+Template: Cloud already present. Skipping...
+Template: NAT already present. Skipping...
+Template: VPCS already present. Skipping...
+Template: Ethernet switch already present. Skipping...
+Template: Ethernet hub already present. Skipping...
+Template: Frame Relay switch already present. Skipping...
+Template: ATM switch already present. Skipping...
+Template: netautomator passed!
+Template: Cisco IOSv 15.7(3)M3 passed!
+Template: Cisco IOSvL2 15.2.1 passed!
+Template: Cisco IOSvL2 15.2(20170321:233949) passed!
+Template: Cisco IOS XRv 9000 6.5.1 passed!
+Template: Cisco IOS XRv 6.1.3 passed!
+Template: Cisco NX-OSv 7.3.0 passed!
+Template: Cisco ASAv 9.9.2 passed!
+Template: Cisco CSR1000v 16.9.4 passed!
+Template: Cumulus VX 3.7.8 passed!
+Template: Cisco NX-OSv 9000 7.0.3.I7.4 passed!
+Template: Arista vEOS 4.21.5F passed!
+```
+
+### Check server CPU and Memory usage
+
+You can use the `get_compute` method to retrieve information about the GNS3 server that is running the emulations.
+
+Here is an example of getting the CPU and Memory average usage for a period of time and use that information to determine if a hungre service router can be turned on.
+
+```python
+import time
+from gns3fy import Gns3Connector, Project
+
+server = Gns3Connector(url="http://gns3server")
+
+lab = Project(name="test_lab", connector=server)
+
+lab.get()
+
+hungry_router = lab.get_node(name="hungry_router")
+
+# Get the CPU and Memory usage and calculate its average
+cpu_usage = []
+memory_usage = []
+for index in range(5):
+    compute_attrs = server.get_compute(compute_id="local")
+    cpu_usage.append(compute_attrs.get("cpu_usage_percent"))
+    memory_usage.append(compute_attrs.get("memory_usage_percent"))
+    time.sleep(1)
+
+cpu_avg = round(sum(cpu_usage) / len(cpu_usage), 2)
+mem_avg = round(sum(memory_usage) / len(memory_usage), 2)
+
+# If CPU is less than 40% and Memory is less than 50% turnup the nodes
+if cpu_avg <= 40.0 and mem_avg <= 50.0:
+    hungry_router.start()
+    print("All good! starting hungry router")
+else:
+    print(
+        f"Hungry router does not have enough resources. CPU avg: {cpu_avg}%"
+        f" Memory avg: {mem_avg}%"
+    )
+```
+
+### Create and list project snapshots
+
+There is an attribute called `snapshots` under the `Project` instance, which stores snapshots information about that project.
+
+You can create, delete and also search for specific snapshots of a project. See the [API reference](api_reference.md#projectget_snapshots)
+
+Here is a snippet that creates and shows information about the snapshots configured on a project.
+
+```python
+from datetime import datetime
+from gns3fy import Gns3Connector, Project
+
+lab = Project(name="test3", connector=Gns3Connector(url="http://gns3server01:3080"))
+
+lab.get()
+
+# Create snapshot
+lab.create_snapshot(name="snap3")
+
+# Show configured snapshots
+for snapshot in lab.snapshots:
+    _time = datetime.utcfromtimestamp(snapshot['created_at']).strftime('%Y-%m-%d %H:%M:%S')
+    print(f"Snapshot: {snapshot['name']}, created at: {_time}")
+```
+
+It prints something similar to this:
+
+```
+Created snapshot: snap3
+
+Snapshot: snap1, created at: 2019-09-28 20:59:50
+Snapshot: snap2, created at: 2019-09-28 20:59:54
+Snapshot: snap3, created at: 2019-09-29 08:44:28
+```

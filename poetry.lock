@@ -289,7 +289,7 @@ description = "Toolbox with useful Python classes and type magic."
 name = "nr.types"
 optional = false
 python-versions = "*"
-version = "3.0.1"
+version = "3.1.0"
 
 [package.dependencies]
 six = "*"
@@ -416,6 +416,7 @@ six = ">=0.11.0"
 reference = "468cace9378a64a267848c07c21a5aedbfab2cf3"
 type = "git"
 url = "https://github.com/NiklasRosenstein/pydoc-markdown.git"
+
 [[package]]
 category = "dev"
 description = "passive checker of Python programs"
@@ -644,7 +645,7 @@ mccabe = ["ab8a6258860da4b6677da4bd2fe5dc2c659cff31b3ee4f7f5d64e79735b80d42", "d
 mkdocs = ["17d34329aad75d5de604b9ed4e31df3a4d235afefdc46ce7b1964fddb2e1e939", "8cc8b38325456b9e942c981a209eaeb1e9f3f77b493ad755bfef889b9c8d356a"]
 mkdocs-cinder = ["0623b3b8c3a70fb735e966da805ff6f33e6c547ae9b26e6146d4995053e182f5", "984ba6df20916240647e5386d8444e6dbf3a8200e4d6db2d58cb145f40f99ff2"]
 more-itertools = ["409cd48d4db7052af495b09dec721011634af3753ae1ef92d2b32f73a745f832", "92b8c4b06dac4f0611c0729b2f2ede52b2e1bac1ab48f089c7ddc12e26bb60c4"]
-"nr.types" = ["18e083324d77d74f889fd8ca6b57586a85157d8eb2b3930d04a67ab524e86c9a"]
+"nr.types" = ["0a01cc2e29bc7df3925bbc7bcd8bddd171ff77d39fcd479a314ff751ca5989c8"]
 packaging = ["a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9", "c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"]
 parso = ["63854233e1fadb5da97f2744b6b24346d2750b85965e7e399bec1620232797dc", "666b0ee4a7a1220f65d367617f2cd3ffddff3e205f3f16a0284df30e774c2a9c"]
 pexpect = ["2094eefdfcf37a1fdbfb9aa090862c1a4878e5c7e0e7e7088bdb511c558e5cd1", "9e2c1fd0e6ee3a49b28f95d4b33bc389c89b20af6a1255906e90ff1262ce62eb"]
