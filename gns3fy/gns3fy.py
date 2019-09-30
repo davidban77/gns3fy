@@ -77,6 +77,7 @@ class Gns3Connector:
         requests.packages.urllib3.disable_warnings()
         self.base_url = f"{url.strip('/')}/v{api_version}"
         self.user = user
+        self.cred = cred
         self.headers = {"Content-Type": "application/json"}
         self.verify = verify
         self.api_calls = 0
