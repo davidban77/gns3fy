@@ -145,8 +145,14 @@ def post_put_matcher(request):
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/snapshots"):
             _data = request.json()
-            if _data.get("name") == "snap2":
-                _returned = projects_snaphot_data()[-1]
+            # if _data.get("name") == "snap2":
+            if _data.get("name") == "snap3":
+                _returned = dict(
+                    created_at=1_569_879_997,
+                    name="snap3",
+                    project_id="28ea5feb-c006-4724-80ec-a7cc0d8b8a5a",
+                    snapshot_id="6796e3ad-ce6d-47db-bdd7-b305506ea22d",
+                )
                 resp.json = lambda: _returned
                 resp.status_code = 201
                 return resp
@@ -1419,18 +1425,22 @@ class TestProject:
 
     def test_create_snapshot(self, api_test_project):
         api_test_project.snapshots = None
-        api_test_project.create_snapshot(name="snap2")
-        snap2 = api_test_project.get_snapshot(name="snap2")
-        assert snap2["name"] == "snap2"
-        assert snap2["snapshot_id"] == "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
-        assert snap2["created_at"] == 1_569_707_994
+        api_test_project.create_snapshot(name="snap3")
+        snap2 = api_test_project.get_snapshot(name="snap3")
+        assert snap2["name"] == "snap3"
+        assert snap2["snapshot_id"] == "6796e3ad-ce6d-47db-bdd7-b305506ea22d"
+        assert snap2["created_at"] == 1_569_879_997
+
+    def test_error_create_snapshot_already_created(self, api_test_project):
+        with pytest.raises(ValueError, match="Snapshot already created"):
+            api_test_project.create_snapshot(name="snap2")
 
     def test_delete_snapshot(self, api_test_project):
         response = api_test_project.delete_snapshot(
-            "44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+            snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759"
         )
         assert response is None
 
     def test_error_delete_snapshot_not_found(self, api_test_project):
-        with pytest.raises(HTTPError, match="Snapshot ID dummy doesn't exist"):
+        with pytest.raises(ValueError, match="Snapshot not found"):
             api_test_project.delete_snapshot(snapshot_id="dummmy")
