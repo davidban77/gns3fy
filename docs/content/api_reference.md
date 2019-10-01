@@ -1084,7 +1084,7 @@ Creates a snapshot of the project
 ### `Project.delete_snapshot()`
 
 ```python
-def delete_snapshot(self, snapshot_id)
+def delete_snapshot(self, name=None, snapshot_id=None)
 ```
 
 Deletes a snapshot of the project
@@ -1096,5 +1096,5 @@ Deletes a snapshot of the project
 
 **Required keyword aguments:**
 
-- `snapshot_id`
+- `name` or `snapshot_id`
 
