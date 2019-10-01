@@ -6,6 +6,13 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.5.1
+
+**Fix:**
+
+- Argument specification for project snapshot methods
+- Cred argument for user-based authentication with a GNS3 server
+
 ## 0.5.0
 
 **New features:**
