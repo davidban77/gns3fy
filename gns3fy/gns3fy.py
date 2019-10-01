@@ -1866,3 +1866,34 @@ class Project:
         self.connector.http_call("delete", _url)
 
         self.get_snapshots()
+
+    def restore_snapshot(self, name=None, snapshot_id=None):
+        """
+        Restore a snapshot from disk
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `name` or `snapshot_id`
+        """
+        self._verify_before_action()
+
+        self.get_snapshots()
+
+        _snapshot = self.get_snapshot(name=name, snapshot_id=snapshot_id)
+        if not _snapshot:
+            raise ValueError("Snapshot not found")
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
+            f"{_snapshot['snapshot_id']}/restore"
+        )
+
+        self.connector.http_call("post", _url)
+
+        # Update the whole project
+        self.get()
