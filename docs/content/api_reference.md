@@ -1098,3 +1098,20 @@ Deletes a snapshot of the project
 
 - `name` or `snapshot_id`
 
+### `Project.restore_snapshot()`
+
+```python
+def restore_snapshot(self, name=None, snapshot_id=None)
+```
+
+Restore a snapshot from disk
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword aguments:**
+
+- `name` or `snapshot_id`
+

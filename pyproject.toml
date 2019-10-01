@@ -1,13 +1,13 @@
 [tool.poetry]
 name = "gns3fy"
-version = "0.5.1"
+version = "0.5.2"
 description = "Python wrapper around GNS3 Server API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/davidban77/gns3fy"
 homepage = "https://github.com/davidban77/gns3fy"
-keywords = ["network", "gns3"]
+keywords = ["network", "gns3", "python", "restapi"]
 classifiers = [
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
