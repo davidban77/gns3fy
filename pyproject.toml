@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/davidban77/gns3fy"
 homepage = "https://github.com/davidban77/gns3fy"
-keywords = ["network", "gns3", "python"]
+keywords = ["network", "gns3", "python", "restapi"]
 classifiers = [
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
