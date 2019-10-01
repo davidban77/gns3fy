@@ -8,6 +8,12 @@ pip install -U gns3fy
 
 ## 0.5.1
 
+**Enhancement:**
+
+- Added `restore_snapshot` to the available snapshot methods of a project
+
+## 0.5.1
+
 **Fix:**
 
 - Argument specification for project snapshot methods
