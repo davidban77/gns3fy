@@ -6,6 +6,12 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.5.2
+
+**Enhancement:**
+
+- Added `restore_snapshot` to the available snapshot methods of a project
+
 ## 0.5.1
 
 **Fix:**
