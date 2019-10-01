@@ -156,6 +156,12 @@ def post_put_matcher(request):
                 resp.json = lambda: _returned
                 resp.status_code = 201
                 return resp
+        elif request.path_url.endswith(
+            f"/{CPROJECT['id']}/snapshots/44e08d78-0ee4-4b8f-bad4-117aa67cb759/restore"
+        ):
+            _returned = json_api_test_project()
+            resp.json = lambda: _returned
+            resp.status_code = 201
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes"):
             _data = request.json()
@@ -1444,3 +1450,13 @@ class TestProject:
     def test_error_delete_snapshot_not_found(self, api_test_project):
         with pytest.raises(ValueError, match="Snapshot not found"):
             api_test_project.delete_snapshot(snapshot_id="dummmy")
+
+    def test_restore_snapshot(self, api_test_project):
+        response = api_test_project.restore_snapshot(
+            snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759"
+        )
+        assert response is None
+
+    def test_error_restore_snapshot_not_found(self, api_test_project):
+        with pytest.raises(ValueError, match="Snapshot not found"):
+            api_test_project.restore_snapshot(snapshot_id="dummmy")
