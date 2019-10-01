@@ -9,6 +9,7 @@ Its main objective is to interact with the GNS3 server in a programatic way, so 
 Here are some examples where gns3fy is used in a programmatic way:
 
 - [Ansible-collection-gns3](https://galaxy.ansible.com/davidban77/gns3): Useful for CI/CD pipelines to interact with GNS3 server using Ansible. It can create/delete projects, nodes and links in an ansible playbook.
+- Terraform: Coming soon... (although it might be a Go version of it)
 - [Migrate templates between GNS3 servers](user-guide.md#migrate-templates-between-gns3-servers)
 - [Check server usage](user-guide.md#check-server-cpu-and-memory-usage) before turning up resource-hungry nodes
 - [Manipulate project snapshots](user-guide.md#create-and-list-project-snapshots) like create, delete or list the snapshots configured for the project.
