@@ -1798,7 +1798,10 @@ class Project:
         - `connector`
 
         **Required keyword arguments:**
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/master
         - `name` or `snapshot_id`
         """
         if snapshot_id:
