@@ -267,6 +267,8 @@
                 
             <li class="second-level"><a href="#projectdelete_snapshot">Project.delete_snapshot()</a></li>
                 
+            <li class="second-level"><a href="#projectrestore_snapshot">Project.restore_snapshot()</a></li>
+                
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
@@ -1120,6 +1122,20 @@ port)</li>
 </code></pre>
 
 <p>Deletes a snapshot of the project</p>
+<p><strong>Required Project instance attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
+</ul>
+<p><strong>Required keyword aguments:</strong></p>
+<ul>
+<li><code>name</code> or <code>snapshot_id</code></li>
+</ul>
+<h3 id="projectrestore_snapshot"><code>Project.restore_snapshot()</code></h3>
+<pre><code class="python">def restore_snapshot(self, name=None, snapshot_id=None)
+</code></pre>
+
+<p>Restore a snapshot from disk</p>
 <p><strong>Required Project instance attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
