@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gns3fy"
-version = "0.5.0"
+version = "0.5.1"
 description = "Python wrapper around GNS3 Server API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"

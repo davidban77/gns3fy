@@ -77,6 +77,7 @@ class Gns3Connector:
         requests.packages.urllib3.disable_warnings()
         self.base_url = f"{url.strip('/')}/v{api_version}"
         self.user = user
+        self.cred = cred
         self.headers = {"Content-Type": "application/json"}
         self.verify = verify
         self.api_calls = 0
@@ -1821,8 +1822,11 @@ class Project:
         """
         self._verify_before_action()
 
-        if not self.snapshots:
-            self.get_snapshots()
+        self.get_snapshots()
+
+        _snapshot = self.get_snapshot(name=name)
+        if _snapshot:
+            raise ValueError("Snapshot already created")
 
         _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
 
@@ -1833,7 +1837,7 @@ class Project:
         self.snapshots.append(_snapshot)
         print(f"Created snapshot: {_snapshot['name']}")
 
-    def delete_snapshot(self, snapshot_id):
+    def delete_snapshot(self, name=None, snapshot_id=None):
         """
         Deletes a snapshot of the project
 
@@ -1844,13 +1848,19 @@ class Project:
 
         **Required keyword aguments:**
 
-        - `snapshot_id`
+        - `name` or `snapshot_id`
         """
         self._verify_before_action()
 
+        self.get_snapshots()
+
+        _snapshot = self.get_snapshot(name=name, snapshot_id=snapshot_id)
+        if not _snapshot:
+            raise ValueError("Snapshot not found")
+
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
-            f"{snapshot_id}"
+            f"{_snapshot['snapshot_id']}"
         )
 
         self.connector.http_call("delete", _url)
