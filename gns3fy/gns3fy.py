@@ -1904,20 +1904,16 @@ class Project:
         nodes in cirular fashion, this method will update the nodes coordinates
         based on the ammount of nodes in the project
         Usage --> Project.arrange_nodes()"""
-        if not self.get():
-            self.get()
-            if not self.open():
-                self.open()
-                _nodes = self.nodes
-                _r = 120
-                _angle = (2 * pi) / len(_nodes)
-                _pos = []
+        self.get()
+        if self.status != 'opened':
+            self.open()
+
+        _r = 120
+        _angle = (2 * pi) / len(self.nodes)
         # Calculating positions the Axis are  inverted in GNS3, so the -Y is UP,
         # and +y is down
-        for n in range(len(_nodes)):
-            _x = int(_r * (sin(_angle * n)))
-            _y = int(_r * (-cos(_angle * n)))
-            _pos.append((_x, _y))
-        # Updating positions
-        for n in _nodes:
-            n.update(x=_pos[_nodes.index(n)][0], y=_pos[_nodes.index(n)][1])
+        for index, n in enumerate(self.nodes):
+            _x = int(_r * (sin(_angle * index)))
+            _y = int(_r * (-cos(_angle * index)))
+            # _pos.append((_x, _y))
+            n.update(x=_x, y=_y)
