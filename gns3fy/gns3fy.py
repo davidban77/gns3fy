@@ -6,6 +6,7 @@ from dataclasses import field
 from typing import Optional, Any, Dict, List
 from pydantic import validator
 from pydantic.dataclasses import dataclass
+from math import pi, sin, cos
 
 
 class Config:
@@ -1897,3 +1898,26 @@ class Project:
 
         # Update the whole project
         self.get()
+
+    def arrange_nodes(self):
+        """Method to re-arrgange the set of nodes bsased on the number of 
+        nodes in cirular fashion, this method will update the nodes coordinates
+        based on the ammount of nodes in the project
+        Usage --> Project.arrange_nodes()"""
+        if not self.get():
+            self.get()
+            if not self.open():
+                self.open()
+                _nodes = self.nodes
+                _r = 120
+                _angle = (2 * pi) / len(_nodes)
+                _pos = []
+        # Calculating positions the Axis are  inverted in GNS3, so the -Y is UP,
+        # and +y is down
+        for n in range(len(_nodes)):
+            _x = int(_r * (sin(_angle * n)))
+            _y = int(_r * (-cos(_angle * n)))
+            _pos.append((_x, _y))
+        # Updating positions
+        for n in _nodes:
+            n.update(x=_pos[_nodes.index(n)][0], y=_pos[_nodes.index(n)][1])
