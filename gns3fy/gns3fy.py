@@ -1900,20 +1900,23 @@ class Project:
         self.get()
 
     def arrange_nodes(self):
-        """Method to re-arrgange the set of nodes bsased on the number of 
-        nodes in cirular fashion, this method will update the nodes coordinates
-        based on the ammount of nodes in the project
-        Usage --> Project.arrange_nodes()"""
+        """
+        Re-arrgange the existing nodes
+        in a geometric fashion (circle)
+
+        **Usage**
+
+        Project.arrange_nodes()
+        """
         self.get()
-        if self.status != 'opened':
+        if self.status != "opened":
             self.open()
 
         _r = 120
+        # radius
         _angle = (2 * pi) / len(self.nodes)
-        # Calculating positions the Axis are  inverted in GNS3, so the -Y is UP,
-        # and +y is down
+        # The Y Axis is inverted in GNS3, so the -Y is UP
         for index, n in enumerate(self.nodes):
             _x = int(_r * (sin(_angle * index)))
             _y = int(_r * (-cos(_angle * index)))
-            # _pos.append((_x, _y))
             n.update(x=_x, y=_y)
