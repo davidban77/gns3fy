@@ -1899,15 +1899,22 @@ class Project:
         # Update the whole project
         self.get()
 
-    def arrange_nodes(self):
+    def arrange_nodes_circular(self, radius=120):
         """
         Re-arrgange the existing nodes
-        in a geometric fashion (circle)
+        in a circular fashion
 
-        **Usage**
+        **Attributes:**
 
-        Project.arrange_nodes()
+        - project instance created
+
+        **Example**
+
+        ```python
+        >>> proj = Project(name='project_name', connector=Gns3connector)
+        >>> proj.arrange_nodes()
         """
+
         self.get()
         if self.status != "opened":
             self.open()

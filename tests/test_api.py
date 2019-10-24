@@ -279,7 +279,7 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: _returned
             return resp
-        # For the arrange_nodes
+        # For the arrange_nodes_circular
         elif f"/{CPROJECT['id']}/nodes" in request.path_url:
             # _data = request.json()
             _returned = json_api_test_node()
@@ -1232,8 +1232,8 @@ class TestProject:
             assert n[0] == api_test_project.nodes[index].name
             assert n[1] == api_test_project.nodes[index].node_type
 
-    def test_arrange_nodes(self, api_test_project):
-        api_test_project.arrange_nodes()
+    def test_arrange_nodes_circular(self, api_test_project):
+        api_test_project.arrange_nodes_circular()
         for node in api_test_project.nodes:
             assert node.x != 0
             assert node.y != 0
