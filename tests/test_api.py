@@ -43,6 +43,12 @@ def projects_snaphot_data():
     return data
 
 
+def projects_drawings_data():
+    with open(DATA_FILES / "project_drawings.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
 def templates_data():
     with open(DATA_FILES / "templates.json") as fdata:
         data = json.load(fdata)
@@ -396,6 +402,12 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/dummmy",
             json={"message": "Snapshot ID dummy doesn't exist", "status": 404},
             status_code=404,
+        )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/drawings",
+            json=projects_drawings_data(),
+            status_code=200,
         )
         # Extra project
         self.adapter.register_uri(
@@ -1473,3 +1485,12 @@ class TestProject:
     def test_error_restore_snapshot_not_found(self, api_test_project):
         with pytest.raises(ValueError, match="Snapshot not found"):
             api_test_project.restore_snapshot(snapshot_id="dummmy")
+
+    def test_get_drawings(self, api_test_project):
+        api_test_project.get_drawings()
+        assert isinstance(api_test_project.drawings, list)
+        assert (
+            api_test_project.drawings[0]["drawing_id"]
+            == "04e326ab-09fa-47e6-957e-d5a285efb988"
+        )
+        assert api_test_project.drawings[0]["project_id"] == api_test_project.project_id
