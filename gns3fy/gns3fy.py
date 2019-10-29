@@ -1069,6 +1069,7 @@ class Project:
     - `variables` (list): Variables required to run the project
     - `zoom` (int): Zoom of the drawing area
     - `stats` (dict): Project stats
+    -.`drawings` (list): List of drawings present on the project
     - `nodes` (list): List of `Node` instances present on the project
     - `links` (list): List of `Link` instances present on the project
 
@@ -1108,6 +1109,7 @@ class Project:
 
     stats: Optional[Dict[str, Any]] = None
     snapshots: Optional[List[Dict]] = None
+    drawings: Optional[List[Dict]] = None
     nodes: List[Node] = field(default_factory=list, repr=False)
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
@@ -1927,3 +1929,18 @@ class Project:
             _x = int(_r * (sin(_angle * index)))
             _y = int(_r * (-cos(_angle * index)))
             n.update(x=_x, y=_y)
+
+    def get_drawings(self):
+        """
+        Retrieves list of drawins  of the project
+        **Required Project instance attributes:**
+        - `project_id`
+        - `connector`
+        """
+        self._verify_before_action()
+        self.get()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
+
+        _response = self.connector.http_call("get", _url)
+        self.drawings = _response.json()
