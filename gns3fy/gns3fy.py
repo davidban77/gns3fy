@@ -6,6 +6,7 @@ from dataclasses import field
 from typing import Optional, Any, Dict, List
 from pydantic import validator
 from pydantic.dataclasses import dataclass
+from math import pi, sin, cos
 
 
 class Config:
@@ -1068,6 +1069,7 @@ class Project:
     - `variables` (list): Variables required to run the project
     - `zoom` (int): Zoom of the drawing area
     - `stats` (dict): Project stats
+    -.`drawings` (list): List of drawings present on the project
     - `nodes` (list): List of `Node` instances present on the project
     - `links` (list): List of `Link` instances present on the project
 
@@ -1107,6 +1109,7 @@ class Project:
 
     stats: Optional[Dict[str, Any]] = None
     snapshots: Optional[List[Dict]] = None
+    drawings: Optional[List[Dict]] = None
     nodes: List[Node] = field(default_factory=list, repr=False)
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
@@ -1897,3 +1900,44 @@ class Project:
 
         # Update the whole project
         self.get()
+
+    def arrange_nodes_circular(self, radius=120):
+        """
+        Re-arrgange the existing nodes
+        in a circular fashion
+
+        **Attributes:**
+
+        - project instance created
+
+        **Example**
+
+        ```python
+        >>> proj = Project(name='project_name', connector=Gns3connector)
+        >>> proj.arrange_nodes()
+        """
+
+        self.get()
+        if self.status != "opened":
+            self.open()
+
+        _angle = (2 * pi) / len(self.nodes)
+        # The Y Axis is inverted in GNS3, so the -Y is UP
+        for index, n in enumerate(self.nodes):
+            _x = int(radius * (sin(_angle * index)))
+            _y = int(radius * (-cos(_angle * index)))
+            n.update(x=_x, y=_y)
+
+    def get_drawings(self):
+        """
+        Retrieves list of drawins  of the project
+        **Required Project instance attributes:**
+        - `project_id`
+        - `connector`
+        """
+        self._verify_before_action()
+
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
+
+        _response = self.connector.http_call("get", _url)
+        self.drawings = _response.json()

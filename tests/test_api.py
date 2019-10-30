@@ -43,6 +43,12 @@ def projects_snaphot_data():
     return data
 
 
+def projects_drawings_data():
+    with open(DATA_FILES / "project_drawings.json") as fdata:
+        data = json.load(fdata)
+    return data
+
+
 def templates_data():
     with open(DATA_FILES / "templates.json") as fdata:
         data = json.load(fdata)
@@ -279,6 +285,13 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: _returned
             return resp
+        # For the arrange_nodes_circular
+        elif f"/{CPROJECT['id']}/nodes" in request.path_url:
+            # _data = request.json()
+            _returned = json_api_test_node()
+            resp.status_code = 200
+            resp.json = lambda: _returned
+            return resp
         elif request.path_url.endswith(f"/templates/{CTEMPLATE['id']}"):
             _data = request.json()
             if _data["category"] == "switch":
@@ -389,6 +402,12 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/dummmy",
             json={"message": "Snapshot ID dummy doesn't exist", "status": 404},
             status_code=404,
+        )
+        self.adapter.register_uri(
+            "GET",
+            f"{self.base_url}/projects/{CPROJECT['id']}/drawings",
+            json=projects_drawings_data(),
+            status_code=200,
         )
         # Extra project
         self.adapter.register_uri(
@@ -1225,6 +1244,12 @@ class TestProject:
             assert n[0] == api_test_project.nodes[index].name
             assert n[1] == api_test_project.nodes[index].node_type
 
+    def test_arrange_nodes_circular(self, api_test_project):
+        api_test_project.arrange_nodes_circular()
+        for node in api_test_project.nodes:
+            assert node.x != 0
+            assert node.y != 0
+
     def test_error_get_node_no_required_params(self, api_test_project):
         with pytest.raises(ValueError, match="name or node_ide must be provided"):
             api_test_project.get_node()
@@ -1460,3 +1485,12 @@ class TestProject:
     def test_error_restore_snapshot_not_found(self, api_test_project):
         with pytest.raises(ValueError, match="Snapshot not found"):
             api_test_project.restore_snapshot(snapshot_id="dummmy")
+
+    def test_get_drawings(self, api_test_project):
+        api_test_project.get_drawings()
+        assert isinstance(api_test_project.drawings, list)
+        assert (
+            api_test_project.drawings[0]["drawing_id"]
+            == "04e326ab-09fa-47e6-957e-d5a285efb988"
+        )
+        assert api_test_project.drawings[0]["project_id"] == api_test_project.project_id
