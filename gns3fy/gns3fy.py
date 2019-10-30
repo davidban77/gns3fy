@@ -1921,13 +1921,11 @@ class Project:
         if self.status != "opened":
             self.open()
 
-        _r = 120
-        # radius
         _angle = (2 * pi) / len(self.nodes)
         # The Y Axis is inverted in GNS3, so the -Y is UP
         for index, n in enumerate(self.nodes):
-            _x = int(_r * (sin(_angle * index)))
-            _y = int(_r * (-cos(_angle * index)))
+            _x = int(radius * (sin(_angle * index)))
+            _y = int(radius * (-cos(_angle * index)))
             n.update(x=_x, y=_y)
 
     def get_drawings(self):
@@ -1938,7 +1936,6 @@ class Project:
         - `connector`
         """
         self._verify_before_action()
-        self.get()
 
         _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
 
