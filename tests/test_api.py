@@ -838,7 +838,7 @@ class TestGns3Connector:
 
     def test_wrong_server_url(self, gns3_server):
         gns3_server.base_url = "WRONG URL"
-        with pytest.raises(requests.exceptions.InvalidURL):
+        with pytest.raises(requests.exceptions.MissingSchema, match="Invalid URL"):
             gns3_server.get_version()
 
 

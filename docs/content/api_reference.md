@@ -650,6 +650,7 @@ information](http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html)
 - `variables` (list): Variables required to run the project
 - `zoom` (int): Zoom of the drawing area
 - `stats` (dict): Project stats
+-.`drawings` (list): List of drawings present on the project
 - `nodes` (list): List of `Node` instances present on the project
 - `links` (list): List of `Link` instances present on the project
 
@@ -1114,4 +1115,37 @@ Restore a snapshot from disk
 **Required keyword aguments:**
 
 - `name` or `snapshot_id`
+
+### `Project.arrange_nodes_circular()`
+
+```python
+def arrange_nodes_circular(self, radius=120)
+```
+
+Re-arrgange the existing nodes
+in a circular fashion
+
+**Attributes:**
+
+- project instance created
+
+**Example**
+
+```python
+>>> proj = Project(name='project_name', connector=Gns3connector)
+>>> proj.arrange_nodes()
+```
+
+### `Project.get_drawings()`
+
+```python
+def get_drawings(self)
+```
+
+Retrieves list of drawings  of the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
 

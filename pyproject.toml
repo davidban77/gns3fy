@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gns3fy"
-version = "0.5.2"
+version = "0.6.0"
 description = "Python wrapper around GNS3 Server API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
@@ -16,13 +16,13 @@ classifiers = [
 [tool.poetry.dependencies]
 python = "^3.6"
 requests = "^2.22"
-pydantic = "^0.*"
+pydantic = "^1.0"
 
 [tool.poetry.dev-dependencies]
 ipython = "^7.7"
 pytest = "^5.0"
 flake8 = "^3.7"
-black = {version = "^18.3-alpha.0",allows-prereleases = true}
+black = {version = "^19.10b0",allows-prereleases = true}
 requests-mock = "^1.6"
 pytest-cov = "^2.7"
 mkdocs = "^1.0"
