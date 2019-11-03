@@ -269,6 +269,10 @@
                 
             <li class="second-level"><a href="#projectrestore_snapshot">Project.restore_snapshot()</a></li>
                 
+            <li class="second-level"><a href="#projectarrange_nodes_circular">Project.arrange_nodes_circular()</a></li>
+                
+            <li class="second-level"><a href="#projectget_drawings">Project.get_drawings()</a></li>
+                
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
@@ -773,7 +777,8 @@ information</a></p>
 <li><code>supplier</code> (dict): Supplier of the project</li>
 <li><code>variables</code> (list): Variables required to run the project</li>
 <li><code>zoom</code> (int): Zoom of the drawing area</li>
-<li><code>stats</code> (dict): Project stats</li>
+<li><code>stats</code> (dict): Project stats
+-.<code>drawings</code> (list): List of drawings present on the project</li>
 <li><code>nodes</code> (list): List of <code>Node</code> instances present on the project</li>
 <li><code>links</code> (list): List of <code>Link</code> instances present on the project</li>
 </ul>
@@ -1144,6 +1149,31 @@ port)</li>
 <p><strong>Required keyword aguments:</strong></p>
 <ul>
 <li><code>name</code> or <code>snapshot_id</code></li>
+</ul>
+<h3 id="projectarrange_nodes_circular"><code>Project.arrange_nodes_circular()</code></h3>
+<pre><code class="python">def arrange_nodes_circular(self, radius=120)
+</code></pre>
+
+<p>Re-arrgange the existing nodes
+in a circular fashion</p>
+<p><strong>Attributes:</strong></p>
+<ul>
+<li>project instance created</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="python">&gt;&gt;&gt; proj = Project(name='project_name', connector=Gns3connector)
+&gt;&gt;&gt; proj.arrange_nodes()
+</code></pre>
+
+<h3 id="projectget_drawings"><code>Project.get_drawings()</code></h3>
+<pre><code class="python">def get_drawings(self)
+</code></pre>
+
+<p>Retrieves list of drawings  of the project</p>
+<p><strong>Required Project instance attributes:</strong></p>
+<ul>
+<li><code>project_id</code></li>
+<li><code>connector</code></li>
 </ul></div>
         
         
