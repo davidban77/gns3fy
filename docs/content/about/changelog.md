@@ -6,6 +6,13 @@ pip install -U gns3fy
 
 # Releases
 
+## 0.6.0
+
+**Enhancement:**
+
+- Added `drawings` attribute. Used to gather information from `Drawing` endpoint, and for that there is also the `get_drawings` method.
+- Added `arrange_nodes_circular` method, which as the name indicates it will arrange the nodes configured on a project in a circular fashion.
+
 ## 0.5.2
 
 **Enhancement:**

@@ -510,7 +510,7 @@ class Link:
 
     @validator("link_type")
     def _valid_node_type(cls, value):
-        if value not in LINK_TYPES:
+        if value not in LINK_TYPES and value is not None:
             raise ValueError(f"Not a valid link_type - {value}")
         return value
 
@@ -680,7 +680,7 @@ class Node:
     y: Optional[int] = None
     z: Optional[int] = None
     template_id: Optional[str] = None
-    properties: Dict = field(default_factory=dict)
+    properties: Optional[Any] = None
 
     template: Optional[str] = None
     links: List[Link] = field(default_factory=list, repr=False)
@@ -688,19 +688,19 @@ class Node:
 
     @validator("node_type")
     def _valid_node_type(cls, value):
-        if value not in NODE_TYPES:
+        if value not in NODE_TYPES and value is not None:
             raise ValueError(f"Not a valid node_type - {value}")
         return value
 
     @validator("console_type")
     def _valid_console_type(cls, value):
-        if value not in CONSOLE_TYPES:
+        if value not in CONSOLE_TYPES and value is not None:
             raise ValueError(f"Not a valid console_type - {value}")
         return value
 
     @validator("status")
     def _valid_status(cls, value):
-        if value not in ("stopped", "started", "suspended"):
+        if value not in ("stopped", "started", "suspended") and value is not None:
             raise ValueError(f"Not a valid status - {value}")
         return value
 
@@ -1116,7 +1116,7 @@ class Project:
 
     @validator("status")
     def _valid_status(cls, value):
-        if value != "opened" and value != "closed":
+        if value != "opened" and value != "closed" and value is not None:
             raise ValueError("status must be opened or closed")
         return value
 
@@ -1915,6 +1915,7 @@ class Project:
         ```python
         >>> proj = Project(name='project_name', connector=Gns3connector)
         >>> proj.arrange_nodes()
+        ```
         """
 
         self.get()
@@ -1930,8 +1931,10 @@ class Project:
 
     def get_drawings(self):
         """
-        Retrieves list of drawins  of the project
+        Retrieves list of drawings  of the project
+
         **Required Project instance attributes:**
+
         - `project_id`
         - `connector`
         """
