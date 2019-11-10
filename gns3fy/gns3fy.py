@@ -463,6 +463,7 @@ def verify_connector_and_id(f):
     Main checker for connector object and respective object's ID for their retrieval
     or actions methods.
     """
+
     def wrapper(self, *args, **kwargs):
         if not self.connector:
             raise ValueError("Gns3Connector not assigned under 'connector'")
