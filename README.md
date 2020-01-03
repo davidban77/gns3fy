@@ -8,7 +8,7 @@
 
 
 # gns3fy
-Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html).
+Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). Minimal GNS3 version is 2.2.
 
 Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts. Ideal for network CI/CD pipeline tooling.
 
