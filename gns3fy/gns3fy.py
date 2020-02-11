@@ -1,3 +1,4 @@
+import os
 import time
 import requests
 from urllib.parse import urlparse
@@ -441,6 +442,23 @@ class Gns3Connector:
         """
         _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
         return self.http_call("get", _url).json()
+
+    def upload_compute_image(self, emulator, file_path, compute_id="local"):
+        """
+        uploads an image for use by a compute.
+
+        **Required Attributes:**
+
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+        - `file_path`: path of file to be uploaded
+        - `compute_id` By default is 'local'
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Could not find file: {file_path}")
+
+        _filename = os.path.basename(file_path)
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
+        self.http_call("post", _url, data=open(file_path, "rb"))
 
     def get_compute_ports(self, compute_id="local"):
         """
