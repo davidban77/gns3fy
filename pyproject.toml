@@ -11,6 +11,7 @@ keywords = ["network", "gns3", "python", "restapi", "netdev"]
 classifiers = [
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.8",
 ]
 
 [tool.poetry.dependencies]
