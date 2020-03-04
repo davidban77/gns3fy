@@ -24,6 +24,11 @@ jobs:
             # - deps-{{ checksum "poetry.lock" }}
             - deps-clear
       - run:
+          name: Install Poetry
+          command: |
+            pip install poetry
+            poetry config virtualenvs.create false
+      - run:
           name: Install Dependencies
           command: |
             poetry install --no-interaction
@@ -43,10 +48,8 @@ jobs:
           # key: deps-{{ checksum "poetry.lock" }}
           key: deps-clear
           paths:
-            - pwd
-            - ls -l ${HOME}/.cache
-            - /home/circleci/.cache/pypoetry/virtualenvs
-            - /home/circleci/.cache/.tox
+            - /root/.cache/pypoetry/virtualenvs
+            - /root/.cache/.tox
       - run:
           name: Running tests
           command: |
