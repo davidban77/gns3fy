@@ -1,6 +1,7 @@
 import os
 import time
 import requests
+from functools import wraps
 from urllib.parse import urlparse
 from requests import HTTPError
 from dataclasses import field
@@ -481,7 +482,7 @@ def verify_connector_and_id(f):
     Main checker for connector object and respective object's ID for their retrieval
     or actions methods.
     """
-
+    @wraps(f)
     def wrapper(self, *args, **kwargs):
         if not self.connector:
             raise ValueError("Gns3Connector not assigned under 'connector'")
@@ -1274,7 +1275,8 @@ class Project:
         _response = self.connector.http_call("post", _url)
 
         # Update object
-        self._update(_response.json())
+        if _response.status_code == 204:
+            self.status = "closed"
 
     @verify_connector_and_id
     def open(self):
@@ -1936,3 +1938,76 @@ class Project:
 
         _response = self.connector.http_call("get", _url)
         self.drawings = _response.json()
+
+    @verify_connector_and_id
+    def create_drawing(self, svg, locked=False, x=10, y=10, z=1):
+        """
+        Creates a drawing on the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
+
+        response = self.connector.http_call(
+            "post", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
+        )
+
+        _drawing = response.json()
+
+        self.drawings.append(_drawing)
+        print(f"Created drawing: {_drawing['drawing_id']}")
+
+    @verify_connector_and_id
+    def update_drawing(self, drawing_id, svg=None, locked=None, x=None, y=None, z=None):
+        """
+        Updates a drawing on the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
+            f"{drawing_id}"
+        )
+
+        if svg is None:
+            svg = [
+                draw["svg"]
+                for draw in self.drawings
+                if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if locked is None:
+            locked = [
+                draw["locked"]
+                for draw in self.drawings
+                if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if x is None:
+            x = [
+                draw["x"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if y is None:
+            y = [
+                draw["y"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if z is None:
+            z = [
+                draw["z"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        response = self.connector.http_call(
+            "put", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
+        )
+
+        self.get_drawings()
+
+        return response.json()
