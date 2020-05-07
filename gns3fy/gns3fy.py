@@ -482,6 +482,7 @@ def verify_connector_and_id(f):
     Main checker for connector object and respective object's ID for their retrieval
     or actions methods.
     """
+
     @wraps(f)
     def wrapper(self, *args, **kwargs):
         if not self.connector:
@@ -1150,6 +1151,10 @@ class Project:
         - `get_nodes`: When true it also queries for the nodes inside the project
         - `get_stats`: When true it also queries for the stats inside the project
 
+        It `get_stats` is set to `True`, it also verifies if snapshots and drawings are
+        inside the project and stores them in their respective attributes
+        (`snapshots` and `drawings`)
+
         **Required Attributes:**
 
         - `connector`
@@ -1182,6 +1187,8 @@ class Project:
             self.get_stats()
             if self.stats.get("snapshots", 0) > 0:
                 self.get_snapshots()
+            if self.stats.get("drawings", 0) > 0:
+                self.get_drawings()
         if get_nodes:
             self.get_nodes()
         if get_links:
@@ -1924,6 +1931,30 @@ class Project:
             _y = int(radius * (-cos(_angle * index)))
             n.update(x=_x, y=_y)
 
+    def get_drawing(self, drawing_id=None):
+        """
+        Returns the drawing by searching for the `svg` or the `drawing_id`.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword arguments:**
+        - `svg` or `drawing_id`
+        """
+        if not self.drawings:
+            self.get_drawings()
+
+        try:
+            return next(
+                _drawing
+                for _drawing in self.drawings
+                if _drawing["drawing_id"] == drawing_id
+            )
+        except StopIteration:
+            return None
+
     @verify_connector_and_id
     def get_drawings(self):
         """
@@ -2011,3 +2042,32 @@ class Project:
         self.get_drawings()
 
         return response.json()
+
+    @verify_connector_and_id
+    def delete_drawing(self, drawing_id=None):
+        """
+        Deletes a drawing of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `drawing_id`
+        """
+        self.get_drawings()
+
+        _drawing = self.get_drawing(drawing_id=drawing_id)
+        if not _drawing:
+            raise ValueError("drawing not found")
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
+            f"{_drawing['drawing_id']}"
+        )
+
+        self.connector.http_call("delete", _url)
+
+        self.get_drawings()
