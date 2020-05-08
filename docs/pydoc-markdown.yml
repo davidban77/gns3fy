@@ -10,6 +10,8 @@ processors:
     expression: not name.endswith("_TYPES")
   - type: filter
     expression: not name.startswith("Config")
+  - type: filter
+    expression: not name.startswith("verify_connector_and_id")
 renderer:
   type: markdown
   render_toc: false
