@@ -6,12 +6,26 @@ pip install -U gns3fy
 
 ## Releases
 
+### 0.7.0
+
+**Enhancement:**
+
+- Ability to manipulate SVGs. Added new methods: `create_drawing`, `update_drawing`, `delete_drawing` and `get_drawing`. Ref #66
+- Added a `drawing_utils.py` module that have some helper functions to generate SVGs in the Project: `generate_rectangle_svg`, `generate_line_svg` and `generate_ellipse_svg`. Also `parsed_x` and `parsed_y` that helps positions the Nodes and drawings in the canvas.
+- Python 3.8 support. Ref #68
+- Added `upload_compute_image` to the `Gns3Connector` object. Thanks @skeiffer for the contribution. Ref #62
+
+**Fix:**
+
+- Fixes issue closing Project. Ref #71
+- Update poetry and fix CI. Ref #64
+
 ### 0.6.0
 
 **Enhancement:**
 
 - Added `drawings` attribute. Used to gather information from `Drawing` endpoint, and for that there is also the `get_drawings` method.
-- Added `arrange_nodes_circular` method, which as the name indicates it will arrange the nodes configured on a project in a circular fashion.
+- Added `arrange_nodes_circular` method, which as the name indicates it will arrange the nodes configured on a project in a circular fashion. Thanks @Krlosromero for the contribution.
 
 ### 0.5.2
 
@@ -19,7 +33,7 @@ pip install -U gns3fy
 
 - Added `restore_snapshot` to the available snapshot methods of a project
 
-## 0.5.1
+### 0.5.1
 
 **Fix:**
 
