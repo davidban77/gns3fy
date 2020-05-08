@@ -139,43 +139,69 @@
         
         <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#060">0.6.0</a></li>
-        <li class="first-level "><a href="#052">0.5.2</a></li>
-        <li class="first-level "><a href="#051">0.5.1</a></li>
-        <li class="first-level "><a href="#050">0.5.0</a></li>
-        <li class="first-level "><a href="#041">0.4.1</a></li>
-        <li class="first-level "><a href="#040">0.4.0</a></li>
-        <li class="first-level "><a href="#030">0.3.0</a></li>
-        <li class="first-level "><a href="#020">0.2.0</a></li>
-        <li class="first-level "><a href="#011">0.1.1</a></li>
-        <li class="first-level "><a href="#010">0.1.0</a></li>
+        <li class="first-level active"><a href="#releases">Releases</a></li>
+            <li class="second-level"><a href="#070">0.7.0</a></li>
+                
+            <li class="second-level"><a href="#060">0.6.0</a></li>
+                
+            <li class="second-level"><a href="#052">0.5.2</a></li>
+                
+            <li class="second-level"><a href="#051">0.5.1</a></li>
+                
+            <li class="second-level"><a href="#050">0.5.0</a></li>
+                
+            <li class="second-level"><a href="#041">0.4.1</a></li>
+                
+            <li class="second-level"><a href="#040">0.4.0</a></li>
+                
+            <li class="second-level"><a href="#030">0.3.0</a></li>
+                
+            <li class="second-level"><a href="#020">0.2.0</a></li>
+                
+            <li class="second-level"><a href="#011">0.1.1</a></li>
+                
+            <li class="second-level"><a href="#010">0.1.0</a></li>
+                
     </ul>
 </div></div>
         <div class="col-md-9" role="main">
 
-<h1>Upgrading</h1>
-<pre><code>pip install -U gns3fy
+<h1>Upgrading and releases history</h1>
+<pre><code class="shell">pip install -U gns3fy
 </code></pre>
 
-<h1>Releases</h1>
-<h2 id="060">0.6.0</h2>
+<h2 id="releases">Releases</h2>
+<h3 id="070">0.7.0</h3>
+<p><strong>Enhancement:</strong></p>
+<ul>
+<li>Ability to manipulate SVGs. Added new methods: <code>create_drawing</code>, <code>update_drawing</code>, <code>delete_drawing</code> and <code>get_drawing</code>. Ref #66</li>
+<li>Added a <code>drawing_utils.py</code> module that have some helper functions to generate SVGs in the Project: <code>generate_rectangle_svg</code>, <code>generate_line_svg</code> and <code>generate_ellipse_svg</code>. Also <code>parsed_x</code> and <code>parsed_y</code> that helps positions the Nodes and drawings in the canvas.</li>
+<li>Python 3.8 support. Ref #68</li>
+<li>Added <code>upload_compute_image</code> to the <code>Gns3Connector</code> object. Thanks @skeiffer for the contribution. Ref #62</li>
+</ul>
+<p><strong>Fix:</strong></p>
+<ul>
+<li>Fixes issue closing Project. Ref #71</li>
+<li>Update poetry and fix CI. Ref #64</li>
+</ul>
+<h3 id="060">0.6.0</h3>
 <p><strong>Enhancement:</strong></p>
 <ul>
 <li>Added <code>drawings</code> attribute. Used to gather information from <code>Drawing</code> endpoint, and for that there is also the <code>get_drawings</code> method.</li>
-<li>Added <code>arrange_nodes_circular</code> method, which as the name indicates it will arrange the nodes configured on a project in a circular fashion.</li>
+<li>Added <code>arrange_nodes_circular</code> method, which as the name indicates it will arrange the nodes configured on a project in a circular fashion. Thanks @Krlosromero for the contribution.</li>
 </ul>
-<h2 id="052">0.5.2</h2>
+<h3 id="052">0.5.2</h3>
 <p><strong>Enhancement:</strong></p>
 <ul>
 <li>Added <code>restore_snapshot</code> to the available snapshot methods of a project</li>
 </ul>
-<h2 id="051">0.5.1</h2>
+<h3 id="051">0.5.1</h3>
 <p><strong>Fix:</strong></p>
 <ul>
 <li>Argument specification for project snapshot methods</li>
 <li>Cred argument for user-based authentication with a GNS3 server</li>
 </ul>
-<h2 id="050">0.5.0</h2>
+<h3 id="050">0.5.0</h3>
 <p><strong>New features:</strong></p>
 <ul>
 <li>
@@ -183,27 +209,25 @@
 </li>
 <li>
 <p>Added compute endpoint get method from the REST API. <a href="http://api.gns3.net/en/2.2/api/v2/controller/compute.html">Compute endpoint</a></p>
-<ul>
+</li>
 <li><code>get_computes</code>: Retrieves attributes and characteristics of the GNS3 server compute that will run the emulations.</li>
 <li><code>get_compute_images</code>: Lists images configured for a specific emulator on a compute.</li>
-<li><code>get_compute_ports</code>: Lists configured and used console ports and UDP ports on a compute.</li>
-</ul>
+<li>
+<p><code>get_compute_ports</code>: Lists configured and used console ports and UDP ports on a compute.</p>
 </li>
 <li>
 <p>Added projects snapshots attribute and methods. <a href="http://api.gns3.net/en/2.2/api/v2/controller/snapshot.html">Snapshots endpoint</a></p>
-<ul>
+</li>
 <li><code>snapshots</code>: Attribute that stores snapshots names, IDs and created times of a project. Updated by the <code>get_snapshots</code> method.</li>
 <li><code>get_snapshot</code>: Retrieves an specific snapshot information.</li>
 <li><code>create_snapshot</code> and <code>delete_snapshot</code>: Creates/Delete an specific snapshot</li>
 </ul>
-</li>
-</ul>
-<h2 id="041">0.4.1</h2>
+<h3 id="041">0.4.1</h3>
 <p><strong>Fix:</strong></p>
 <ul>
 <li>Dependency of python to start at version 3.6</li>
 </ul>
-<h2 id="040">0.4.0</h2>
+<h3 id="040">0.4.0</h3>
 <p><strong>New features:</strong></p>
 <ul>
 <li>Added <code>get_file</code> and <code>write_file</code> methods to <code>Node</code> and <code>Project</code>. Useful for interacting with files that reside on the server like README files, <code>/etc/network/interfaces</code> file for docker nodes, among other cases</li>
@@ -212,15 +236,15 @@
 <ul>
 <li>A "template not found" message, when creating a <code>Node</code> specifiying a missing/wrong template name.</li>
 </ul>
-<h2 id="030">0.3.0</h2>
+<h3 id="030">0.3.0</h3>
 <p><strong>Enhancement:</strong></p>
 <ul>
-<li><code>tox</code> for pipeline testing. https://github.com/davidban77/gns3fy/pull/15</li>
-<li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>. https://github.com/davidban77/gns3fy/pull/17</li>
-<li>Improved <code>nodes_inventory</code> method. https://github.com/davidban77/gns3fy/pull/23</li>
-<li>Refactor of <code>Node</code> creation, basically changed the API endpoint from Node to Template. https://github.com/davidban77/gns3fy/pull/27</li>
+<li><code>tox</code> for pipeline testing. <a href="https://github.com/davidban77/gns3fy/pull/15">PR-15</a></li>
+<li><code>projects_summary</code> and <code>templates_summary</code> methods for <code>Gns3Connector</code>. <a href="https://github.com/davidban77/gns3fy/pull/17">PR-17</a></li>
+<li>Improved <code>nodes_inventory</code> method. <a href="https://github.com/davidban77/gns3fy/pull/23">PR-23</a></li>
+<li>Refactor of <code>Node</code> creation, basically changed the API endpoint from Node to Template. <a href="https://github.com/davidban77/gns3fy/pull/27">PR-27</a></li>
 </ul>
-<h2 id="020">0.2.0</h2>
+<h3 id="020">0.2.0</h3>
 <p><strong>New features:</strong></p>
 <ul>
 <li>Ability to create <code>Project</code>, <code>Node</code> and <code>Link</code> instances</li>
@@ -228,17 +252,17 @@
 <li>Added some commodity methods like <code>nodes_summary</code></li>
 <li>Created the <code>docs</code></li>
 <li>Improved the tests and coverage</li>
-<li>Added CircleCI with the following checks:<ul>
+<li>Added CircleCI with the following checks:</li>
 <li>flake8</li>
 <li>black formatting</li>
 <li>pytest</li>
 </ul>
-</li>
+<h3 id="011">0.1.1</h3>
+<p><strong>Enhancement:</strong></p>
+<ul>
+<li>Adding <code>Gns3Connector</code> method <code>get_version</code></li>
 </ul>
-<h2 id="011">0.1.1</h2>
-<p><strong>Enhancement:</strong>
-- Adding <code>Gns3Connector</code> method <code>get_version</code></p>
-<h2 id="010">0.1.0</h2>
+<h3 id="010">0.1.0</h3>
 <ul>
 <li>Initial Push</li>
 </ul></div>
