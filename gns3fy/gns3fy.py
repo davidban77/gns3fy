@@ -1,5 +1,7 @@
+import os
 import time
 import requests
+from functools import wraps
 from urllib.parse import urlparse
 from requests import HTTPError
 from dataclasses import field
@@ -442,6 +444,23 @@ class Gns3Connector:
         _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
         return self.http_call("get", _url).json()
 
+    def upload_compute_image(self, emulator, file_path, compute_id="local"):
+        """
+        uploads an image for use by a compute.
+
+        **Required Attributes:**
+
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+        - `file_path`: path of file to be uploaded
+        - `compute_id` By default is 'local'
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Could not find file: {file_path}")
+
+        _filename = os.path.basename(file_path)
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
+        self.http_call("post", _url, data=open(file_path, "rb"))
+
     def get_compute_ports(self, compute_id="local"):
         """
         Returns ports used and configured by a compute.
@@ -456,6 +475,45 @@ class Gns3Connector:
         """
         _url = f"{self.base_url}/computes/{compute_id}/ports"
         return self.http_call("get", _url).json()
+
+
+def verify_connector_and_id(f):
+    """
+    Main checker for connector object and respective object's ID for their retrieval
+    or actions methods.
+    """
+
+    @wraps(f)
+    def wrapper(self, *args, **kwargs):
+        if not self.connector:
+            raise ValueError("Gns3Connector not assigned under 'connector'")
+        if not self.project_id:
+            raise ValueError("Need to submit project_id")
+        # Checks for Node
+        if self.__class__.__name__ == "Node":
+            if not self.node_id:
+                if not self.name:
+                    raise ValueError("Need to either submit node_id or name")
+
+                # Try to retrieve the node_id
+                _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
+                _response = self.connector.http_call("get", _url)
+
+                extracted = [
+                    node for node in _response.json() if node["name"] == self.name
+                ]
+                if len(extracted) > 1:
+                    raise ValueError(
+                        "Multiple nodes found with same name. Need to submit node_id"
+                    )
+                self.node_id = extracted[0]["node_id"]
+        # Checks for Link
+        if self.__class__.__name__ == "Link":
+            if not self.link_id:
+                raise ValueError("Need to submit link_id")
+        return f(self, *args, **kwargs)
+
+    return wrapper
 
 
 @dataclass(config=Config)
@@ -519,14 +577,7 @@ class Link:
             if k in self.__dict__.keys():
                 self.__setattr__(k, v)
 
-    def _verify_before_action(self):
-        if not self.connector:
-            raise ValueError("Gns3Connector not assigned under 'connector'")
-        if not self.project_id:
-            raise ValueError("Need to submit project_id")
-        if not self.link_id:
-            raise ValueError("Need to submit link_id")
-
+    @verify_connector_and_id
     def get(self):
         """
         Retrieves the information from the link endpoint.
@@ -537,8 +588,6 @@ class Link:
         - `connector`
         - `link_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
         )
@@ -547,6 +596,7 @@ class Link:
         # Update object
         self._update(_response.json())
 
+    @verify_connector_and_id
     def delete(self):
         """
         Deletes a link endpoint from the project. It sets to `None` the attributes
@@ -558,8 +608,6 @@ class Link:
         - `connector`
         - `link_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
         )
@@ -709,26 +757,7 @@ class Node:
             if k in self.__dict__.keys():
                 self.__setattr__(k, v)
 
-    def _verify_before_action(self):
-        if not self.connector:
-            raise ValueError("Gns3Connector not assigned under 'connector'")
-        if not self.project_id:
-            raise ValueError("Need to submit project_id")
-        if not self.node_id:
-            if not self.name:
-                raise ValueError("Need to either submit node_id or name")
-
-            # Try to retrieve the node_id
-            _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            _response = self.connector.http_call("get", _url)
-
-            extracted = [node for node in _response.json() if node["name"] == self.name]
-            if len(extracted) > 1:
-                raise ValueError(
-                    "Multiple nodes found with same name. Need to submit node_id"
-                )
-            self.node_id = extracted[0]["node_id"]
-
+    @verify_connector_and_id
     def get(self, get_links=True):
         """
         Retrieves the node information. When `get_links` is `True` it also retrieves the
@@ -740,8 +769,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
         )
@@ -753,6 +780,7 @@ class Node:
         if get_links:
             self.get_links()
 
+    @verify_connector_and_id
     def get_links(self):
         """
         Retrieves the links of the respective node. They will be saved at the `links`
@@ -764,8 +792,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/links"
@@ -778,6 +804,7 @@ class Node:
         for _link in _response.json():
             self.links.append(Link(connector=self.connector, **_link))
 
+    @verify_connector_and_id
     def start(self):
         """
         Starts the node.
@@ -788,8 +815,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/start"
@@ -802,6 +827,7 @@ class Node:
         else:
             self.get()
 
+    @verify_connector_and_id
     def stop(self):
         """
         Stops the node.
@@ -812,8 +838,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/stop"
@@ -826,6 +850,7 @@ class Node:
         else:
             self.get()
 
+    @verify_connector_and_id
     def reload(self):
         """
         Reloads the node.
@@ -836,8 +861,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/reload"
@@ -850,6 +873,7 @@ class Node:
         else:
             self.get()
 
+    @verify_connector_and_id
     def suspend(self):
         """
         Suspends the node.
@@ -860,8 +884,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/suspend"
@@ -874,6 +896,7 @@ class Node:
         else:
             self.get()
 
+    @verify_connector_and_id
     def update(self, **kwargs):
         """
         Updates the node instance by passing the keyword arguments of the attributes
@@ -892,8 +915,6 @@ class Node:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
         )
@@ -965,6 +986,7 @@ class Node:
         # Update the node attributes based on cached data
         self.update(**cached_data)
 
+    @verify_connector_and_id
     def delete(self):
         """
         Deletes the node from the project. It sets to `None` the attributes `node_id`
@@ -976,8 +998,6 @@ class Node:
         - `connector`
         - `node_id`
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
         )
@@ -988,6 +1008,7 @@ class Node:
         self.node_id = None
         self.name = None
 
+    @verify_connector_and_id
     def get_file(self, path):
         """
         Retrieve a file in the node directory.
@@ -998,8 +1019,6 @@ class Node:
         - `connector`
         - `path`: Node's relative path of the file
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
             f"/files/{path}"
@@ -1007,6 +1026,7 @@ class Node:
 
         return self.connector.http_call("get", _url).text
 
+    @verify_connector_and_id
     def write_file(self, path, data):
         """
         Places a file content on a specified node file path. Used mainly for docker
@@ -1030,8 +1050,6 @@ class Node:
         - `path`: Node's relative path of the file
         - `data`: Data to be included in the file
         """
-        self._verify_before_action()
-
         _url = (
             f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
             f"/files/{path}"
@@ -1125,12 +1143,6 @@ class Project:
             if k in self.__dict__.keys():
                 self.__setattr__(k, v)
 
-    def _verify_before_action(self):
-        if not self.connector:
-            raise ValueError("Gns3Connector not assigned under 'connector'")
-        if not self.project_id:
-            raise ValueError("Need to submit project_id")
-
     def get(self, get_links=True, get_nodes=True, get_stats=True):
         """
         Retrieves the projects information.
@@ -1138,6 +1150,10 @@ class Project:
         - `get_links`: When true it also queries for the links inside the project
         - `get_nodes`: When true it also queries for the nodes inside the project
         - `get_stats`: When true it also queries for the stats inside the project
+
+        It `get_stats` is set to `True`, it also verifies if snapshots and drawings are
+        inside the project and stores them in their respective attributes
+        (`snapshots` and `drawings`)
 
         **Required Attributes:**
 
@@ -1171,6 +1187,8 @@ class Project:
             self.get_stats()
             if self.stats.get("snapshots", 0) > 0:
                 self.get_snapshots()
+            if self.stats.get("drawings", 0) > 0:
+                self.get_drawings()
         if get_nodes:
             self.get_nodes()
         if get_links:
@@ -1204,6 +1222,7 @@ class Project:
         # Now update it
         self._update(_response.json())
 
+    @verify_connector_and_id
     def update(self, **kwargs):
         """
         Updates the project instance by passing the keyword arguments of the attributes
@@ -1222,8 +1241,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}"
 
         # TODO: Verify that the passed kwargs are supported ones
@@ -1232,6 +1249,7 @@ class Project:
         # Update object
         self._update(_response.json())
 
+    @verify_connector_and_id
     def delete(self):
         """
         Deletes the project from the server. It sets to `None` the attributes
@@ -1242,8 +1260,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}"
 
         self.connector.http_call("delete", _url)
@@ -1251,6 +1267,7 @@ class Project:
         self.project_id = None
         self.name = None
 
+    @verify_connector_and_id
     def close(self):
         """
         Closes the project on the server.
@@ -1260,15 +1277,15 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/close"
 
         _response = self.connector.http_call("post", _url)
 
         # Update object
-        self._update(_response.json())
+        if _response.status_code == 204:
+            self.status = "closed"
 
+    @verify_connector_and_id
     def open(self):
         """
         Opens the project on the server.
@@ -1278,8 +1295,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/open"
 
         _response = self.connector.http_call("post", _url)
@@ -1287,6 +1302,7 @@ class Project:
         # Update object
         self._update(_response.json())
 
+    @verify_connector_and_id
     def get_stats(self):
         """
         Retrieve the stats of the project.
@@ -1296,8 +1312,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/stats"
 
         _response = self.connector.http_call("get", _url)
@@ -1305,6 +1319,7 @@ class Project:
         # Update object
         self.stats = _response.json()
 
+    @verify_connector_and_id
     def get_file(self, path):
         """
         Retrieve a file in the project directory. Beware you have warranty to be able to
@@ -1316,12 +1331,11 @@ class Project:
         - `connector`
         - `path`: Project's relative path of the file
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
 
         return self.connector.http_call("get", _url).text
 
+    @verify_connector_and_id
     def write_file(self, path, data):
         """
         Places a file content on a specified project file path. Beware you have warranty
@@ -1344,12 +1358,11 @@ class Project:
         - `path`: Project's relative path of the file
         - `data`: Data to be included in the file
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/files/{path}"
 
         self.connector.http_call("post", _url, data=data)
 
+    @verify_connector_and_id
     def get_nodes(self):
         """
         Retrieve the nodes of the project.
@@ -1359,8 +1372,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
 
         _response = self.connector.http_call("get", _url)
@@ -1373,6 +1384,7 @@ class Project:
             _n.project_id = self.project_id
             self.nodes.append(_n)
 
+    @verify_connector_and_id
     def get_links(self):
         """
         Retrieve the links of the project.
@@ -1382,8 +1394,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/links"
 
         _response = self.connector.http_call("get", _url)
@@ -1396,6 +1406,7 @@ class Project:
             _l.project_id = self.project_id
             self.links.append(_l)
 
+    @verify_connector_and_id
     def start_nodes(self, poll_wait_time=5):
         """
         Starts all the nodes inside the project.
@@ -1408,8 +1419,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/start"
 
         self.connector.http_call("post", _url)
@@ -1418,6 +1427,7 @@ class Project:
         time.sleep(poll_wait_time)
         self.get_nodes()
 
+    @verify_connector_and_id
     def stop_nodes(self, poll_wait_time=5):
         """
         Stops all the nodes inside the project.
@@ -1430,8 +1440,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/stop"
 
         self.connector.http_call("post", _url)
@@ -1440,6 +1448,7 @@ class Project:
         time.sleep(poll_wait_time)
         self.get_nodes()
 
+    @verify_connector_and_id
     def reload_nodes(self, poll_wait_time=5):
         """
         Reloads all the nodes inside the project.
@@ -1452,8 +1461,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/reload"
 
         self.connector.http_call("post", _url)
@@ -1462,6 +1469,7 @@ class Project:
         time.sleep(poll_wait_time)
         self.get_nodes()
 
+    @verify_connector_and_id
     def suspend_nodes(self, poll_wait_time=5):
         """
         Suspends all the nodes inside the project.
@@ -1474,8 +1482,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/suspend"
 
         self.connector.http_call("post", _url)
@@ -1765,6 +1771,7 @@ class Project:
         self.links.append(_link)
         print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
 
+    @verify_connector_and_id
     def get_snapshots(self):
         """
         Retrieves list of snapshots of the project
@@ -1774,8 +1781,6 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots"
 
         response = self.connector.http_call("get", _url)
@@ -1810,6 +1815,7 @@ class Project:
         else:
             raise ValueError("name or snapshot_id must be provided")
 
+    @verify_connector_and_id
     def create_snapshot(self, name):
         """
         Creates a snapshot of the project
@@ -1823,8 +1829,6 @@ class Project:
 
         - `name`
         """
-        self._verify_before_action()
-
         self.get_snapshots()
 
         _snapshot = self.get_snapshot(name=name)
@@ -1840,6 +1844,7 @@ class Project:
         self.snapshots.append(_snapshot)
         print(f"Created snapshot: {_snapshot['name']}")
 
+    @verify_connector_and_id
     def delete_snapshot(self, name=None, snapshot_id=None):
         """
         Deletes a snapshot of the project
@@ -1853,8 +1858,6 @@ class Project:
 
         - `name` or `snapshot_id`
         """
-        self._verify_before_action()
-
         self.get_snapshots()
 
         _snapshot = self.get_snapshot(name=name, snapshot_id=snapshot_id)
@@ -1870,6 +1873,7 @@ class Project:
 
         self.get_snapshots()
 
+    @verify_connector_and_id
     def restore_snapshot(self, name=None, snapshot_id=None):
         """
         Restore a snapshot from disk
@@ -1883,8 +1887,6 @@ class Project:
 
         - `name` or `snapshot_id`
         """
-        self._verify_before_action()
-
         self.get_snapshots()
 
         _snapshot = self.get_snapshot(name=name, snapshot_id=snapshot_id)
@@ -1929,6 +1931,31 @@ class Project:
             _y = int(radius * (-cos(_angle * index)))
             n.update(x=_x, y=_y)
 
+    def get_drawing(self, drawing_id=None):
+        """
+        Returns the drawing by searching for the `svg` or the `drawing_id`.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword arguments:**
+        - `svg` or `drawing_id`
+        """
+        if not self.drawings:
+            self.get_drawings()
+
+        try:
+            return next(
+                _drawing
+                for _drawing in self.drawings
+                if _drawing["drawing_id"] == drawing_id
+            )
+        except StopIteration:
+            return None
+
+    @verify_connector_and_id
     def get_drawings(self):
         """
         Retrieves list of drawings  of the project
@@ -1938,9 +1965,109 @@ class Project:
         - `project_id`
         - `connector`
         """
-        self._verify_before_action()
-
         _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
 
         _response = self.connector.http_call("get", _url)
         self.drawings = _response.json()
+
+    @verify_connector_and_id
+    def create_drawing(self, svg, locked=False, x=10, y=10, z=1):
+        """
+        Creates a drawing on the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
+
+        response = self.connector.http_call(
+            "post", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
+        )
+
+        _drawing = response.json()
+
+        self.drawings.append(_drawing)
+        print(f"Created drawing: {_drawing['drawing_id']}")
+
+    @verify_connector_and_id
+    def update_drawing(self, drawing_id, svg=None, locked=None, x=None, y=None, z=None):
+        """
+        Updates a drawing on the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+        """
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
+            f"{drawing_id}"
+        )
+
+        if svg is None:
+            svg = [
+                draw["svg"]
+                for draw in self.drawings
+                if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if locked is None:
+            locked = [
+                draw["locked"]
+                for draw in self.drawings
+                if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if x is None:
+            x = [
+                draw["x"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if y is None:
+            y = [
+                draw["y"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        if z is None:
+            z = [
+                draw["z"] for draw in self.drawings if draw["drawing_id"] == drawing_id
+            ][0]
+
+        response = self.connector.http_call(
+            "put", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
+        )
+
+        self.get_drawings()
+
+        return response.json()
+
+    @verify_connector_and_id
+    def delete_drawing(self, drawing_id=None):
+        """
+        Deletes a drawing of the project
+
+        **Required Project instance attributes:**
+
+        - `project_id`
+        - `connector`
+
+        **Required keyword aguments:**
+
+        - `drawing_id`
+        """
+        self.get_drawings()
+
+        _drawing = self.get_drawing(drawing_id=drawing_id)
+        if not _drawing:
+            raise ValueError("drawing not found")
+
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
+            f"{_drawing['drawing_id']}"
+        )
+
+        self.connector.http_call("delete", _url)
+
+        self.get_drawings()

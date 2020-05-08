@@ -19,3 +19,9 @@ build:
 
 publish:
 	poetry publish
+
+docker-settings:
+	cp .vscode/docker-settings.json .vscode/settings.json
+
+local-settings:
+	cp .vscode/local-settings.json .vscode/settings.json

@@ -15,7 +15,8 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/python:3.7
+      # - image: circleci/python:3.7
+      - image: continuumio/miniconda3
     steps:
       - checkout
       - restore_cache:
@@ -23,9 +24,14 @@ jobs:
             # - deps-{{ checksum "poetry.lock" }}
             - deps-clear
       - run:
+          name: Install Poetry
+          command: |
+            pip install poetry
+            poetry config virtualenvs.create false
+      - run:
           name: Install Dependencies
           command: |
-            poetry install
+            poetry install --no-interaction
       - run:
           name: Run flake8
           command: |
@@ -42,8 +48,8 @@ jobs:
           # key: deps-{{ checksum "poetry.lock" }}
           key: deps-clear
           paths:
-            - /home/circleci/.cache/pypoetry/virtualenvs
-            - /home/circleci/.cache/.tox
+            - /root/.cache/pypoetry/virtualenvs
+            - /root/.cache/.tox
       - run:
           name: Running tests
           command: |

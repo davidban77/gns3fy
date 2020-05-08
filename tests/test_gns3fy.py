@@ -14,6 +14,7 @@ BASE_URL = "mock://gns3server:3080"
 CPROJECT = {"name": "API_TEST", "id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe"}
 CNODE = {"name": "alpine-1", "id": "ef503c45-e998-499d-88fc-2765614b313e"}
 CTEMPLATE = {"name": "alpine", "id": "847e5333-6ac9-411f-a400-89838584371b"}
+CDRAWING = {"id": "04e326ab-09fa-47e6-957e-d5a285efb988"}
 CLINK = {"link_type": "ethernet", "id": "4d9f1235-7fd1-466b-ad26-0b4b08beb778"}
 CCOMPUTE = {"id": "local"}
 CIMAGE = {"filename": "vEOS-lab-4.21.5F.vmdk"}
@@ -114,7 +115,10 @@ def post_put_matcher(request):
     "Creates the Responses for POST and PUT requests"
     resp = requests.Response()
     if request.method == "POST":
-        if request.path_url.endswith("/projects"):
+        if request.path_url.endswith("/computes/local/qemu/images/files.txt"):
+            resp.status_code = 204
+            return resp
+        elif request.path_url.endswith("/projects"):
             # Now verify the data
             _data = request.json()
             if _data["name"] == "API_TEST":
@@ -128,10 +132,7 @@ def post_put_matcher(request):
                 )
                 return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/close"):
-            _returned = json_api_test_project()
-            _returned.update(status="closed")
             resp.status_code = 204
-            resp.json = lambda: _returned
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/open"):
             _returned = json_api_test_project()
@@ -162,6 +163,21 @@ def post_put_matcher(request):
                 resp.json = lambda: _returned
                 resp.status_code = 201
                 return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/drawings"):
+            _data = request.json()
+            _returned = dict(
+                locked=False,
+                rotation=0,
+                x=10,
+                y=20,
+                z=0,
+                svg=_data.get("svg"),
+                project_id="28ea5feb-c006-4724-80ec-a7cc0d8b8a5a",
+                drawing_id="62afa856-4a43-4444-a376-60f6f963bb3d",
+            )
+            resp.json = lambda: _returned
+            resp.status_code = 201
+            return resp
         elif request.path_url.endswith(
             f"/{CPROJECT['id']}/snapshots/44e08d78-0ee4-4b8f-bad4-117aa67cb759/restore"
         ):
@@ -298,6 +314,12 @@ def post_put_matcher(request):
                 resp.status_code = 200
                 resp.json = lambda: _data
                 return resp
+        elif request.path_url.endswith(f"/drawings/{CDRAWING['id']}"):
+            _data = request.json()
+            if _data["x"] == -256:
+                resp.status_code = 201
+                resp.json = lambda: _data
+                return resp
     return None
 
 
@@ -370,7 +392,7 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
-            json={"drawings": 0, "links": 4, "nodes": 6, "snapshots": 2},
+            json={"drawings": 2, "links": 4, "nodes": 6, "snapshots": 2},
         )
         # Get a project README file info
         self.adapter.register_uri(
@@ -408,6 +430,11 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/drawings",
             json=projects_drawings_data(),
             status_code=200,
+        )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/drawings/{CDRAWING['id']}",
+            status_code=204,
         )
         # Extra project
         self.adapter.register_uri(
@@ -831,6 +858,18 @@ class TestGns3Connector:
             assert n[0] == response[index]["filename"]
             assert n[1] == response[index]["filesize"]
 
+    def test_upload_compute_image_not_found(self, gns3_server):
+        # NOTE: This is better tested on an integration scenario
+        with pytest.raises(FileNotFoundError, match="Could not find file: dummy"):
+            gns3_server.upload_compute_image(emulator="qemu", file_path="dummy")
+
+    def test_upload_compute_image(self, gns3_server):
+        # NOTE: This is better tested on an integration scenario
+        response = gns3_server.upload_compute_image(
+            emulator="qemu", file_path=DATA_FILES / "files.txt"
+        )
+        assert response is None
+
     def test_get_compute_ports(self, gns3_server):
         response = gns3_server.get_compute_ports(compute_id="local")
         assert response["console_port_range"] == [5000, 10000]
@@ -1174,7 +1213,7 @@ class TestProject:
         assert "API_TEST" == api_test_project.name
         assert "opened" == api_test_project.status
         assert {
-            "drawings": 0,
+            "drawings": 2,
             "links": 4,
             "nodes": 6,
             "snapshots": 2,
@@ -1223,7 +1262,7 @@ class TestProject:
     def test_get_stats(self, api_test_project):
         api_test_project.get_stats()
         assert {
-            "drawings": 0,
+            "drawings": 2,
             "links": 4,
             "nodes": 6,
             "snapshots": 2,
@@ -1489,8 +1528,57 @@ class TestProject:
     def test_get_drawings(self, api_test_project):
         api_test_project.get_drawings()
         assert isinstance(api_test_project.drawings, list)
-        assert (
-            api_test_project.drawings[0]["drawing_id"]
-            == "04e326ab-09fa-47e6-957e-d5a285efb988"
-        )
+        assert api_test_project.drawings[0]["drawing_id"] == CDRAWING["id"]
         assert api_test_project.drawings[0]["project_id"] == api_test_project.project_id
+
+    def test_error_get_drawing_not_found(self, api_test_project):
+        dummy = api_test_project.get_drawing(drawing_id="dummy")
+        assert dummy is None
+
+    def test_get_drawing(self, api_test_project):
+        api_test_project.drawings = None
+        drawing = api_test_project.get_drawing(drawing_id=CDRAWING["id"])
+        assert drawing["svg"] == (
+            '<svg height="100" width="200"><rect fill="#ffffff" fill-opacity="1.0" '
+            'height="100" stroke="#000000" stroke-width="2" width="200" /></svg>'
+        )
+        assert drawing["x"] == -256
+        assert drawing["y"] == -237
+        assert drawing["z"] == 1
+
+    def test_create_drawing(self, api_test_project):
+        api_test_project.create_drawing(
+            svg=(
+                '<svg height="210" width="500"><line x1="0" y1="0" x2="200" y2="200" '
+                'style="stroke:rgb(255,0,0);stroke-width:2" /></svg>'
+            ),
+            x=10,
+            y=20,
+            z=0,
+        )
+        drawing = api_test_project.drawings[-1]
+        assert drawing["drawing_id"] == "62afa856-4a43-4444-a376-60f6f963bb3d"
+        assert drawing["project_id"] == "28ea5feb-c006-4724-80ec-a7cc0d8b8a5a"
+        assert drawing["x"] == 10
+        assert drawing["y"] == 20
+        assert drawing["z"] == 0
+
+    def test_update_drawing(self, api_test_project):
+        api_test_project.get_drawings()
+
+        # Update:
+        # NOTE: This should be really well tested in an integration phase since
+        # the values are not really altered here
+        api_test_project.update_drawing(
+            drawing_id=api_test_project.drawings[0]["drawing_id"]
+        )
+        assert api_test_project.drawings[0]["x"] == -256
+        assert api_test_project.drawings[0]["drawing_id"] == CDRAWING["id"]
+
+    def test_delete_drawing(self, api_test_project):
+        response = api_test_project.delete_drawing(drawing_id=CDRAWING["id"])
+        assert response is None
+
+    def test_delete_drawing_not_found(self, api_test_project):
+        with pytest.raises(ValueError, match="drawing not found"):
+            api_test_project.delete_drawing(drawing_id="dummmy")
