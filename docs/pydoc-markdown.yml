@@ -6,12 +6,19 @@ processors:
   - type: pydocmd
   - type: filter
     document_only: true
-  - type: filter
-    expression: not name.endswith("_TYPES")
-  - type: filter
-    expression: not name.startswith("Config")
-  - type: filter
-    expression: not name.startswith("verify_connector_and_id")
+  # - type: filter
+  #   expression: not name.endswith("_TYPES")
+  # - type: google
+  #   expression: not name.startswith("Config")
+  # - type: filter
+  #   expression: not name.startswith("@verify_connector_and_id")
+  #   documented_only: false
 renderer:
   type: markdown
   render_toc: false
+  header_level_by_type:
+    Module: 1
+    Class: 2
+    Method: 3
+    Function: 3
+    Data: 4
