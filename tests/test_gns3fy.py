@@ -404,7 +404,7 @@ class Gns3ConnectorMock(Gns3Connector):
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/files//dummy/path",
-            json={"message": f"404: Not found", "status": 404},
+            json={"message": "404: Not found", "status": 404},
             status_code=404,
         )
         self.adapter.register_uri(

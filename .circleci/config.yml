@@ -1,37 +1,30 @@
 version: 2.1
-workflows:
-  main:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - "gh-pages"
-
 
 orbs:
-  codecov: codecov/codecov@1.0.5
+  codecov: codecov/codecov@1.1.1
 
-jobs:
+commands:
   build:
-    docker:
-      # - image: circleci/python:3.7
-      - image: continuumio/miniconda3
     steps:
       - checkout
       - restore_cache:
           keys:
-            # - deps-{{ checksum "poetry.lock" }}
-            - deps-clear
-      - run:
-          name: Install Poetry
-          command: |
-            pip install poetry
-            poetry config virtualenvs.create false
+            - deps-{{ checksum "poetry.lock" }}
+            # - deps-clear
       - run:
           name: Install Dependencies
           command: |
             poetry install --no-interaction
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          # key: deps-clear
+          paths:
+            - "~/.cache/pypoetry/virtualenvs"
+            - "/usr/local/bin"
+            - "/usr/local/lib/"
+
+  linting:
+    steps:
       - run:
           name: Run flake8
           command: |
@@ -40,19 +33,78 @@ jobs:
           name: Run black formatting check
           command: |
             poetry run black --diff --check .
-      - run:
-          name: Run tox
-          command: |
-            poetry run tox
-      - save_cache:
-          # key: deps-{{ checksum "poetry.lock" }}
-          key: deps-clear
-          paths:
-            - /root/.cache/pypoetry/virtualenvs
-            - /root/.cache/.tox
+
+  test:
+    steps:
       - run:
           name: Running tests
+          command: |
+            poetry run pytest tests/ -v
+
+executors:
+  py36-executor:
+    docker:
+      - image: circleci/python:3.6
+  py37-executor:
+    docker:
+      - image: circleci/python:3.7
+  py38-executor:
+    docker:
+      - image: circleci/python:3.8
+
+jobs:
+  test-with-py36:
+    executor: py36-executor
+    steps:
+      - build
+      - linting
+      - test
+  test-with-py37:
+    executor: py37-executor
+    steps:
+      - build
+      - linting
+      - test
+  test-with-py38:
+    executor: py38-executor
+    steps:
+      - build
+      - linting
+      - test
+
+  coverage_publish:
+    executor: py38-executor
+    steps:
+      - build
+      - run:
+          name: Running tests with coverage
           command: |
             poetry run pytest --cov-report=xml --cov=gns3fy tests/
       - codecov/upload:
           file: coverage.xml
+
+workflows:
+  py36-test:
+    jobs:
+      - test-with-py36:
+          filters:
+            branches:
+              ignore:
+                - "gh-pages"
+  py37-test:
+    jobs:
+      - test-with-py37:
+          filters:
+            branches:
+              ignore:
+                - "gh-pages"
+  py38-test:
+    jobs:
+      - test-with-py38:
+          filters:
+            branches:
+              ignore:
+                - "gh-pages"
+      - coverage_publish:
+          requires:
+              - "test-with-py38"
