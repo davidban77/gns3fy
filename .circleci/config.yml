@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  codecov: codecov/codecov@1.0.5
+  codecov: codecov/codecov@1.1.1
 
 commands:
   build:
@@ -19,8 +19,9 @@ commands:
           key: deps-{{ checksum "poetry.lock" }}
           # key: deps-clear
           paths:
-            - /root/.cache/pypoetry/virtualenvs
-            - /root/.cache/.tox
+            - "~/.cache/pypoetry/virtualenvs"
+            - "/usr/local/bin"
+            - "/usr/local/lib/"
 
   linting:
     steps:
@@ -32,6 +33,13 @@ commands:
           name: Run black formatting check
           command: |
             poetry run black --diff --check .
+
+  test:
+    steps:
+      - run:
+          name: Running tests
+          command: |
+            poetry run pytest tests/ -v
 
 executors:
   py36-executor:
@@ -45,32 +53,30 @@ executors:
       - image: circleci/python:3.8
 
 jobs:
-  build-with-py36:
+  test-with-py36:
     executor: py36-executor
     steps:
       - build
       - linting
-      - run:
-          name: Run tox py36
-          command: |
-            poetry run tox -e py36
-  build-with-py37:
+      - test
+  test-with-py37:
     executor: py37-executor
     steps:
       - build
       - linting
-      - run:
-          name: Run tox py37
-          command: |
-            poetry run tox -e py37
-  build-with-py38:
+      - test
+  test-with-py38:
     executor: py38-executor
-
     steps:
       - build
       - linting
+      - test
+
+  coverage_publish:
+    executor: py38-executor
+    steps:
       - run:
-          name: Running tests py38
+          name: Running tests with coverage
           command: |
             poetry run pytest --cov-report=xml --cov=gns3fy tests/
       - codecov/upload:
@@ -79,22 +85,23 @@ jobs:
 workflows:
   py36-test:
     jobs:
-      - build-with-py36:
+      - test-with-py36:
           filters:
             branches:
               ignore:
                 - "gh-pages"
   py37-test:
     jobs:
-      - build-with-py37:
+      - test-with-py37:
           filters:
             branches:
               ignore:
                 - "gh-pages"
   py38-test:
     jobs:
-      - build-with-py38:
+      - test-with-py38:
           filters:
             branches:
               ignore:
                 - "gh-pages"
+      - coverage_publish
