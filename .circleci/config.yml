@@ -24,6 +24,11 @@ jobs:
             # - deps-{{ checksum "poetry.lock" }}
             - deps-clear
       - run:
+          name: Install curl
+          command: |
+            apt-get udpate
+            apt-get install curl -y
+      - run:
           name: Install Poetry
           command: |
             pip install poetry
