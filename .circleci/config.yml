@@ -47,10 +47,9 @@ executors:
 jobs:
   build-with-py36:
     executor: py36-executor
-    filters:
-      branches:
-        ignore:
-          - "gh-pages"
+    branches:
+      ignore:
+        - "gh-pages"
     steps:
       - build
       - linting
@@ -60,10 +59,9 @@ jobs:
             poetry run tox -e py36
   build-with-py37:
     executor: py37-executor
-    filters:
-      branches:
-        ignore:
-          - "gh-pages"
+    branches:
+      ignore:
+        - "gh-pages"
     steps:
       - build
       - linting
@@ -73,10 +71,9 @@ jobs:
             poetry run tox -e py37
   build-with-py38:
     executor: py38-executor
-    filters:
-      branches:
-        ignore:
-          - "gh-pages"
+    branches:
+      ignore:
+        - "gh-pages"
     steps:
       - build
       - linting
