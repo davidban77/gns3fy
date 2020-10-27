@@ -75,6 +75,7 @@ jobs:
   coverage_publish:
     executor: py38-executor
     steps:
+      - build
       - run:
           name: Running tests with coverage
           command: |
@@ -104,4 +105,6 @@ workflows:
             branches:
               ignore:
                 - "gh-pages"
-      - coverage_publish
+      - coverage_publish:
+          requires:
+              - "test-with-py38"
