@@ -11,8 +11,8 @@ docs-show:
 test:
 	poetry run flake8 .
 	poetry run black --diff --check .
-	poetry run tox
-	poetry run pytest --cov-report=xml --cov=gns3fy tests/
+	poetry run tox -e py38
+	poetry run pytest --cov-report=html --cov=gns3fy tests/
 
 build:
 	poetry build

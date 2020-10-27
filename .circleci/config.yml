@@ -1,42 +1,29 @@
 version: 2.1
-workflows:
-  main:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - "gh-pages"
-
 
 orbs:
   codecov: codecov/codecov@1.0.5
 
-jobs:
+commands:
   build:
-    docker:
-      # - image: circleci/python:3.7
-      - image: continuumio/miniconda3
     steps:
       - checkout
       - restore_cache:
           keys:
-            # - deps-{{ checksum "poetry.lock" }}
-            - deps-clear
-      - run:
-          name: Install curl
-          command: |
-            apt-get update
-            apt-get install curl -y
-      - run:
-          name: Install Poetry
-          command: |
-            pip install poetry
-            poetry config virtualenvs.create false
+            - deps-{{ checksum "poetry.lock" }}
+            # - deps-clear
       - run:
           name: Install Dependencies
           command: |
             poetry install --no-interaction
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          # key: deps-clear
+          paths:
+            - /root/.cache/pypoetry/virtualenvs
+            - /root/.cache/.tox
+
+  linting:
+    steps:
       - run:
           name: Run flake8
           command: |
@@ -45,19 +32,68 @@ jobs:
           name: Run black formatting check
           command: |
             poetry run black --diff --check .
+
+executors:
+  py36-executor:
+    docker:
+      - image: circleci/python:3.6
+    filters:
+      branches:
+        ignore:
+          - "gh-pages"
+  py37-executor:
+    docker:
+      - image: circleci/python:3.7
+    filters:
+      branches:
+        ignore:
+          - "gh-pages"
+  py38-executor:
+    docker:
+      - image: circleci/python:3.8
+    filters:
+      branches:
+        ignore:
+          - "gh-pages"
+
+jobs:
+  build-with-py36:
+    executor: py36-executor
+    steps:
+      - build
+      - linting
       - run:
-          name: Run tox
+          name: Run tox py36
           command: |
-            poetry run tox
-      - save_cache:
-          # key: deps-{{ checksum "poetry.lock" }}
-          key: deps-clear
-          paths:
-            - /root/.cache/pypoetry/virtualenvs
-            - /root/.cache/.tox
+            poetry run tox -e py36
+  build-with-py37:
+    executor: py37-executor
+    steps:
+      - build
+      - linting
       - run:
-          name: Running tests
+          name: Run tox py37
+          command: |
+            poetry run tox -e py37
+  build-with-py38:
+    executor: py38-executor
+    steps:
+      - build
+      - linting
+      - run:
+          name: Running tests py38
           command: |
             poetry run pytest --cov-report=xml --cov=gns3fy tests/
       - codecov/upload:
           file: coverage.xml
+
+workflows:
+  py36-test:
+    jobs:
+      - build-with-py36
+  py37-test:
+    jobs:
+      - build-with-py37
+  py38-test:
+    jobs:
+      - build-with-py38
