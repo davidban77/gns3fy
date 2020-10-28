@@ -1,174 +1,579 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GNS3 REST API python library.">
-    <meta name="author" content="David Flores">
-    <link rel="canonical" href="https://davidban77.github.io/gns3fy/user-guide/">
-    <link rel="../img/favicon.ico">
-
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-    <title>User Guide - gns3fy</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="GNS3 REST API python library.">
+      
+      
+        <link rel="canonical" href="https://davidban77.github.io/gns3fy/user-guide/">
+      
+      
+        <meta name="author" content="David Flores">
+      
+      <link rel="shortcut icon" href="https://fontawesome.com/icons/stream?style=solid">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
     
-
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
-    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="../css/base.min.css" rel="stylesheet">
-    <link href="../css/cinder.min.css" rel="stylesheet">
-    <link href="../css/highlight.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
-
     
-
-     
-</head>
-
-<body>
-
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            
-
-            <!-- Main title -->
-
-            <a class="navbar-brand" href="..">gns3fy</a>
-        </div>
-
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                
-                
-                    <li >
-                        <a href="..">Overview</a>
-                    </li>
-                
-                
-                
-                    <li class="active">
-                        <a href="./">User Guide</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../api_reference/">API Reference</a>
-                    </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../about/changelog/">Release Notes</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../about/license/">License</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                            <i class="fas fa-search"></i> Search
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="..">
-                            <i class="fas fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="next" href="../api_reference/">
-                            Next <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/davidban77/gns3fy/edit/develop/docs/content/user-guide.md"><i class="fab fa-github"></i> Edit on GitHub</a>
-                    </li>
-            </ul>
-        </div>
+      
+        <title>User Guide - gns3fy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,700%7CSource+Code+Pro&display=fallback">
+        <style>body,input{font-family:"Nunito",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Source Code Pro",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="blue-grey">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#interact-with-existing-project" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://davidban77.github.io/gns3fy/" title="gns3fy" class="md-header-nav__button md-logo" aria-label="gns3fy">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            gns3fy
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              User Guide
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/davidban77/gns3fy/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    davidban77/gns3fy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
 
-    <div class="container">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://davidban77.github.io/gns3fy/" title="gns3fy" class="md-nav__button md-logo" aria-label="gns3fy">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z"/></svg>
+
+    </a>
+    gns3fy
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/davidban77/gns3fy/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    davidban77/gns3fy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        User Guide
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      User Guide
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#interact-with-existing-project" class="md-nav__link">
+    Interact with existing Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Interact with existing Project">
+      <ul class="md-nav__list">
         
+          <li class="md-nav__item">
+  <a href="#gns3connector-and-project-objects" class="md-nav__link">
+    Gns3Connector and Project objects
+  </a>
+  
+</li>
         
-        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#interact-with-existing-project">Interact with existing Project</a></li>
-            <li class="second-level"><a href="#gns3connector-and-project-objects">Gns3Connector and Project objects</a></li>
-                
-            <li class="second-level"><a href="#node-and-link-objects">Node and Link objects</a></li>
-                
-        <li class="first-level "><a href="#creating-a-new-project">Creating a new Project</a></li>
-            <li class="second-level"><a href="#project-creation">Project creation</a></li>
-                
-            <li class="second-level"><a href="#node-creation">Node creation</a></li>
-                
-            <li class="second-level"><a href="#link-creation">Link creation</a></li>
-                
-        <li class="first-level "><a href="#examples">Examples</a></li>
-            <li class="second-level"><a href="#manipulate-a-node-from-a-project-instance">Manipulate a Node from a Project instance</a></li>
-                
-            <li class="second-level"><a href="#check-existing-templates-and-projects-available">Check existing templates and projects available</a></li>
-                
-            <li class="second-level"><a href="#get-nodes-and-links-summary">Get Nodes and Links summary</a></li>
-                
-            <li class="second-level"><a href="#migrate-templates-between-gns3-servers">Migrate templates between GNS3 servers</a></li>
-                
-            <li class="second-level"><a href="#check-server-cpu-and-memory-usage">Check server CPU and Memory usage</a></li>
-                
-            <li class="second-level"><a href="#create-and-list-project-snapshots">Create and list project snapshots</a></li>
-                
+          <li class="md-nav__item">
+  <a href="#node-and-link-objects" class="md-nav__link">
+    Node and Link objects
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-new-project" class="md-nav__link">
+    Creating a new Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a new Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-creation" class="md-nav__link">
+    Project creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-creation" class="md-nav__link">
+    Node creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-creation" class="md-nav__link">
+    Link creation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manipulate-a-node-from-a-project-instance" class="md-nav__link">
+    Manipulate a Node from a Project instance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-existing-templates-and-projects-available" class="md-nav__link">
+    Check existing templates and projects available
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-nodes-and-links-summary" class="md-nav__link">
+    Get Nodes and Links summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrate-templates-between-gns3-servers" class="md-nav__link">
+    Migrate templates between GNS3 servers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-server-cpu-and-memory-usage" class="md-nav__link">
+    Check server CPU and Memory usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-and-list-project-snapshots" class="md-nav__link">
+    Create and list project snapshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
-</div></div>
-        <div class="col-md-9" role="main">
+  
+</nav>
+    
+  </li>
 
-<h1>How it works</h1>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../api_reference/" class="md-nav__link">
+      API Reference
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      About
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="About" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/changelog/" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/license/" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#interact-with-existing-project" class="md-nav__link">
+    Interact with existing Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Interact with existing Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gns3connector-and-project-objects" class="md-nav__link">
+    Gns3Connector and Project objects
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-and-link-objects" class="md-nav__link">
+    Node and Link objects
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#creating-a-new-project" class="md-nav__link">
+    Creating a new Project
+  </a>
+  
+    <nav class="md-nav" aria-label="Creating a new Project">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#project-creation" class="md-nav__link">
+    Project creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#node-creation" class="md-nav__link">
+    Node creation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#link-creation" class="md-nav__link">
+    Link creation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#examples" class="md-nav__link">
+    Examples
+  </a>
+  
+    <nav class="md-nav" aria-label="Examples">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#manipulate-a-node-from-a-project-instance" class="md-nav__link">
+    Manipulate a Node from a Project instance
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-existing-templates-and-projects-available" class="md-nav__link">
+    Check existing templates and projects available
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get-nodes-and-links-summary" class="md-nav__link">
+    Get Nodes and Links summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#migrate-templates-between-gns3-servers" class="md-nav__link">
+    Migrate templates between GNS3 servers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-server-cpu-and-memory-usage" class="md-nav__link">
+    Check server CPU and Memory usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-and-list-project-snapshots" class="md-nav__link">
+    Create and list project snapshots
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/davidban77/gns3fy/edit/master/docs/user-guide.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <h1>How it works</h1>
 <p>The library provide the following interfaces:</p>
 <ul>
 <li><code>Gns3Connector</code>: Main object that interacts with the GNS3 server REST API and its objective is to be its interface.</li>
@@ -178,242 +583,234 @@
 </ul>
 <p>The <code>Gns3Connector</code> is mandatory and needs to be assigned to the <code>Project</code>, <code>Node</code> or <code>Link</code> object you want to work with, the latter uses the connector to interact with the REST API.</p>
 <p>Next you can see different ways to interact with the library.</p>
-<h2 id="interact-with-existing-project">Interact with existing Project</h2>
-<h3 id="gns3connector-and-project-objects">Gns3Connector and Project objects</h3>
+<h2 id="interact-with-existing-project">Interact with existing Project<a class="headerlink" href="#interact-with-existing-project" title="Permanent link">#</a></h2>
+<h3 id="gns3connector-and-project-objects">Gns3Connector and Project objects<a class="headerlink" href="#gns3connector-and-project-objects" title="Permanent link">#</a></h3>
 <p>Here is an example of defining a connector object and a project that is already configured on a local GNS3 server:</p>
-<pre><code class="python">&gt;&gt;&gt; from gns3fy import Gns3Connector, Project
-&gt;&gt;&gt; from tabulate import tabulate
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">gns3fy</span> <span class="kn">import</span> <span class="n">Gns3Connector</span><span class="p">,</span> <span class="n">Project</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
 
-&gt;&gt;&gt; server = Gns3Connector(&quot;http://localhost:3080&quot;)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="s2">&quot;http://localhost:3080&quot;</span><span class="p">)</span>
 
-# To show the available projects on the server
-&gt;&gt;&gt; print(
-        tabulate(
-            server.projects_summary(is_print=False),
-            headers=[&quot;Project Name&quot;, &quot;Project ID&quot;, &quot;Total Nodes&quot;, &quot;Total Links&quot;, &quot;Status&quot;],
-        )
-    )
-&quot;&quot;&quot;
-Project Name    Project ID                              Total Nodes    Total Links  Status
---------------  ------------------------------------  -------------  -------------  --------
-test2           c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
-API_TEST        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
-mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             40  closed
-&quot;&quot;&quot;
+<span class="c1"># To show the available projects on the server</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+        <span class="n">tabulate</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">projects_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Project Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Project ID&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Nodes&quot;</span><span class="p">,</span> <span class="s2">&quot;Total Links&quot;</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Project Name    Project ID                              Total Nodes    Total Links  Status</span>
+<span class="sd">--------------  ------------------------------------  -------------  -------------  --------</span>
+<span class="sd">test2           c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened</span>
+<span class="sd">API_TEST        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened</span>
+<span class="sd">mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             40  closed</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-&gt;&gt;&gt; lab = Project(name=&quot;API_TEST&quot;, connector=server)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;API_TEST&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">)</span>
 
-# Retrieve its information and display
-&gt;&gt;&gt; lab.get()
+<span class="c1"># Retrieve its information and display</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
-&gt;&gt;&gt; print(lab)
-Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...)
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">lab</span><span class="p">)</span>
+<span class="n">Project</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="s1">&#39;4b21dfb3-675a-4efa-8613-2f7fb32e76fe&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;API_TEST&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;opened&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)</span>
 
-# Access the project attributes
-&gt;&gt;&gt; print(f&quot;Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}&quot;)
-&quot;Name: API_TEST -- Status: closed -- Is auto_closed?: False&quot;
+<span class="c1"># Access the project attributes</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">lab</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> -- Status: </span><span class="si">{</span><span class="n">lab</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> -- Is auto_closed?: </span><span class="si">{</span><span class="n">lab</span><span class="o">.</span><span class="n">auto_close</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="s2">&quot;Name: API_TEST -- Status: closed -- Is auto_closed?: False&quot;</span>
 
-# Open the project
-&gt;&gt;&gt; lab.open()
-&gt;&gt;&gt; lab.status
-opened
+<span class="c1"># Open the project</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">status</span>
+<span class="n">opened</span>
 
-# Verify the stats
-&gt;&gt;&gt; lab.stats
-{'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
+<span class="c1"># Verify the stats</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">stats</span>
+<span class="p">{</span><span class="s1">&#39;drawings&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;links&#39;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s1">&#39;nodes&#39;</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s1">&#39;snapshots&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>
 
-# List the names and status of all the nodes in the project
-for node in lab.nodes:
-    print(f&quot;Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}&quot;)
-&quot;&quot;&quot;
-Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started
-...
-&quot;&quot;&quot;
-</code></pre>
+<span class="c1"># List the names and status of all the nodes in the project</span>
+<span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Node: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> -- Node Type: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">node_type</span><span class="si">}</span><span class="s2"> -- Status: </span><span class="si">{</span><span class="n">node</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started</span>
+<span class="sd">...</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</code></pre></div>
 
 <p>As noted before you can also use the <code>Gns3Connector</code> as an interface object to the GNS3 server REST API.</p>
-<pre><code class="python">&gt;&gt;&gt; server.get_version()
-{'local': False, 'version': '2.2.0b4'}
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">server</span><span class="o">.</span><span class="n">get_version</span><span class="p">()</span>
+<span class="p">{</span><span class="s1">&#39;local&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2.2.0b4&#39;</span><span class="p">}</span>
 
-&gt;&gt;&gt; server.get_templates()
-[{'adapter_type': 'e1000',
-  'adapters': 13,
-  'bios_image': '',
-  'boot_priority': 'c',
-  'builtin': False,
-  'category': 'router',
-  'cdrom_image': '',
-  'compute_id': 'local',
-  ...
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">server</span><span class="o">.</span><span class="n">get_templates</span><span class="p">()</span>
+<span class="p">[{</span><span class="s1">&#39;adapter_type&#39;</span><span class="p">:</span> <span class="s1">&#39;e1000&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;adapters&#39;</span><span class="p">:</span> <span class="mi">13</span><span class="p">,</span>
+  <span class="s1">&#39;bios_image&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;boot_priority&#39;</span><span class="p">:</span> <span class="s1">&#39;c&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;builtin&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+  <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;router&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;cdrom_image&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;compute_id&#39;</span><span class="p">:</span> <span class="s1">&#39;local&#39;</span><span class="p">,</span>
+  <span class="o">...</span>
+</code></pre></div>
 
-<h3 id="node-and-link-objects">Node and Link objects</h3>
+<h3 id="node-and-link-objects">Node and Link objects<a class="headerlink" href="#node-and-link-objects" title="Permanent link">#</a></h3>
 <p>You have access to the <code>Node</code> and <code>Link</code> objects as well, and this gives you the ability to start, stop, suspend the individual element in a GNS3 project.</p>
-<pre><code class="python">...
-&gt;&gt;&gt; PROJECT_ID = &quot;4b21dfb3-675a-4efa-8613-2f7fb32e76fe&quot;
-&gt;&gt;&gt; alpine1 = Node(project_id=PROJECT_ID, name=&quot;alpine-1&quot;, connector=server)
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">PROJECT_ID</span> <span class="o">=</span> <span class="s2">&quot;4b21dfb3-675a-4efa-8613-2f7fb32e76fe&quot;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">PROJECT_ID</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;alpine-1&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">)</span>
 
-&gt;&gt;&gt; alpine1.get()
-&gt;&gt;&gt; print(alpine1)
-Node(name='alpine-1', node_type='docker', node_directory= ...)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">alpine1</span><span class="p">)</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;alpine-1&#39;</span><span class="p">,</span> <span class="n">node_type</span><span class="o">=</span><span class="s1">&#39;docker&#39;</span><span class="p">,</span> <span class="n">node_directory</span><span class="o">=</span> <span class="o">...</span><span class="p">)</span>
 
-# And you can access the attributes the same way as the project
-&gt;&gt;&gt; print(f&quot;Name: {alpine1.name} -- Status: {alpine1.status} -- Console: {alpine1.console}&quot;)
-&quot;Name: alpine-1 -- Status: started -- Console: 5005&quot;
+<span class="c1"># And you can access the attributes the same way as the project</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Name: </span><span class="si">{</span><span class="n">alpine1</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2"> -- Status: </span><span class="si">{</span><span class="n">alpine1</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2"> -- Console: </span><span class="si">{</span><span class="n">alpine1</span><span class="o">.</span><span class="n">console</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="s2">&quot;Name: alpine-1 -- Status: started -- Console: 5005&quot;</span>
 
-# Stop the node and start (you can just restart it as well)
-&gt;&gt;&gt; alpine1.stop()
-&gt;&gt;&gt; alpine1.status
-stopped
+<span class="c1"># Stop the node and start (you can just restart it as well)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">status</span>
+<span class="n">stopped</span>
 
-&gt;&gt;&gt; alpine1.start()
-&gt;&gt;&gt; alpine1.status
-started
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">status</span>
+<span class="n">started</span>
 
-# You can also see the Link objects assigned to this node
-&gt;&gt;&gt; alpine1.links
-[Link(link_id='4d9f1235-7fd1-466b-ad26-0b4b08beb778', link_type='ethernet', ...)]
+<span class="c1"># You can also see the Link objects assigned to this node</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">links</span>
+<span class="p">[</span><span class="n">Link</span><span class="p">(</span><span class="n">link_id</span><span class="o">=</span><span class="s1">&#39;4d9f1235-7fd1-466b-ad26-0b4b08beb778&#39;</span><span class="p">,</span> <span class="n">link_type</span><span class="o">=</span><span class="s1">&#39;ethernet&#39;</span><span class="p">,</span> <span class="o">...</span><span class="p">)]</span>
 
-# And in the same way you can interact with a Link object
-&gt;&gt;&gt; link1 = alpine1.links[0]
-&gt;&gt;&gt; print(f&quot;Link Type: {link1.link_type} -- Capturing?: {link1.capturing} -- Endpoints: {link1.nodes}&quot;)
-Link Type: ethernet -- Capturing?: False -- Endpoints: [{'adapter_number': 2, ...}]
-</code></pre>
+<span class="c1"># And in the same way you can interact with a Link object</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">link1</span> <span class="o">=</span> <span class="n">alpine1</span><span class="o">.</span><span class="n">links</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Link Type: </span><span class="si">{</span><span class="n">link1</span><span class="o">.</span><span class="n">link_type</span><span class="si">}</span><span class="s2"> -- Capturing?: </span><span class="si">{</span><span class="n">link1</span><span class="o">.</span><span class="n">capturing</span><span class="si">}</span><span class="s2"> -- Endpoints: </span><span class="si">{</span><span class="n">link1</span><span class="o">.</span><span class="n">nodes</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">Link</span> <span class="n">Type</span><span class="p">:</span> <span class="n">ethernet</span> <span class="o">--</span> <span class="n">Capturing</span><span class="err">?</span><span class="p">:</span> <span class="kc">False</span> <span class="o">--</span> <span class="n">Endpoints</span><span class="p">:</span> <span class="p">[{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="o">...</span><span class="p">}]</span>
+</code></pre></div>
 
-<h2 id="creating-a-new-project">Creating a new Project</h2>
+<h2 id="creating-a-new-project">Creating a new Project<a class="headerlink" href="#creating-a-new-project" title="Permanent link">#</a></h2>
 <p>You can find here a couple of methods that are available on the interfaces provided by the library.</p>
 <p>To navigate to some of them and see their value, lets create a simple lab on the server with 2 nodes connected betweem each other.</p>
-<h3 id="project-creation">Project creation</h3>
+<h3 id="project-creation">Project creation<a class="headerlink" href="#project-creation" title="Permanent link">#</a></h3>
 <p>Lets start by creating a lab called <code>test_lab</code></p>
-<pre><code class="python">...
-&gt;&gt;&gt; lab = Project(name=&quot;test_lab&quot;, connector=server)
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_lab&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">)</span>
 
-&gt;&gt;&gt; lab.create()
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-&gt;&gt;&gt; lab
-Project(project_id='e83f1275-3a6f-48f7-88ee-36386ee27a55', name='test_lab', status='opened',...)
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span>
+<span class="n">Project</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="s1">&#39;e83f1275-3a6f-48f7-88ee-36386ee27a55&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;test_lab&#39;</span><span class="p">,</span> <span class="n">status</span><span class="o">=</span><span class="s1">&#39;opened&#39;</span><span class="p">,</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
 
 <p>You can see you get the <code>project_id</code>. In GNS3 the project ID is key for all interactions under that project.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For a complete list of the attibutes you can see the <a href="../api_reference/#project-objects">API Reference</a></p>
 </div>
-<h3 id="node-creation">Node creation</h3>
+<h3 id="node-creation">Node creation<a class="headerlink" href="#node-creation" title="Permanent link">#</a></h3>
 <p>Next, lets try and create a Ethernet switch node. For this we need to know the template and node type of it.</p>
-<pre><code class="python">...
-&gt;&gt;&gt;  for template in server.get_templates():
-...:     if &quot;switch&quot; in template[&quot;name&quot;]:
-...:         print(f&quot;Template: {template['name']} -- ID: {template['template_id']}&quot;)
-...:
-&quot;&quot;&quot;
-Template: Ethernet switch -- ID: 1966b864-93e7-32d5-965f-001384eec461
-Template: Frame Relay switch -- ID: dd0f6f3a-ba58-3249-81cb-a1dd88407a47
-Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2
-&quot;&quot;&quot;
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span>  <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">server</span><span class="o">.</span><span class="n">get_templates</span><span class="p">():</span>
+<span class="o">...</span><span class="p">:</span>     <span class="k">if</span> <span class="s2">&quot;switch&quot;</span> <span class="ow">in</span> <span class="n">template</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]:</span>
+<span class="o">...</span><span class="p">:</span>         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> -- ID: </span><span class="si">{</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;template_id&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="o">...</span><span class="p">:</span>
+<span class="hll"><span class="sd">&quot;&quot;&quot;</span>
+</span><span class="sd">Template: Ethernet switch -- ID: 1966b864-93e7-32d5-965f-001384eec461</span>
+<span class="sd">Template: Frame Relay switch -- ID: dd0f6f3a-ba58-3249-81cb-a1dd88407a47</span>
+<span class="sd">Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-&gt;&gt;&gt; server.get_template_by_name(&quot;Ethernet switch&quot;)
-{'builtin': True,
- 'category': 'switch',
- 'console_type': 'none',
- 'name': 'Ethernet switch',
- 'symbol': ':/symbols/ethernet_switch.svg',
- 'template_id': '1966b864-93e7-32d5-965f-001384eec461',
- 'template_type': 'ethernet_switch'}
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">server</span><span class="o">.</span><span class="n">get_template_by_name</span><span class="p">(</span><span class="s2">&quot;Ethernet switch&quot;</span><span class="p">)</span>
+<span class="p">{</span><span class="s1">&#39;builtin&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+ <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;switch&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;console_type&#39;</span><span class="p">:</span> <span class="s1">&#39;none&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Ethernet switch&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="s1">&#39;:/symbols/ethernet_switch.svg&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;template_id&#39;</span><span class="p">:</span> <span class="s1">&#39;1966b864-93e7-32d5-965f-001384eec461&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;template_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet_switch&#39;</span><span class="p">}</span>
+</code></pre></div>
 
 <p>By knowing the template information of the device we can create the Node instace of it</p>
-<pre><code class="python">...
-&gt;&gt;&gt; switch = Node(
-...:    project_id=lab.project_id,
-...:    connector=server,
-...:    name=&quot;Ethernet-switch&quot;,
-...:    template=&quot;Ethernet switch&quot;
-...:)
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">switch</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">project_id</span><span class="o">=</span><span class="n">lab</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Ethernet-switch&quot;</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;Ethernet switch&quot;</span>
+<span class="o">...</span><span class="p">:)</span>
 
-&gt;&gt;&gt; switch.create()
+<span class="o">&gt;&gt;&gt;</span> <span class="n">switch</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-&gt;&gt;&gt; switch
-Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609-49'...)
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">switch</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Ethernet-switch&#39;</span><span class="p">,</span> <span class="n">project_id</span><span class="o">=</span><span class="s1">&#39;6e75bca5-3fa0-4219-a7cf-f82c0540fb73&#39;</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s1">&#39;c3607609-49&#39;</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
 
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For a complete list of the attibutes you can see the <a href="../api_reference/#node-objects">API Reference</a></p>
 </div>
 <p>Now lets add an docker Alpine host to the project (<strong>NOTE:</strong> The docker image and template needs to be already configured in GNS3)</p>
-<pre><code class="python">...
-&gt;&gt;&gt; alpine = Node(
-...:    project_id=lab.project_id,
-...:    connector=server,
-...:    name=&quot;alpine-host&quot;,
-...:    template=&quot;alpine&quot;
-...:)
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">project_id</span><span class="o">=</span><span class="n">lab</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;alpine-host&quot;</span><span class="p">,</span>
+<span class="o">...</span><span class="p">:</span>    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;alpine&quot;</span>
+<span class="o">...</span><span class="p">:)</span>
 
-&gt;&gt;&gt; alpine.create()
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-&gt;&gt;&gt; alpine
-Node(name='alpine-host', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b'...)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span>
+<span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;alpine-host&#39;</span><span class="p">,</span> <span class="n">project_id</span><span class="o">=</span><span class="s1">&#39;6e75bca5-3fa0-4219-a7cf-f82c0540fb73&#39;</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="s1">&#39;8c11eb8b&#39;</span><span class="o">...</span><span class="p">)</span>
 
-&gt;&gt;&gt; alpine.properties
-{'adapters': 2,
- 'aux': 5026,
- 'category': 'guest',
- 'console_auto_start': False,
- 'console_http_path': '/',
- 'console_http_port': 80,
- 'console_resolution': '1024x768',
- 'console_type': 'telnet',
- 'container_id': 'f26b6aee763a9399c93c86032b75717c57b260e5010e88c4d410ce13554771df',
- 'custom_adapters': [],
- 'environment': '',
- 'extra_hosts': '',
- 'extra_volumes': [],
- 'image': 'alpine:latest',
- 'start_command': '',
- 'symbol': ':/symbols/affinity/circle/gray/docker.svg',
- 'usage': ''}
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span><span class="o">.</span><span class="n">properties</span>
+<span class="p">{</span><span class="s1">&#39;adapters&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+ <span class="s1">&#39;aux&#39;</span><span class="p">:</span> <span class="mi">5026</span><span class="p">,</span>
+ <span class="s1">&#39;category&#39;</span><span class="p">:</span> <span class="s1">&#39;guest&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;console_auto_start&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+ <span class="s1">&#39;console_http_path&#39;</span><span class="p">:</span> <span class="s1">&#39;/&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;console_http_port&#39;</span><span class="p">:</span> <span class="mi">80</span><span class="p">,</span>
+ <span class="s1">&#39;console_resolution&#39;</span><span class="p">:</span> <span class="s1">&#39;1024x768&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;console_type&#39;</span><span class="p">:</span> <span class="s1">&#39;telnet&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;container_id&#39;</span><span class="p">:</span> <span class="s1">&#39;f26b6aee763a9399c93c86032b75717c57b260e5010e88c4d410ce13554771df&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;custom_adapters&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s1">&#39;environment&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;extra_hosts&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;extra_volumes&#39;</span><span class="p">:</span> <span class="p">[],</span>
+ <span class="s1">&#39;image&#39;</span><span class="p">:</span> <span class="s1">&#39;alpine:latest&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;start_command&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;symbol&#39;</span><span class="p">:</span> <span class="s1">&#39;:/symbols/affinity/circle/gray/docker.svg&#39;</span><span class="p">,</span>
+ <span class="s1">&#39;usage&#39;</span><span class="p">:</span> <span class="s1">&#39;&#39;</span><span class="p">}</span>
 
-&gt;&gt;&gt; alpine.ports
-[{'adapter_number': 0,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'eth0',
-  'port_number': 0,
-  'short_name': 'eth0'},
- {'adapter_number': 1,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'eth1',
-  'port_number': 0,
-  'short_name': 'eth1'}]
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span><span class="o">.</span><span class="n">ports</span>
+<span class="p">[{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth0&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth0&#39;</span><span class="p">},</span>
+ <span class="p">{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth1&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth1&#39;</span><span class="p">}]</span>
+</code></pre></div>
 
 <p>You can access all of the host attributes and see their specifications based on the template defined on the server.</p>
 <p>To update the <code>lab</code> object with their latest nodes added</p>
-<pre><code class="python">...
-&gt;&gt;&gt; lab.get()
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
-# I have shorten the output shown
-&gt;&gt;&gt; lab.nodes
-&quot;&quot;&quot;
-[Node(name='Ethernet-switch', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='c3607609...
-Node(name='alpine-host1', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', node_id='8c11eb8b...
-]
-&quot;&quot;&quot;
-</code></pre>
+<span class="c1"># I have shorten the output shown</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">nodes</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">[Node(name=&#39;Ethernet-switch&#39;, project_id=&#39;6e75bca5-3fa0-4219-a7cf-f82c0540fb73&#39;, node_id=&#39;c3607609...</span>
+<span class="sd">Node(name=&#39;alpine-host1&#39;, project_id=&#39;6e75bca5-3fa0-4219-a7cf-f82c0540fb73&#39;, node_id=&#39;8c11eb8b...</span>
+<span class="sd">]</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</code></pre></div>
 
-<h3 id="link-creation">Link creation</h3>
+<h3 id="link-creation">Link creation<a class="headerlink" href="#link-creation" title="Permanent link">#</a></h3>
 <p>Next lets create a link between the switch and the alpine host.</p>
 <p><code>Switch Etherner0 &lt;--&gt; Alpine Eth1</code></p>
-<pre><code class="python">...
-&gt;&gt;&gt; lab.create_link('Ethernet-switch', 'Ethernet0', 'alpine-host1', 'eth1')
-&quot;Created Link-ID: b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce -- Type: ethernet&quot;
-
-&gt;&gt;&gt; lab.links
-[Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet', project_id='6e7'...)]
-</code></pre>
-
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>For a complete list of the attibutes you can see the <a href="../api_reference/#link-objects">API Reference</a></p>
@@ -425,61 +822,61 @@ Node(name='alpine-host1', project_id='6e75bca5-3fa0-4219-a7cf-f82c0540fb73', nod
 <li><code>adapter_number</code></li>
 <li><code>port_number</code></li>
 </ul>
-<pre><code class="python">...
-&gt;&gt;&gt; switch.ports
-[{'adapter_number': 0,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'Ethernet0',
-  'port_number': 0,
-  'short_name': 'e0'},
- {'adapter_number': 0,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'Ethernet1',
-  'port_number': 1,
-  'short_name': 'e1'},
-  ...
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">switch</span><span class="o">.</span><span class="n">ports</span>
+<span class="p">[{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Ethernet0&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;e0&#39;</span><span class="p">},</span>
+<span class="hll"> <span class="p">{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+</span>  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;Ethernet1&#39;</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+</span>  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;e1&#39;</span><span class="p">},</span>
+  <span class="o">...</span>
 
-&gt;&gt;&gt; alpine.ports
-[{'adapter_number': 0,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'eth0',
-  'port_number': 0,
-  'short_name': 'eth0'},
- {'adapter_number': 1,
-  'data_link_types': {'Ethernet': 'DLT_EN10MB'},
-  'link_type': 'ethernet',
-  'name': 'eth1',
-  'port_number': 0,
-  'short_name': 'eth1'}]
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span><span class="o">.</span><span class="n">ports</span>
+<span class="p">[{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+</span>  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth0&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="hll">  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth0&#39;</span><span class="p">},</span>
+</span> <span class="p">{</span><span class="s1">&#39;adapter_number&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+  <span class="s1">&#39;data_link_types&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;Ethernet&#39;</span><span class="p">:</span> <span class="s1">&#39;DLT_EN10MB&#39;</span><span class="p">},</span>
+  <span class="s1">&#39;link_type&#39;</span><span class="p">:</span> <span class="s1">&#39;ethernet&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth1&#39;</span><span class="p">,</span>
+  <span class="s1">&#39;port_number&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s1">&#39;short_name&#39;</span><span class="p">:</span> <span class="s1">&#39;eth1&#39;</span><span class="p">}]</span>
+</code></pre></div>
 
 <p>Gettings this information from both nodes we can create the Link.</p>
-<pre><code class="python">...
-&gt;&gt;&gt; nodes = [
-    dict(node_id=switch.node_id, adapter_number=0, port_number=1),
-    dict(node_id=alpine.node_id, adapter_number=0, port_number=0)
-]
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="hll"><span class="o">&gt;&gt;&gt;</span> <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="hll">    <span class="nb">dict</span><span class="p">(</span><span class="n">node_id</span><span class="o">=</span><span class="n">switch</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span> <span class="n">adapter_number</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">port_number</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>
+</span>    <span class="nb">dict</span><span class="p">(</span><span class="n">node_id</span><span class="o">=</span><span class="n">alpine</span><span class="o">.</span><span class="n">node_id</span><span class="p">,</span> <span class="n">adapter_number</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">port_number</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="p">]</span>
 
-&gt;&gt;&gt; extra_link = Link(project_id=lab.project_id, connector=server, nodes=nodes)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">extra_link</span> <span class="o">=</span> <span class="n">Link</span><span class="p">(</span><span class="n">project_id</span><span class="o">=</span><span class="n">lab</span><span class="o">.</span><span class="n">project_id</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">,</span> <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="p">)</span>
 
-&gt;&gt;&gt; extra_link.create()
+<span class="o">&gt;&gt;&gt;</span> <span class="n">extra_link</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
 
-&gt;&gt;&gt; extra_link
-Link(link_id='edf38e1a-67e7-4060-8493-0e222ec22072', link_type='ethernet', project_id='6e75bca5'...)
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">extra_link</span>
+<span class="n">Link</span><span class="p">(</span><span class="n">link_id</span><span class="o">=</span><span class="s1">&#39;edf38e1a-67e7-4060-8493-0e222ec22072&#39;</span><span class="p">,</span> <span class="n">link_type</span><span class="o">=</span><span class="s1">&#39;ethernet&#39;</span><span class="p">,</span> <span class="n">project_id</span><span class="o">=</span><span class="s1">&#39;6e75bca5&#39;</span><span class="o">...</span><span class="p">)</span>
+</code></pre></div>
 
 <p>You can get the latest link information on the project</p>
-<pre><code class="python">...
-&gt;&gt;&gt; lab.get_links()
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">get_links</span><span class="p">()</span>
 
-# You can see the 2 links created earlier
-&gt;&gt;&gt; lab.links
-[Link(link_id='b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce', link_type='ethernet'...
-Link(link_id='=', link_type='ethernet'...]
-</code></pre>
+<span class="c1"># You can see the 2 links created earlier</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">links</span>
+<span class="p">[</span><span class="n">Link</span><span class="p">(</span><span class="n">link_id</span><span class="o">=</span><span class="s1">&#39;b0d0df11-8ed8-4d1d-98e4-3776c9b7bdce&#39;</span><span class="p">,</span> <span class="n">link_type</span><span class="o">=</span><span class="s1">&#39;ethernet&#39;</span><span class="o">...</span>
+<span class="n">Link</span><span class="p">(</span><span class="n">link_id</span><span class="o">=</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="n">link_type</span><span class="o">=</span><span class="s1">&#39;ethernet&#39;</span><span class="o">...</span><span class="p">]</span>
+</code></pre></div>
 
 <p>You can see the final result if you open the lab on your GNS3 client:</p>
 <p><img alt="test_lab" src="../img/create_lab_example.png" /></p>
@@ -487,198 +884,198 @@ Link(link_id='=', link_type='ethernet'...]
 <p class="admonition-title">Note</p>
 <p>The devices are all clustered together. This will be addressed in the future. For te moment you can re-arrange them the way you want</p>
 </div>
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">#</a></h2>
 <p>Here are some examples of what you can do with the library</p>
-<h3 id="manipulate-a-node-from-a-project-instance">Manipulate a Node from a Project instance</h3>
+<h3 id="manipulate-a-node-from-a-project-instance">Manipulate a Node from a Project instance<a class="headerlink" href="#manipulate-a-node-from-a-project-instance" title="Permanent link">#</a></h3>
 <p>The <code>Project</code> object gives you all the nodes configured on it. This is typically saved under <code>Project.nodes</code> as a list of <code>Node</code> instances.</p>
 <p>When collecting the information of a project on a given time, you also retrieve by default all of its nodes. Each of the nodes are assigned the <code>Gns3Connector</code> by default if you follow the procedure below.</p>
-<pre><code class="python">...
-&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://localhost:3080&quot;)]
-&gt;&gt;&gt; print(server)
-'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
-&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=server)
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://localhost:3080&quot;</span><span class="p">)]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">server</span><span class="p">)</span>
+<span class="s1">&#39;&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">)</span>
 
-# Retrieve the lab information and print the amount of nodes configured
-&gt;&gt;&gt; lab.get()
-&gt;&gt;&gt; print(len(lab.nodes))
-2
+<span class="c1"># Retrieve the lab information and print the amount of nodes configured</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lab</span><span class="o">.</span><span class="n">nodes</span><span class="p">))</span>
+<span class="mi">2</span>
 
-# Assign one of the nodes to a varaible and start manipulating it
-&gt;&gt;&gt; node_1 = lab.nodes[0]
-&gt;&gt;&gt; print(node_1.status)
-'stopped'
+<span class="c1"># Assign one of the nodes to a varaible and start manipulating it</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">node_1</span> <span class="o">=</span> <span class="n">lab</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">node_1</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+<span class="s1">&#39;stopped&#39;</span>
 
-&gt;&gt;&gt; node_1.start()
-&gt;&gt;&gt; print(node_1.status)
-'started'
-&gt;&gt;&gt; print(node_1.connector)
-'&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;'
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">node_1</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">node_1</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+<span class="s1">&#39;started&#39;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">node_1</span><span class="o">.</span><span class="n">connector</span><span class="p">)</span>
+<span class="s1">&#39;&lt;gns3fy.gns3fy.Gns3Connector at 0x10d4c8e10&gt;&#39;</span>
+</code></pre></div>
 
 <p><code>node_1</code> has the same connector object as reference for interaction with the server.</p>
 <p>The same can be done with a <code>Link</code> by interacting with the <code>Project.links</code> attribute.</p>
-<h3 id="check-existing-templates-and-projects-available">Check existing templates and projects available</h3>
+<h3 id="check-existing-templates-and-projects-available">Check existing templates and projects available<a class="headerlink" href="#check-existing-templates-and-projects-available" title="Permanent link">#</a></h3>
 <p>The templates and projects configured on the GNS3 server can be viewed by using the <code>templates_summary</code> and <code>projects_summary</code>.</p>
-<pre><code class="python">...
-&gt;&gt;&gt; from tabulate import tabulate
-&gt;&gt;&gt; templates_summary = server.templates_summary(is_print=False)
-&gt;&gt;&gt; print(
-        tabulate(
-            server.templates_summary(is_print=False),
-            headers=[
-                &quot;Template Name&quot;,
-                &quot;Template ID&quot;,
-                &quot;Type&quot;,
-                &quot;Builtin&quot;,
-                &quot;Console&quot;,
-                &quot;Category&quot;,
-            ],
-        )
-    )
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">templates_summary</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">templates_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+        <span class="n">tabulate</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">templates_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;Template Name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Template ID&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Builtin&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Console&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Category&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-&quot;&quot;&quot;
-Template Name       Template ID                           Type                Builtin    Console    Category
-------------------  ------------------------------------  ------------------  ---------  ---------  ----------
-IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router
-IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch
-vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router
-alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest
-Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest
-NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest
-VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest
-Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch
-Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch
-Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
-ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
-&quot;&quot;&quot;
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Template Name       Template ID                           Type                Builtin    Console    Category</span>
+<span class="sd">------------------  ------------------------------------  ------------------  ---------  ---------  ----------</span>
+<span class="sd">IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router</span>
+<span class="sd">IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch</span>
+<span class="sd">vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router</span>
+<span class="sd">alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest</span>
+<span class="sd">Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest</span>
+<span class="sd">NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest</span>
+<span class="sd">VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest</span>
+<span class="sd">Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch</span>
+<span class="sd">Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch</span>
+<span class="sd">Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch</span>
+<span class="sd">ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
-&gt;&gt;&gt; projects_summary = server.projects_summary(is_print=False)
-&gt;&gt;&gt; print(
-        tabulate(
-            server.projects_summary(is_print=False),
-            headers=[
-                &quot;Project Name&quot;,
-                &quot;Project ID&quot;,
-                &quot;Total Nodes&quot;,
-                &quot;Total Links&quot;,
-                &quot;Status&quot;,
-            ],
-        )
-    )
+<span class="o">&gt;&gt;&gt;</span> <span class="n">projects_summary</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">projects_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+        <span class="n">tabulate</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">projects_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;Project Name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Project ID&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Total Nodes&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Total Links&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Status&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-&quot;&quot;&quot;
-Project name    Project ID                              Total Nodes    Total Links  Status
---------------  ------------------------------------  -------------  -------------  --------
-mgmt_network    c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
-ospf_lab        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
-[API] New test  f5de5917-0ac5-4850-82b1-1d7e3c777fa1              0              0  closed
-test_ansible    5599f8f5-9074-4372-b20e-e96eb3bd27c6              4              4  opened
-&quot;&quot;&quot;
-</code></pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Project name    Project ID                              Total Nodes    Total Links  Status</span>
+<span class="sd">--------------  ------------------------------------  -------------  -------------  --------</span>
+<span class="sd">mgmt_network    c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened</span>
+<span class="sd">ospf_lab        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened</span>
+<span class="sd">[API] New test  f5de5917-0ac5-4850-82b1-1d7e3c777fa1              0              0  closed</span>
+<span class="sd">test_ansible    5599f8f5-9074-4372-b20e-e96eb3bd27c6              4              4  opened</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</code></pre></div>
 
-<h3 id="get-nodes-and-links-summary">Get Nodes and Links summary</h3>
+<h3 id="get-nodes-and-links-summary">Get Nodes and Links summary<a class="headerlink" href="#get-nodes-and-links-summary" title="Permanent link">#</a></h3>
 <p>For a given project you can use <code>nodes_summary</code> and <code>links_summary</code>, that if used with a library like <code>tabulate</code> you can obtain the following:</p>
-<pre><code class="python">...
-&gt;&gt;&gt; from tabulate import tabulate
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="kn">from</span> <span class="nn">tabulate</span> <span class="kn">import</span> <span class="n">tabulate</span>
 
-&gt;&gt;&gt; nodes_summary = lab.nodes_summary(is_print=False)
+<span class="o">&gt;&gt;&gt;</span> <span class="n">nodes_summary</span> <span class="o">=</span> <span class="n">lab</span><span class="o">.</span><span class="n">nodes_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-&gt;&gt;&gt; print(
-...     tabulate(nodes_summary, headers=[&quot;Node&quot;, &quot;Status&quot;, &quot;Console Port&quot;, &quot;ID&quot;])
-... )
-&quot;&quot;&quot;
-Node              Status      Console Port  ID
-----------------  --------  --------------  ------------------------------------
-Ethernetswitch-1  started             5000  da28e1c0-9465-4f7c-b42c-49b2f4e1c64d
-IOU1              started             5001  de23a89a-aa1f-446a-a950-31d4bf98653c
-IOU2              started             5002  0d10d697-ef8d-40af-a4f3-fafe71f5458b
-vEOS-4.21.5F-1    started             5003  8283b923-df0e-4bc1-8199-be6fea40f500
-alpine-1          started             5005  ef503c45-e998-499d-88fc-2765614b313e
-Cloud-1           started                   cde85a31-c97f-4551-9596-a3ed12c08498
-&quot;&quot;&quot;
-&gt;&gt;&gt; links_summary = lab.links_summary(is_print=False)
-&gt;&gt;&gt; print(
-...     tabulate(links_summary, headers=[&quot;Node A&quot;, &quot;Port A&quot;, &quot;Node B&quot;, &quot;Port B&quot;])
-... )
-&quot;&quot;&quot;
-Node A          Port A       Node B            Port B
---------------  -----------  ----------------  -----------
-IOU1            Ethernet1/0  IOU2              Ethernet1/0
-vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0
-vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0
-Cloud-1         eth1         Ethernetswitch-1  Ethernet7
-&quot;&quot;&quot;
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">tabulate</span><span class="p">(</span><span class="n">nodes_summary</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Node&quot;</span><span class="p">,</span> <span class="s2">&quot;Status&quot;</span><span class="p">,</span> <span class="s2">&quot;Console Port&quot;</span><span class="p">,</span> <span class="s2">&quot;ID&quot;</span><span class="p">])</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Node              Status      Console Port  ID</span>
+<span class="sd">----------------  --------  --------------  ------------------------------------</span>
+<span class="sd">Ethernetswitch-1  started             5000  da28e1c0-9465-4f7c-b42c-49b2f4e1c64d</span>
+<span class="sd">IOU1              started             5001  de23a89a-aa1f-446a-a950-31d4bf98653c</span>
+<span class="sd">IOU2              started             5002  0d10d697-ef8d-40af-a4f3-fafe71f5458b</span>
+<span class="sd">vEOS-4.21.5F-1    started             5003  8283b923-df0e-4bc1-8199-be6fea40f500</span>
+<span class="sd">alpine-1          started             5005  ef503c45-e998-499d-88fc-2765614b313e</span>
+<span class="sd">Cloud-1           started                   cde85a31-c97f-4551-9596-a3ed12c08498</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">links_summary</span> <span class="o">=</span> <span class="n">lab</span><span class="o">.</span><span class="n">links_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+<span class="o">...</span>     <span class="n">tabulate</span><span class="p">(</span><span class="n">links_summary</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Node A&quot;</span><span class="p">,</span> <span class="s2">&quot;Port A&quot;</span><span class="p">,</span> <span class="s2">&quot;Node B&quot;</span><span class="p">,</span> <span class="s2">&quot;Port B&quot;</span><span class="p">])</span>
+<span class="o">...</span> <span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Node A          Port A       Node B            Port B</span>
+<span class="sd">--------------  -----------  ----------------  -----------</span>
+<span class="sd">IOU1            Ethernet1/0  IOU2              Ethernet1/0</span>
+<span class="sd">vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0</span>
+<span class="sd">vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0</span>
+<span class="sd">Cloud-1         eth1         Ethernetswitch-1  Ethernet7</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</code></pre></div>
 
 <p>I have shown the <code>projects_summary</code> earlier, here is another one that is helpful</p>
-<pre><code class="python">...
-&gt;&gt;&gt; print(
-        tabulate(
-            server.templates_summary(is_print=False),
-            headers=[
-                &quot;Template Name&quot;,
-                &quot;Template ID&quot;,
-                &quot;Type&quot;,
-                &quot;Builtin&quot;,
-                &quot;Console&quot;,
-                &quot;Category&quot;,
-            ],
-        )
-    )
+<div class="highlight"><pre><span></span><code><span class="o">...</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span>
+        <span class="n">tabulate</span><span class="p">(</span>
+            <span class="n">server</span><span class="o">.</span><span class="n">templates_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">[</span>
+                <span class="s2">&quot;Template Name&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Template ID&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Type&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Builtin&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Console&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Category&quot;</span><span class="p">,</span>
+            <span class="p">],</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
 
-&quot;&quot;&quot;
-Template Name       Template ID                           Type                Builtin    Console    Category
-------------------  ------------------------------------  ------------------  ---------  ---------  ----------
-IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router
-IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch
-vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router
-alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest
-Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest
-NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest
-VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest
-Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch
-Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch
-Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch
-ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch
-&quot;&quot;&quot;
-</code></pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Template Name       Template ID                           Type                Builtin    Console    Category</span>
+<span class="sd">------------------  ------------------------------------  ------------------  ---------  ---------  ----------</span>
+<span class="sd">IOU-L3              8504c605-7914-4a8f-9cd4-a2638382db0e  iou                 False      telnet     router</span>
+<span class="sd">IOU-L2              92cccfb2-6401-48f2-8964-3c75323be3cb  iou                 False      telnet     switch</span>
+<span class="sd">vEOS                c6203d4b-d0ce-4951-bf18-c44369d46804  qemu                False      telnet     router</span>
+<span class="sd">alpine              847e5333-6ac9-411f-a400-89838584371b  docker              False      telnet     guest</span>
+<span class="sd">Cloud               39e257dc-8412-3174-b6b3-0ee3ed6a43e9  cloud               True       N/A        guest</span>
+<span class="sd">NAT                 df8f4ea9-33b7-3e96-86a2-c39bc9bb649c  nat                 True       N/A        guest</span>
+<span class="sd">VPCS                19021f99-e36f-394d-b4a1-8aaa902ab9cc  vpcs                True       N/A        guest</span>
+<span class="sd">Ethernet switch     1966b864-93e7-32d5-965f-001384eec461  ethernet_switch     True       none       switch</span>
+<span class="sd">Ethernet hub        b4503ea9-d6b6-3695-9fe4-1db3b39290b0  ethernet_hub        True       N/A        switch</span>
+<span class="sd">Frame Relay switch  dd0f6f3a-ba58-3249-81cb-a1dd88407a47  frame_relay_switch  True       N/A        switch</span>
+<span class="sd">ATM switch          aaa764e2-b383-300f-8a0e-3493bbfdb7d2  atm_switch          True       N/A        switch</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</code></pre></div>
 
-<h3 id="migrate-templates-between-gns3-servers">Migrate templates between GNS3 servers</h3>
+<h3 id="migrate-templates-between-gns3-servers">Migrate templates between GNS3 servers<a class="headerlink" href="#migrate-templates-between-gns3-servers" title="Permanent link">#</a></h3>
 <p>You may need to backup your current templates configuration of one server to another, or just want to standardize the templates used across your GNS3 server.</p>
 <p>Here is a simple script that shows an example of how to achive it with <code>Gns3Connector</code>.</p>
 <p><code>migrate_gns3_templates.py</code></p>
-<pre><code class="python">from gns3fy import Gns3Connector
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">gns3fy</span> <span class="kn">import</span> <span class="n">Gns3Connector</span>
 
-OLD_URL = &quot;http://gns3server01:3080&quot;
-NEW_URL = &quot;http://gns3server02:3080&quot;
+<span class="n">OLD_URL</span> <span class="o">=</span> <span class="s2">&quot;http://gns3server01:3080&quot;</span>
+<span class="n">NEW_URL</span> <span class="o">=</span> <span class="s2">&quot;http://gns3server02:3080&quot;</span>
 
-def main()
-    # Define the server objects
-    old_server = Gns3Connector(url=OLD_URL)
-    new_server = Gns3Connector(url=NEW_URL)
+<span class="k">def</span> <span class="nf">main</span><span class="p">()</span>
+    <span class="c1"># Define the server objects</span>
+    <span class="n">old_server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">OLD_URL</span><span class="p">)</span>
+    <span class="n">new_server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">NEW_URL</span><span class="p">)</span>
 
-    # Retrive their current templates
-    old_server_templates = old_server.get_templates()
-    new_server_templates = new_server.get_templates()
+    <span class="c1"># Retrive their current templates</span>
+    <span class="n">old_server_templates</span> <span class="o">=</span> <span class="n">old_server</span><span class="o">.</span><span class="n">get_templates</span><span class="p">()</span>
+    <span class="n">new_server_templates</span> <span class="o">=</span> <span class="n">new_server</span><span class="o">.</span><span class="n">get_templates</span><span class="p">()</span>
 
-    # Now pass the templates
-    for template in old_server_templates:
-        # Bypass templates already configured on new server
-        if any(template[&quot;name&quot;] == x[&quot;name&quot;] for x in new_server_templates):
-            print(f&quot;Template: {template['name']} already present. Skipping...&quot;)
-            continue
+    <span class="c1"># Now pass the templates</span>
+    <span class="k">for</span> <span class="n">template</span> <span class="ow">in</span> <span class="n">old_server_templates</span><span class="p">:</span>
+        <span class="c1"># Bypass templates already configured on new server</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">template</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">x</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">new_server_templates</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> already present. Skipping...&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
 
-        # Pass template
-        new_server.create_template(**template)
-        print(f&quot;Template: {template['name']} passed!&quot;)
+        <span class="c1"># Pass template</span>
+        <span class="n">new_server</span><span class="o">.</span><span class="n">create_template</span><span class="p">(</span><span class="o">**</span><span class="n">template</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Template: </span><span class="si">{</span><span class="n">template</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> passed!&quot;</span><span class="p">)</span>
 
-if __name__ == '__main__':
-    main()
-</code></pre>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></div>
 
 <p>It can produce an output similar to this:</p>
 <p><code>python migrate_gns3_templates.py</code></p>
-<pre><code>Template: vEOS-4.21.5F passed!
+<div class="highlight"><pre><span></span><code>Template: vEOS-4.21.5F passed!
 Template: Junos vMX passed!
 Template: alpine passed!
 Template: Cloud already present. Skipping...
@@ -700,159 +1097,168 @@ Template: Cisco CSR1000v 16.9.4 passed!
 Template: Cumulus VX 3.7.8 passed!
 Template: Cisco NX-OSv 9000 7.0.3.I7.4 passed!
 Template: Arista vEOS 4.21.5F passed!
-</code></pre>
+</code></pre></div>
 
-<h3 id="check-server-cpu-and-memory-usage">Check server CPU and Memory usage</h3>
+<h3 id="check-server-cpu-and-memory-usage">Check server CPU and Memory usage<a class="headerlink" href="#check-server-cpu-and-memory-usage" title="Permanent link">#</a></h3>
 <p>You can use the <code>get_compute</code> method to retrieve information about the GNS3 server that is running the emulations.</p>
 <p>Here is an example of getting the CPU and Memory average usage for a period of time and use that information to determine if a hungre service router can be turned on.</p>
-<pre><code class="python">import time
-from gns3fy import Gns3Connector, Project
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">gns3fy</span> <span class="kn">import</span> <span class="n">Gns3Connector</span><span class="p">,</span> <span class="n">Project</span>
 
-server = Gns3Connector(url=&quot;http://gns3server&quot;)
+<span class="n">server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://gns3server&quot;</span><span class="p">)</span>
 
-lab = Project(name=&quot;test_lab&quot;, connector=server)
+<span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test_lab&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">server</span><span class="p">)</span>
 
-lab.get()
+<span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
-hungry_router = lab.get_node(name=&quot;hungry_router&quot;)
+<span class="n">hungry_router</span> <span class="o">=</span> <span class="n">lab</span><span class="o">.</span><span class="n">get_node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;hungry_router&quot;</span><span class="p">)</span>
 
-# Get the CPU and Memory usage and calculate its average
-cpu_usage = []
-memory_usage = []
-for index in range(5):
-    compute_attrs = server.get_compute(compute_id=&quot;local&quot;)
-    cpu_usage.append(compute_attrs.get(&quot;cpu_usage_percent&quot;))
-    memory_usage.append(compute_attrs.get(&quot;memory_usage_percent&quot;))
-    time.sleep(1)
+<span class="c1"># Get the CPU and Memory usage and calculate its average</span>
+<span class="n">cpu_usage</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">memory_usage</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">compute_attrs</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">get_compute</span><span class="p">(</span><span class="n">compute_id</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+    <span class="n">cpu_usage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cpu_usage_percent&quot;</span><span class="p">))</span>
+    <span class="n">memory_usage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">compute_attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_usage_percent&quot;</span><span class="p">))</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-cpu_avg = round(sum(cpu_usage) / len(cpu_usage), 2)
-mem_avg = round(sum(memory_usage) / len(memory_usage), 2)
+<span class="n">cpu_avg</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">cpu_usage</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">cpu_usage</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">mem_avg</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">memory_usage</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">memory_usage</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
 
-# If CPU is less than 40% and Memory is less than 50% turnup the nodes
-if cpu_avg &lt;= 40.0 and mem_avg &lt;= 50.0:
-    hungry_router.start()
-    print(&quot;All good! starting hungry router&quot;)
-else:
-    print(
-        f&quot;Hungry router does not have enough resources. CPU avg: {cpu_avg}%&quot;
-        f&quot; Memory avg: {mem_avg}%&quot;
-    )
-</code></pre>
+<span class="c1"># If CPU is less than 40% and Memory is less than 50% turnup the nodes</span>
+<span class="k">if</span> <span class="n">cpu_avg</span> <span class="o">&lt;=</span> <span class="mf">40.0</span> <span class="ow">and</span> <span class="n">mem_avg</span> <span class="o">&lt;=</span> <span class="mf">50.0</span><span class="p">:</span>
+    <span class="n">hungry_router</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;All good! starting hungry router&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Hungry router does not have enough resources. CPU avg: </span><span class="si">{</span><span class="n">cpu_avg</span><span class="si">}</span><span class="s2">%&quot;</span>
+        <span class="sa">f</span><span class="s2">&quot; Memory avg: </span><span class="si">{</span><span class="n">mem_avg</span><span class="si">}</span><span class="s2">%&quot;</span>
+    <span class="p">)</span>
+</code></pre></div>
 
-<h3 id="create-and-list-project-snapshots">Create and list project snapshots</h3>
+<h3 id="create-and-list-project-snapshots">Create and list project snapshots<a class="headerlink" href="#create-and-list-project-snapshots" title="Permanent link">#</a></h3>
 <p>There is an attribute called <code>snapshots</code> under the <code>Project</code> instance, which stores snapshots information about that project.</p>
 <p>You can create, delete and also search for specific snapshots of a project. See the <a href="../api_reference/#projectget_snapshots">API reference</a></p>
 <p>Here is a snippet that creates and shows information about the snapshots configured on a project.</p>
-<pre><code class="python">from datetime import datetime
-from gns3fy import Gns3Connector, Project
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">gns3fy</span> <span class="kn">import</span> <span class="n">Gns3Connector</span><span class="p">,</span> <span class="n">Project</span>
 
-lab = Project(name=&quot;test3&quot;, connector=Gns3Connector(url=&quot;http://gns3server01:3080&quot;))
+<span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;test3&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://gns3server01:3080&quot;</span><span class="p">))</span>
 
-lab.get()
+<span class="n">lab</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
 
-# Create snapshot
-lab.create_snapshot(name=&quot;snap3&quot;)
+<span class="c1"># Create snapshot</span>
+<span class="n">lab</span><span class="o">.</span><span class="n">create_snapshot</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;snap3&quot;</span><span class="p">)</span>
 
-# Show configured snapshots
-for snapshot in lab.snapshots:
-    _time = datetime.utcfromtimestamp(snapshot['created_at']).strftime('%Y-%m-%d %H:%M:%S')
-    print(f&quot;Snapshot: {snapshot['name']}, created at: {_time}&quot;)
-</code></pre>
+<span class="c1"># Show configured snapshots</span>
+<span class="k">for</span> <span class="n">snapshot</span> <span class="ow">in</span> <span class="n">lab</span><span class="o">.</span><span class="n">snapshots</span><span class="p">:</span>
+    <span class="n">_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;created_at&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Snapshot: </span><span class="si">{</span><span class="n">snapshot</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, created at: </span><span class="si">{</span><span class="n">_time</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>It prints something similar to this:</p>
-<pre><code>Created snapshot: snap3
+<div class="highlight"><pre><span></span><code>Created snapshot: snap3
 
 Snapshot: snap1, created at: 2019-09-28 20:59:50
 Snapshot: snap2, created at: 2019-09-28 20:59:54
 Snapshot: snap3, created at: 2019-09-29 08:44:28
 </code></pre></div>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Overview
+              </div>
+            </div>
+          </a>
         
         
+          <a href="../api_reference/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                API Reference
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
     </div>
-
-    <footer class="col-md-12 text-center">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
         
-        <hr>
-        <p>
-        <small>Copyright &copy; 2019 David Flores<br></small>
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 David Flores
+          </div>
         
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
-
-        
-        
-    </footer>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script>var base_url = ".."</script>
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
     
-    <script src="../js/base.js"></script>
-    <script src="../search/main.js"></script>
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/davidban77" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
 
-    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+  </div>
+</footer>
+      
     </div>
-</div>
-    </body>
-
+    
+      <script src="../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ['toc.autohide'],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
 </html>

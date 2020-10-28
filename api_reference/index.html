@@ -1,222 +1,1436 @@
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="GNS3 REST API python library.">
-    <meta name="author" content="David Flores">
-    <link rel="canonical" href="https://davidban77.github.io/gns3fy/api_reference/">
-    <link rel="../img/favicon.ico">
-
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
     
-    <title>API Reference - gns3fy</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="GNS3 REST API python library.">
+      
+      
+        <link rel="canonical" href="https://davidban77.github.io/gns3fy/api_reference/">
+      
+      
+        <meta name="author" content="David Flores">
+      
+      <link rel="shortcut icon" href="https://fontawesome.com/icons/stream?style=solid">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.0">
     
-
-    <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.min.css">
-    <link href='//fonts.googleapis.com/css?family=PT+Sans:400,400italic,700,700italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,600,700&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
-    <link href="../css/bootstrap-custom.min.css" rel="stylesheet">
-    <link href="../css/base.min.css" rel="stylesheet">
-    <link href="../css/cinder.min.css" rel="stylesheet">
-    <link href="../css/highlight.min.css" rel="stylesheet">
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-            <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-        <![endif]-->
-
-    <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script>
-    WebFont.load({
-        google: {
-            families: ['Open Sans', 'PT Sans']
-        }
-    });
-    </script>
-
     
-
-     
-</head>
-
-<body>
-
-    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
-    <div class="container">
-
-        <!-- Collapsed navigation -->
-        <div class="navbar-header">
-            <!-- Expander button -->
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            
-
-            <!-- Main title -->
-
-            <a class="navbar-brand" href="..">gns3fy</a>
-        </div>
-
-        <!-- Expanded navigation -->
-        <div class="navbar-collapse collapse">
-                <!-- Main navigation -->
-                <ul class="nav navbar-nav">
-                
-                
-                    <li >
-                        <a href="..">Overview</a>
-                    </li>
-                
-                
-                
-                    <li >
-                        <a href="../user-guide/">User Guide</a>
-                    </li>
-                
-                
-                
-                    <li class="active">
-                        <a href="./">API Reference</a>
-                    </li>
-                
-                
-                
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">About <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                        
-                            
-<li >
-    <a href="../about/changelog/">Release Notes</a>
-</li>
-
-                        
-                            
-<li >
-    <a href="../about/license/">License</a>
-</li>
-
-                        
-                        </ul>
-                    </li>
-                
-                
-                </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
-                            <i class="fas fa-search"></i> Search
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="prev" href="../user-guide/">
-                            <i class="fas fa-arrow-left"></i> Previous
-                        </a>
-                    </li>
-                    <li >
-                        <a rel="next" href="../about/changelog/">
-                            Next <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://github.com/davidban77/gns3fy/edit/develop/docs/content/api_reference.md"><i class="fab fa-github"></i> Edit on GitHub</a>
-                    </li>
-            </ul>
-        </div>
+      
+        <title>API Reference - gns3fy</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.bc7e593a.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab28b872.min.css">
+        
+          
+          
+          <meta name="theme-color" content="#02a6f2">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:300,400,400i,700%7CSource+Code+Pro&display=fallback">
+        <style>body,input{font-family:"Nunito",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Source Code Pro",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="slate" data-md-color-primary="light-blue" data-md-color-accent="blue-grey">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#gns3connector-objects" class="md-skip">
+          Skip to content
+        </a>
+      
     </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://davidban77.github.io/gns3fy/" title="gns3fy" class="md-header-nav__button md-logo" aria-label="gns3fy">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            gns3fy
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              API Reference
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active">
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/davidban77/gns3fy/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    davidban77/gns3fy
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
 
-    <div class="container">
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://davidban77.github.io/gns3fy/" title="gns3fy" class="md-nav__button md-logo" aria-label="gns3fy">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M480 160H32c-17.673 0-32-14.327-32-32V64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm112 248H32c-17.673 0-32-14.327-32-32v-64c0-17.673 14.327-32 32-32h448c17.673 0 32 14.327 32 32v64c0 17.673-14.327 32-32 32zm-48-88c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24zm-64 0c-13.255 0-24 10.745-24 24s10.745 24 24 24 24-10.745 24-24-10.745-24-24-24z"/></svg>
+
+    </a>
+    gns3fy
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/davidban77/gns3fy/" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    davidban77/gns3fy
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." class="md-nav__link">
+      Overview
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../user-guide/" class="md-nav__link">
+      User Guide
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        API Reference
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      API Reference
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gns3connector-objects" class="md-nav__link">
+    Gns3Connector Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Gns3Connector Objects">
+      <ul class="md-nav__list">
         
+          <li class="md-nav__item">
+  <a href="#http_call" class="md-nav__link">
+    http_call
+  </a>
+  
+</li>
         
-        <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
-    <ul class="nav bs-sidenav">
-        <li class="first-level active"><a href="#http_call">http_call</a></li>
-        <li class="first-level "><a href="#get_version">get_version</a></li>
-        <li class="first-level "><a href="#projects_summary">projects_summary</a></li>
-        <li class="first-level "><a href="#get_projects">get_projects</a></li>
-        <li class="first-level "><a href="#get_project">get_project</a></li>
-        <li class="first-level "><a href="#templates_summary">templates_summary</a></li>
-        <li class="first-level "><a href="#get_templates">get_templates</a></li>
-        <li class="first-level "><a href="#get_template">get_template</a></li>
-        <li class="first-level "><a href="#update_template">update_template</a></li>
-        <li class="first-level "><a href="#create_template">create_template</a></li>
-        <li class="first-level "><a href="#delete_template">delete_template</a></li>
-        <li class="first-level "><a href="#get_nodes">get_nodes</a></li>
-        <li class="first-level "><a href="#get_node">get_node</a></li>
-        <li class="first-level "><a href="#get_links">get_links</a></li>
-        <li class="first-level "><a href="#get_link">get_link</a></li>
-        <li class="first-level "><a href="#create_project">create_project</a></li>
-        <li class="first-level "><a href="#delete_project">delete_project</a></li>
-        <li class="first-level "><a href="#get_computes">get_computes</a></li>
-        <li class="first-level "><a href="#get_compute">get_compute</a></li>
-        <li class="first-level "><a href="#get_compute_images">get_compute_images</a></li>
-        <li class="first-level "><a href="#upload_compute_image">upload_compute_image</a></li>
-        <li class="first-level "><a href="#get_compute_ports">get_compute_ports</a></li>
-        <li class="first-level "><a href="#get">get</a></li>
-        <li class="first-level "><a href="#delete">delete</a></li>
-        <li class="first-level "><a href="#create">create</a></li>
-        <li class="first-level "><a href="#get_1">get</a></li>
-        <li class="first-level "><a href="#get_links_1">get_links</a></li>
-        <li class="first-level "><a href="#start">start</a></li>
-        <li class="first-level "><a href="#stop">stop</a></li>
-        <li class="first-level "><a href="#reload">reload</a></li>
-        <li class="first-level "><a href="#suspend">suspend</a></li>
-        <li class="first-level "><a href="#update">update</a></li>
-        <li class="first-level "><a href="#create_1">create</a></li>
-        <li class="first-level "><a href="#delete_1">delete</a></li>
-        <li class="first-level "><a href="#get_file">get_file</a></li>
-        <li class="first-level "><a href="#write_file">write_file</a></li>
-        <li class="first-level "><a href="#get_2">get</a></li>
-        <li class="first-level "><a href="#create_2">create</a></li>
-        <li class="first-level "><a href="#update_1">update</a></li>
-        <li class="first-level "><a href="#delete_2">delete</a></li>
-        <li class="first-level "><a href="#close">close</a></li>
-        <li class="first-level "><a href="#open">open</a></li>
-        <li class="first-level "><a href="#get_stats">get_stats</a></li>
-        <li class="first-level "><a href="#get_file_1">get_file</a></li>
-        <li class="first-level "><a href="#write_file_1">write_file</a></li>
-        <li class="first-level "><a href="#get_nodes_1">get_nodes</a></li>
-        <li class="first-level "><a href="#get_links_2">get_links</a></li>
-        <li class="first-level "><a href="#start_nodes">start_nodes</a></li>
-        <li class="first-level "><a href="#stop_nodes">stop_nodes</a></li>
-        <li class="first-level "><a href="#reload_nodes">reload_nodes</a></li>
-        <li class="first-level "><a href="#suspend_nodes">suspend_nodes</a></li>
-        <li class="first-level "><a href="#nodes_summary">nodes_summary</a></li>
-        <li class="first-level "><a href="#nodes_inventory">nodes_inventory</a></li>
-        <li class="first-level "><a href="#links_summary">links_summary</a></li>
-        <li class="first-level "><a href="#get_node_1">get_node</a></li>
-        <li class="first-level "><a href="#get_link_1">get_link</a></li>
-        <li class="first-level "><a href="#create_node">create_node</a></li>
-        <li class="first-level "><a href="#create_link">create_link</a></li>
-        <li class="first-level "><a href="#get_snapshots">get_snapshots</a></li>
-        <li class="first-level "><a href="#get_snapshot">get_snapshot</a></li>
-        <li class="first-level "><a href="#create_snapshot">create_snapshot</a></li>
-        <li class="first-level "><a href="#delete_snapshot">delete_snapshot</a></li>
-        <li class="first-level "><a href="#restore_snapshot">restore_snapshot</a></li>
-        <li class="first-level "><a href="#arrange_nodes_circular">arrange_nodes_circular</a></li>
-        <li class="first-level "><a href="#get_drawing">get_drawing</a></li>
-        <li class="first-level "><a href="#get_drawings">get_drawings</a></li>
-        <li class="first-level "><a href="#create_drawing">create_drawing</a></li>
-        <li class="first-level "><a href="#update_drawing">update_drawing</a></li>
-        <li class="first-level "><a href="#delete_drawing">delete_drawing</a></li>
+          <li class="md-nav__item">
+  <a href="#get_version" class="md-nav__link">
+    get_version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projects_summary" class="md-nav__link">
+    projects_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_projects" class="md-nav__link">
+    get_projects
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_project" class="md-nav__link">
+    get_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_summary" class="md-nav__link">
+    templates_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_templates" class="md-nav__link">
+    get_templates
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_template" class="md-nav__link">
+    get_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_template" class="md-nav__link">
+    update_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_template" class="md-nav__link">
+    create_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_template" class="md-nav__link">
+    delete_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_nodes" class="md-nav__link">
+    get_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_node" class="md-nav__link">
+    get_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_link" class="md-nav__link">
+    get_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_project" class="md-nav__link">
+    create_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_project" class="md-nav__link">
+    delete_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_computes" class="md-nav__link">
+    get_computes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute" class="md-nav__link">
+    get_compute
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute_images" class="md-nav__link">
+    get_compute_images
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload_compute_image" class="md-nav__link">
+    upload_compute_image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute_ports" class="md-nav__link">
+    get_compute_ports
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify_connector_and_id" class="md-nav__link">
+    verify_connector_and_id
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-objects" class="md-nav__link">
+    Link Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Link Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-objects" class="md-nav__link">
+    Node Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Node Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_1" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links_1" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload" class="md-nav__link">
+    reload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspend" class="md-nav__link">
+    suspend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_1" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_1" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_file" class="md-nav__link">
+    get_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_file" class="md-nav__link">
+    write_file
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-objects" class="md-nav__link">
+    Project Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_2" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_2" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_1" class="md-nav__link">
+    update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_2" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    close
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open" class="md-nav__link">
+    open
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_stats" class="md-nav__link">
+    get_stats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_file_1" class="md-nav__link">
+    get_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_file_1" class="md-nav__link">
+    write_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_nodes_1" class="md-nav__link">
+    get_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links_2" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_nodes" class="md-nav__link">
+    start_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_nodes" class="md-nav__link">
+    stop_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload_nodes" class="md-nav__link">
+    reload_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspend_nodes" class="md-nav__link">
+    suspend_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodes_summary" class="md-nav__link">
+    nodes_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodes_inventory" class="md-nav__link">
+    nodes_inventory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#links_summary" class="md-nav__link">
+    links_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_node_1" class="md-nav__link">
+    get_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_link_1" class="md-nav__link">
+    get_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_node" class="md-nav__link">
+    create_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_link" class="md-nav__link">
+    create_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_snapshots" class="md-nav__link">
+    get_snapshots
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_snapshot" class="md-nav__link">
+    get_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_snapshot" class="md-nav__link">
+    create_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_snapshot" class="md-nav__link">
+    delete_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restore_snapshot" class="md-nav__link">
+    restore_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrange_nodes_circular" class="md-nav__link">
+    arrange_nodes_circular
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_drawing" class="md-nav__link">
+    get_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_drawings" class="md-nav__link">
+    get_drawings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_drawing" class="md-nav__link">
+    create_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_drawing" class="md-nav__link">
+    update_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_drawing" class="md-nav__link">
+    delete_drawing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
     </ul>
-</div></div>
-        <div class="col-md-9" role="main">
+  
+</nav>
+    
+  </li>
 
-<p><a name=".gns3fy.Gns3Connector"></a></p>
-<h1>Gns3Connector</h1>
-<pre><code class="python">class Gns3Connector():
-    __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
-</code></pre>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-nav__toggle md-toggle" data-md-toggle="nav-4" type="checkbox" id="nav-4">
+    
+    <label class="md-nav__link" for="nav-4">
+      About
+      <span class="md-nav__icon md-icon"></span>
+    </label>
+    <nav class="md-nav" aria-label="About" data-md-level="1">
+      <label class="md-nav__title" for="nav-4">
+        <span class="md-nav__icon md-icon"></span>
+        About
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/changelog/" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../about/license/" class="md-nav__link">
+      License
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#gns3connector-objects" class="md-nav__link">
+    Gns3Connector Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Gns3Connector Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#http_call" class="md-nav__link">
+    http_call
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_version" class="md-nav__link">
+    get_version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#projects_summary" class="md-nav__link">
+    projects_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_projects" class="md-nav__link">
+    get_projects
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_project" class="md-nav__link">
+    get_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#templates_summary" class="md-nav__link">
+    templates_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_templates" class="md-nav__link">
+    get_templates
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_template" class="md-nav__link">
+    get_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_template" class="md-nav__link">
+    update_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_template" class="md-nav__link">
+    create_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_template" class="md-nav__link">
+    delete_template
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_nodes" class="md-nav__link">
+    get_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_node" class="md-nav__link">
+    get_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_link" class="md-nav__link">
+    get_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_project" class="md-nav__link">
+    create_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_project" class="md-nav__link">
+    delete_project
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_computes" class="md-nav__link">
+    get_computes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute" class="md-nav__link">
+    get_compute
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute_images" class="md-nav__link">
+    get_compute_images
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#upload_compute_image" class="md-nav__link">
+    upload_compute_image
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_compute_ports" class="md-nav__link">
+    get_compute_ports
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify_connector_and_id" class="md-nav__link">
+    verify_connector_and_id
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#link-objects" class="md-nav__link">
+    Link Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Link Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#node-objects" class="md-nav__link">
+    Node Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Node Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_1" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links_1" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start" class="md-nav__link">
+    start
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop" class="md-nav__link">
+    stop
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload" class="md-nav__link">
+    reload
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspend" class="md-nav__link">
+    suspend
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update" class="md-nav__link">
+    update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_1" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_1" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_file" class="md-nav__link">
+    get_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_file" class="md-nav__link">
+    write_file
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-objects" class="md-nav__link">
+    Project Objects
+  </a>
+  
+    <nav class="md-nav" aria-label="Project Objects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#get_2" class="md-nav__link">
+    get
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_2" class="md-nav__link">
+    create
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_1" class="md-nav__link">
+    update
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_2" class="md-nav__link">
+    delete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#close" class="md-nav__link">
+    close
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#open" class="md-nav__link">
+    open
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_stats" class="md-nav__link">
+    get_stats
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_file_1" class="md-nav__link">
+    get_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#write_file_1" class="md-nav__link">
+    write_file
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_nodes_1" class="md-nav__link">
+    get_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_links_2" class="md-nav__link">
+    get_links
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#start_nodes" class="md-nav__link">
+    start_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stop_nodes" class="md-nav__link">
+    stop_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reload_nodes" class="md-nav__link">
+    reload_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#suspend_nodes" class="md-nav__link">
+    suspend_nodes
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodes_summary" class="md-nav__link">
+    nodes_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nodes_inventory" class="md-nav__link">
+    nodes_inventory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#links_summary" class="md-nav__link">
+    links_summary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_node_1" class="md-nav__link">
+    get_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_link_1" class="md-nav__link">
+    get_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_node" class="md-nav__link">
+    create_node
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_link" class="md-nav__link">
+    create_link
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_snapshots" class="md-nav__link">
+    get_snapshots
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_snapshot" class="md-nav__link">
+    get_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_snapshot" class="md-nav__link">
+    create_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_snapshot" class="md-nav__link">
+    delete_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restore_snapshot" class="md-nav__link">
+    restore_snapshot
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arrange_nodes_circular" class="md-nav__link">
+    arrange_nodes_circular
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_drawing" class="md-nav__link">
+    get_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#get_drawings" class="md-nav__link">
+    get_drawings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create_drawing" class="md-nav__link">
+    create_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#update_drawing" class="md-nav__link">
+    update_drawing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#delete_drawing" class="md-nav__link">
+    delete_drawing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                  <a href="https://github.com/davidban77/gns3fy/edit/master/docs/api_reference.md" title="Edit this page" class="md-content__button md-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25z"/></svg>
+                  </a>
+                
+                
+                <p><a name="gns3fy"></a></p>
+<h1>gns3fy</h1>
+<p><a name="gns3fy.Gns3Connector"></a></p>
+<h2 id="gns3connector-objects">Gns3Connector Objects<a class="headerlink" href="#gns3connector-objects" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Gns3Connector</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Connector to be use for interaction against GNS3 server controller API.</p>
 <p><strong>Attributes:</strong></p>
@@ -233,15 +1447,15 @@
 <p><strong>Returns:</strong></p>
 <p><code>Gns3Connector</code> instance</p>
 <p><strong>Example:</strong></p>
-<pre><code class="python">&gt;&gt;&gt; server = Gns3Connector(url=&quot;http://&lt;address&gt;:3080&quot;)
-&gt;&gt;&gt; print(server.get_version())
-{'local': False, 'version': '2.2.0b4'}
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">server</span> <span class="o">=</span> <span class="n">Gns3Connector</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://&lt;address&gt;:3080&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">server</span><span class="o">.</span><span class="n">get_version</span><span class="p">())</span>
+<span class="p">{</span><span class="s1">&#39;local&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;version&#39;</span><span class="p">:</span> <span class="s1">&#39;2.2.0b4&#39;</span><span class="p">}</span>
+</code></pre></div>
 
-<p><a name=".gns3fy.Gns3Connector.http_call"></a></p>
-<h2 id="http_call">http_call</h2>
-<pre><code class="python">http_call(self, method, url, data=None, json_data=None, headers=None, verify=False, params=None)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.http_call"></a></p>
+<h3 id="http_call">http_call<a class="headerlink" href="#http_call" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">http_call</span><span class="p">(</span><span class="n">method</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">json_data</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Performs the HTTP operation actioned</p>
 <p><strong>Required Attributes:</strong></p>
@@ -255,64 +1469,64 @@ patch (<strong>required</strong>)</li>
 <li><code>verify</code>: SSL Verification</li>
 <li><code>params</code>: Dictionary or bytes to be sent in the query string for the Request</li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_version"></a></p>
-<h2 id="get_version">get_version</h2>
-<pre><code class="python">get_version(self)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_version"></a></p>
+<h3 id="get_version">get_version<a class="headerlink" href="#get_version" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_version</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Returns the version information of GNS3 server</p>
-<p><a name=".gns3fy.Gns3Connector.projects_summary"></a></p>
-<h2 id="projects_summary">projects_summary</h2>
-<pre><code class="python">projects_summary(self, is_print=True)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.projects_summary"></a></p>
+<h3 id="projects_summary">projects_summary<a class="headerlink" href="#projects_summary" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">projects_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a summary of the projects in the server. If <code>is_print</code> is <code>False</code>, it
 will return a list of tuples like:</p>
 <p><code>[(name, project_id, total_nodes, total_links, status) ...]</code></p>
-<p><a name=".gns3fy.Gns3Connector.get_projects"></a></p>
-<h2 id="get_projects">get_projects</h2>
-<pre><code class="python">get_projects(self)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_projects"></a></p>
+<h3 id="get_projects">get_projects<a class="headerlink" href="#get_projects" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_projects</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Returns the list of the projects on the server</p>
-<p><a name=".gns3fy.Gns3Connector.get_project"></a></p>
-<h2 id="get_project">get_project</h2>
-<pre><code class="python">get_project(self, name=None, project_id=None)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_project"></a></p>
+<h3 id="get_project">get_project<a class="headerlink" href="#get_project" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">project_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieves a project from either a name or ID</p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
 <li><code>name</code> or <code>project_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.templates_summary"></a></p>
-<h2 id="templates_summary">templates_summary</h2>
-<pre><code class="python">templates_summary(self, is_print=True)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.templates_summary"></a></p>
+<h3 id="templates_summary">templates_summary<a class="headerlink" href="#templates_summary" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">templates_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a summary of the templates in the server. If <code>is_print</code> is <code>False</code>, it
 will return a list of tuples like:</p>
 <p><code>[(name, template_id, template_type, builtin, console_type, category) ...]</code></p>
-<p><a name=".gns3fy.Gns3Connector.get_templates"></a></p>
-<h2 id="get_templates">get_templates</h2>
-<pre><code class="python">get_templates(self)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_templates"></a></p>
+<h3 id="get_templates">get_templates<a class="headerlink" href="#get_templates" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_templates</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Returns the templates defined on the server.</p>
-<p><a name=".gns3fy.Gns3Connector.get_template"></a></p>
-<h2 id="get_template">get_template</h2>
-<pre><code class="python">get_template(self, name=None, template_id=None)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_template"></a></p>
+<h3 id="get_template">get_template<a class="headerlink" href="#get_template" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_template</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieves a template from either a name or ID</p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
 <li><code>name</code> or <code>template_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.update_template"></a></p>
-<h2 id="update_template">update_template</h2>
-<pre><code class="python">update_template(self, name=None, template_id=None, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.update_template"></a></p>
+<h3 id="update_template">update_template<a class="headerlink" href="#update_template" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">update_template</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Updates a template by giving its name or UUID. For more information [API INFO]
 (http://api.gns3.net/en/2.2/api/v2/controller/template/
@@ -321,10 +1535,10 @@ templatestemplateid.html#put-v2-templates-template-id)</p>
 <ul>
 <li><code>name</code> or <code>template_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.create_template"></a></p>
-<h2 id="create_template">create_template</h2>
-<pre><code class="python">create_template(self, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.create_template"></a></p>
+<h3 id="create_template">create_template<a class="headerlink" href="#create_template" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create_template</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Creates a template by giving its attributes. For more information [API INFO]
 (http://api.gns3.net/en/2.2/api/v2/controller/template/
@@ -335,10 +1549,10 @@ templates.html#post-v2-templates)</p>
 <li><code>compute_id</code> by default is 'local'</li>
 <li><code>template_type</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.delete_template"></a></p>
-<h2 id="delete_template">delete_template</h2>
-<pre><code class="python">delete_template(self, name=None, template_id=None)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.delete_template"></a></p>
+<h3 id="delete_template">delete_template<a class="headerlink" href="#delete_template" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">delete_template</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">template_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Deletes a template by giving its attributes. For more information [API INFO]
 (http://api.gns3.net/en/2.2/api/v2/controller/template/
@@ -347,20 +1561,20 @@ templatestemplateid.html#id16)</p>
 <ul>
 <li><code>name</code> or <code>template_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_nodes"></a></p>
-<h2 id="get_nodes">get_nodes</h2>
-<pre><code class="python">get_nodes(self, project_id)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_nodes"></a></p>
+<h3 id="get_nodes">get_nodes<a class="headerlink" href="#get_nodes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_nodes</span><span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retieves the nodes defined on the project</p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_node"></a></p>
-<h2 id="get_node">get_node</h2>
-<pre><code class="python">get_node(self, project_id, node_id)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_node"></a></p>
+<h3 id="get_node">get_node<a class="headerlink" href="#get_node" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_node</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">node_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the node by locating its ID.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -368,20 +1582,20 @@ templatestemplateid.html#id16)</p>
 <li><code>project_id</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_links"></a></p>
-<h2 id="get_links">get_links</h2>
-<pre><code class="python">get_links(self, project_id)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_links"></a></p>
+<h3 id="get_links">get_links<a class="headerlink" href="#get_links" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_links</span><span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieves the links defined in the project.</p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_link"></a></p>
-<h2 id="get_link">get_link</h2>
-<pre><code class="python">get_link(self, project_id, link_id)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_link"></a></p>
+<h3 id="get_link">get_link<a class="headerlink" href="#get_link" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_link</span><span class="p">(</span><span class="n">project_id</span><span class="p">,</span> <span class="n">link_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the link by locating its ID.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -389,10 +1603,10 @@ templatestemplateid.html#id16)</p>
 <li><code>project_id</code></li>
 <li><code>link_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.create_project"></a></p>
-<h2 id="create_project">create_project</h2>
-<pre><code class="python">create_project(self, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.create_project"></a></p>
+<h3 id="create_project">create_project<a class="headerlink" href="#create_project" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create_project</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Pass a dictionary type object with the project parameters to be created.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -401,36 +1615,36 @@ templatestemplateid.html#id16)</p>
 </ul>
 <p><strong>Returns</strong></p>
 <p>JSON project information</p>
-<p><a name=".gns3fy.Gns3Connector.delete_project"></a></p>
-<h2 id="delete_project">delete_project</h2>
-<pre><code class="python">delete_project(self, project_id)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.delete_project"></a></p>
+<h3 id="delete_project">delete_project<a class="headerlink" href="#delete_project" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">delete_project</span><span class="p">(</span><span class="n">project_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Deletes a project from server.</p>
 <p><strong>Required Attributes:</strong></p>
 <ul>
 <li><code>project_id</code></li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_computes"></a></p>
-<h2 id="get_computes">get_computes</h2>
-<pre><code class="python">get_computes(self)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_computes"></a></p>
+<h3 id="get_computes">get_computes<a class="headerlink" href="#get_computes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_computes</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Returns a list of computes.</p>
 <p><strong>Returns:</strong></p>
 <p>List of dictionaries of the computes attributes like cpu/memory usage</p>
-<p><a name=".gns3fy.Gns3Connector.get_compute"></a></p>
-<h2 id="get_compute">get_compute</h2>
-<pre><code class="python">get_compute(self, compute_id=&quot;local&quot;)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_compute"></a></p>
+<h3 id="get_compute">get_compute<a class="headerlink" href="#get_compute" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_compute</span><span class="p">(</span><span class="n">compute_id</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a compute.</p>
 <p><strong>Returns:</strong></p>
 <p>Dictionary of the compute attributes like cpu/memory usage</p>
-<p><a name=".gns3fy.Gns3Connector.get_compute_images"></a></p>
-<h2 id="get_compute_images">get_compute_images</h2>
-<pre><code class="python">get_compute_images(self, emulator, compute_id=&quot;local&quot;)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_compute_images"></a></p>
+<h3 id="get_compute_images">get_compute_images<a class="headerlink" href="#get_compute_images" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_compute_images</span><span class="p">(</span><span class="n">emulator</span><span class="p">,</span> <span class="n">compute_id</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a list of images available for a compute.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -441,10 +1655,10 @@ templatestemplateid.html#id16)</p>
 <p><strong>Returns:</strong></p>
 <p>List of dictionaries with images available for the compute for the specified
 emulator</p>
-<p><a name=".gns3fy.Gns3Connector.upload_compute_image"></a></p>
-<h2 id="upload_compute_image">upload_compute_image</h2>
-<pre><code class="python">upload_compute_image(self, emulator, file_path, compute_id=&quot;local&quot;)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.upload_compute_image"></a></p>
+<h3 id="upload_compute_image">upload_compute_image<a class="headerlink" href="#upload_compute_image" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">upload_compute_image</span><span class="p">(</span><span class="n">emulator</span><span class="p">,</span> <span class="n">file_path</span><span class="p">,</span> <span class="n">compute_id</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>uploads an image for use by a compute.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -453,10 +1667,10 @@ emulator</p>
 <li><code>file_path</code>: path of file to be uploaded</li>
 <li><code>compute_id</code> By default is 'local'</li>
 </ul>
-<p><a name=".gns3fy.Gns3Connector.get_compute_ports"></a></p>
-<h2 id="get_compute_ports">get_compute_ports</h2>
-<pre><code class="python">get_compute_ports(self, compute_id=&quot;local&quot;)
-</code></pre>
+<p><a name="gns3fy.Gns3Connector.get_compute_ports"></a></p>
+<h3 id="get_compute_ports">get_compute_ports<a class="headerlink" href="#get_compute_ports" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_compute_ports</span><span class="p">(</span><span class="n">compute_id</span><span class="o">=</span><span class="s2">&quot;local&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns ports used and configured by a compute.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -465,10 +1679,18 @@ emulator</p>
 </ul>
 <p><strong>Returns:</strong></p>
 <p>Dictionary of <code>console_ports</code> used and range, as well as the <code>udp_ports</code></p>
-<p><a name=".gns3fy.Link"></a></p>
-<h1>Link</h1>
-<pre><code class="python">class Link()
-</code></pre>
+<p><a name="gns3fy.verify_connector_and_id"></a></p>
+<h3 id="verify_connector_and_id">verify_connector_and_id<a class="headerlink" href="#verify_connector_and_id" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code><span class="n">verify_connector_and_id</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</code></pre></div>
+
+<p>Main checker for connector object and respective object's ID for their retrieval
+or actions methods.</p>
+<p><a name="gns3fy.Link"></a></p>
+<h2 id="link-objects">Link Objects<a class="headerlink" href="#link-objects" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">Config</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Link</span><span class="p">()</span>
+</code></pre></div>
 
 <p>GNS3 Link API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/link/projectsprojectidlinks.html">Links Endpoint API information</a></p>
 <p><strong>Attributes:</strong></p>
@@ -490,18 +1712,18 @@ capture is running</li>
 <p><strong>Returns:</strong></p>
 <p><code>Link</code> instance</p>
 <p><strong>Example:</strong></p>
-<pre><code class="python">&gt;&gt;&gt; link = Link(project_id=&lt;pr_id&gt;, link_id=&lt;link_id&gt; connector=&lt;Gns3Connector
-instance&gt;)
-&gt;&gt;&gt; link.get()
-&gt;&gt;&gt; print(link.link_type)
-'ethernet'
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">link</span> <span class="o">=</span> <span class="n">Link</span><span class="p">(</span><span class="n">project_id</span><span class="o">=&lt;</span><span class="n">pr_id</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">link_id</span><span class="o">=&lt;</span><span class="n">link_id</span><span class="o">&gt;</span> <span class="n">connector</span><span class="o">=&lt;</span><span class="n">Gns3Connector</span>
+<span class="n">instance</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">link</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">link</span><span class="o">.</span><span class="n">link_type</span><span class="p">)</span>
+<span class="s1">&#39;ethernet&#39;</span>
+</code></pre></div>
 
-<p><a name=".gns3fy.Link.get"></a></p>
-<h2 id="get">get</h2>
-<pre><code class="python">@verify_connector_and_id
-get(self)
-</code></pre>
+<p><a name="gns3fy.Link.get"></a></p>
+<h3 id="get">get<a class="headerlink" href="#get" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieves the information from the link endpoint.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -510,11 +1732,11 @@ get(self)
 <li><code>connector</code></li>
 <li><code>link_id</code></li>
 </ul>
-<p><a name=".gns3fy.Link.delete"></a></p>
-<h2 id="delete">delete</h2>
-<pre><code class="python">@verify_connector_and_id
-delete(self)
-</code></pre>
+<p><a name="gns3fy.Link.delete"></a></p>
+<h3 id="delete">delete<a class="headerlink" href="#delete" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">delete</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Deletes a link endpoint from the project. It sets to <code>None</code> the attributes
 <code>link_id</code> when executed sucessfully</p>
@@ -524,10 +1746,10 @@ delete(self)
 <li><code>connector</code></li>
 <li><code>link_id</code></li>
 </ul>
-<p><a name=".gns3fy.Link.create"></a></p>
-<h2 id="create">create</h2>
-<pre><code class="python">create(self)
-</code></pre>
+<p><a name="gns3fy.Link.create"></a></p>
+<h3 id="create">create<a class="headerlink" href="#create" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Creates a link endpoint</p>
 <p><strong>Required Attributes:</strong></p>
@@ -536,10 +1758,11 @@ delete(self)
 <li><code>connector</code></li>
 <li><code>nodes</code></li>
 </ul>
-<p><a name=".gns3fy.Node"></a></p>
-<h1>Node</h1>
-<pre><code class="python">class Node()
-</code></pre>
+<p><a name="gns3fy.Node"></a></p>
+<h2 id="node-objects">Node Objects<a class="headerlink" href="#node-objects" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">Config</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">()</span>
+</code></pre></div>
 
 <p>GNS3 Node API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/node/projectsprojectidnodes.html">Node Endpoint API information</a></p>
 <p><strong>Attributes:</strong></p>
@@ -579,18 +1802,18 @@ started</li>
 <p><strong>Returns:</strong></p>
 <p><code>Node</code> instance</p>
 <p><strong>Example:</strong></p>
-<pre><code class="python">&gt;&gt;&gt; alpine = Node(name=&quot;alpine1&quot;, node_type=&quot;docker&quot;, template=&quot;alpine&quot;,
-project_id=&lt;pr_id&gt;, connector=&lt;Gns3Connector instance&gt;)
-&gt;&gt;&gt; alpine.create()
-&gt;&gt;&gt; print(alpine.node_id)
-'SOME-UUID-GENERATED'
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;alpine1&quot;</span><span class="p">,</span> <span class="n">node_type</span><span class="o">=</span><span class="s2">&quot;docker&quot;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;alpine&quot;</span><span class="p">,</span>
+<span class="n">project_id</span><span class="o">=&lt;</span><span class="n">pr_id</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=&lt;</span><span class="n">Gns3Connector</span> <span class="n">instance</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">alpine</span><span class="o">.</span><span class="n">node_id</span><span class="p">)</span>
+<span class="s1">&#39;SOME-UUID-GENERATED&#39;</span>
+</code></pre></div>
 
-<p><a name=".gns3fy.Node.get"></a></p>
-<h2 id="get_1">get</h2>
-<pre><code class="python">@verify_connector_and_id
-get(self, get_links=True)
-</code></pre>
+<p><a name="gns3fy.Node.get"></a></p>
+<h3 id="get_1">get<a class="headerlink" href="#get_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get</span><span class="p">(</span><span class="n">get_links</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieves the node information. When <code>get_links</code> is <code>True</code> it also retrieves the
 links respective to the node.</p>
@@ -600,11 +1823,11 @@ links respective to the node.</p>
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.get_links"></a></p>
-<h2 id="get_links_1">get_links</h2>
-<pre><code class="python">@verify_connector_and_id
-get_links(self)
-</code></pre>
+<p><a name="gns3fy.Node.get_links"></a></p>
+<h3 id="get_links_1">get_links<a class="headerlink" href="#get_links_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_links</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieves the links of the respective node. They will be saved at the <code>links</code>
 attribute</p>
@@ -614,11 +1837,11 @@ attribute</p>
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.start"></a></p>
-<h2 id="start">start</h2>
-<pre><code class="python">@verify_connector_and_id
-start(self)
-</code></pre>
+<p><a name="gns3fy.Node.start"></a></p>
+<h3 id="start">start<a class="headerlink" href="#start" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">start</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Starts the node.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -627,11 +1850,11 @@ start(self)
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.stop"></a></p>
-<h2 id="stop">stop</h2>
-<pre><code class="python">@verify_connector_and_id
-stop(self)
-</code></pre>
+<p><a name="gns3fy.Node.stop"></a></p>
+<h3 id="stop">stop<a class="headerlink" href="#stop" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">stop</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Stops the node.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -640,11 +1863,11 @@ stop(self)
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.reload"></a></p>
-<h2 id="reload">reload</h2>
-<pre><code class="python">@verify_connector_and_id
-reload(self)
-</code></pre>
+<p><a name="gns3fy.Node.reload"></a></p>
+<h3 id="reload">reload<a class="headerlink" href="#reload" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">reload</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Reloads the node.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -653,11 +1876,11 @@ reload(self)
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.suspend"></a></p>
-<h2 id="suspend">suspend</h2>
-<pre><code class="python">@verify_connector_and_id
-suspend(self)
-</code></pre>
+<p><a name="gns3fy.Node.suspend"></a></p>
+<h3 id="suspend">suspend<a class="headerlink" href="#suspend" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">suspend</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Suspends the node.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -666,17 +1889,17 @@ suspend(self)
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.update"></a></p>
-<h2 id="update">update</h2>
-<pre><code class="python">@verify_connector_and_id
-update(self, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Node.update"></a></p>
+<h3 id="update">update<a class="headerlink" href="#update" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Updates the node instance by passing the keyword arguments of the attributes
 you want updated</p>
 <p>Example:</p>
-<pre><code class="python">router01.update(name=&quot;router01-CSX&quot;)
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">router01</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;router01-CSX&quot;</span><span class="p">)</span>
+</code></pre></div>
 
 <p>This will update the project <code>auto_close</code> attribute to <code>True</code></p>
 <p><strong>Required Attributes:</strong></p>
@@ -684,10 +1907,10 @@ you want updated</p>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Node.create"></a></p>
-<h2 id="create_1">create</h2>
-<pre><code class="python">create(self)
-</code></pre>
+<p><a name="gns3fy.Node.create"></a></p>
+<h3 id="create_1">create<a class="headerlink" href="#create_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Creates a node.</p>
 <p>By default it will fetch the nodes properties for creation based on the
@@ -700,11 +1923,11 @@ by sending a dictionary of the properties under <code>extra_properties</code>.</
 <li><code>compute_id</code>: Defaults to "local"</li>
 <li><code>template</code> or <code>template_id</code> - if not passed as arguments</li>
 </ul>
-<p><a name=".gns3fy.Node.delete"></a></p>
-<h2 id="delete_1">delete</h2>
-<pre><code class="python">@verify_connector_and_id
-delete(self)
-</code></pre>
+<p><a name="gns3fy.Node.delete"></a></p>
+<h3 id="delete_1">delete<a class="headerlink" href="#delete_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">delete</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Deletes the node from the project. It sets to <code>None</code> the attributes <code>node_id</code>
 and <code>name</code> when executed successfully</p>
@@ -714,11 +1937,11 @@ and <code>name</code> when executed successfully</p>
 <li><code>connector</code></li>
 <li><code>node_id</code></li>
 </ul>
-<p><a name=".gns3fy.Node.get_file"></a></p>
-<h2 id="get_file">get_file</h2>
-<pre><code class="python">@verify_connector_and_id
-get_file(self, path)
-</code></pre>
+<p><a name="gns3fy.Node.get_file"></a></p>
+<h3 id="get_file">get_file<a class="headerlink" href="#get_file" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieve a file in the node directory.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -727,22 +1950,22 @@ get_file(self, path)
 <li><code>connector</code></li>
 <li><code>path</code>: Node's relative path of the file</li>
 </ul>
-<p><a name=".gns3fy.Node.write_file"></a></p>
-<h2 id="write_file">write_file</h2>
-<pre><code class="python">@verify_connector_and_id
-write_file(self, path, data)
-</code></pre>
+<p><a name="gns3fy.Node.write_file"></a></p>
+<h3 id="write_file">write_file<a class="headerlink" href="#write_file" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Places a file content on a specified node file path. Used mainly for docker
 images.</p>
 <p>Example to update an alpine docker network interfaces:</p>
-<pre><code class="python">&gt;&gt;&gt; data = '''
-    auto eth0
-    iface eth0 inet dhcp
-    '''
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    auto eth0</span>
+<span class="s1">    iface eth0 inet dhcp</span>
+<span class="s1">    &#39;&#39;&#39;</span>
 
-&gt;&gt;&gt; alpine_node.write_file(path='/etc/network/interfaces', data=data)
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">alpine_node</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;/etc/network/interfaces&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 
 <p><strong>Required Attributes:</strong></p>
 <ul>
@@ -751,10 +1974,11 @@ images.</p>
 <li><code>path</code>: Node's relative path of the file</li>
 <li><code>data</code>: Data to be included in the file</li>
 </ul>
-<p><a name=".gns3fy.Project"></a></p>
-<h1>Project</h1>
-<pre><code class="python">class Project()
-</code></pre>
+<p><a name="gns3fy.Project"></a></p>
+<h2 id="project-objects">Project Objects<a class="headerlink" href="#project-objects" title="Permanent link">#</a></h2>
+<div class="highlight"><pre><span></span><code><span class="nd">@dataclass</span><span class="p">(</span><span class="n">config</span><span class="o">=</span><span class="n">Config</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">Project</span><span class="p">()</span>
+</code></pre></div>
 
 <p>GNS3 Project API object. For more information visit: <a href="http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html">Project Endpoint API
 information</a></p>
@@ -788,16 +2012,16 @@ information</a></p>
 <p><strong>Returns:</strong></p>
 <p><code>Project</code> instance</p>
 <p><strong>Example:</strong></p>
-<pre><code class="python">&gt;&gt;&gt; lab = Project(name=&quot;lab&quot;, connector=&lt;Gns3Connector instance&gt;)
-&gt;&gt;&gt; lab.create()
-&gt;&gt;&gt; print(lab.status)
-'opened'
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;lab&quot;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=&lt;</span><span class="n">Gns3Connector</span> <span class="n">instance</span><span class="o">&gt;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">lab</span><span class="o">.</span><span class="n">create</span><span class="p">()</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="nb">print</span><span class="p">(</span><span class="n">lab</span><span class="o">.</span><span class="n">status</span><span class="p">)</span>
+<span class="s1">&#39;opened&#39;</span>
+</code></pre></div>
 
-<p><a name=".gns3fy.Project.get"></a></p>
-<h2 id="get_2">get</h2>
-<pre><code class="python">get(self, get_links=True, get_nodes=True, get_stats=True)
-</code></pre>
+<p><a name="gns3fy.Project.get"></a></p>
+<h3 id="get_2">get<a class="headerlink" href="#get_2" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get</span><span class="p">(</span><span class="n">get_links</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_nodes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">get_stats</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieves the projects information.</p>
 <ul>
@@ -813,10 +2037,10 @@ inside the project and stores them in their respective attributes
 <li><code>connector</code></li>
 <li><code>project_id</code> or <code>name</code></li>
 </ul>
-<p><a name=".gns3fy.Project.create"></a></p>
-<h2 id="create_2">create</h2>
-<pre><code class="python">create(self)
-</code></pre>
+<p><a name="gns3fy.Project.create"></a></p>
+<h3 id="create_2">create<a class="headerlink" href="#create_2" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Creates the project.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -824,17 +2048,17 @@ inside the project and stores them in their respective attributes
 <li><code>name</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.update"></a></p>
-<h2 id="update_1">update</h2>
-<pre><code class="python">@verify_connector_and_id
-update(self, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Project.update"></a></p>
+<h3 id="update_1">update<a class="headerlink" href="#update_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">update</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Updates the project instance by passing the keyword arguments of the attributes
 you want updated</p>
 <p>Example:</p>
-<pre><code class="python">lab.update(auto_close=True)
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">lab</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">auto_close</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>This will update the project <code>auto_close</code> attribute to <code>True</code></p>
 <p><strong>Required Attributes:</strong></p>
@@ -842,11 +2066,11 @@ you want updated</p>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.delete"></a></p>
-<h2 id="delete_2">delete</h2>
-<pre><code class="python">@verify_connector_and_id
-delete(self)
-</code></pre>
+<p><a name="gns3fy.Project.delete"></a></p>
+<h3 id="delete_2">delete<a class="headerlink" href="#delete_2" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">delete</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Deletes the project from the server. It sets to <code>None</code> the attributes
 <code>project_id</code> and <code>name</code> when executed successfully</p>
@@ -855,11 +2079,11 @@ delete(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.close"></a></p>
-<h2 id="close">close</h2>
-<pre><code class="python">@verify_connector_and_id
-close(self)
-</code></pre>
+<p><a name="gns3fy.Project.close"></a></p>
+<h3 id="close">close<a class="headerlink" href="#close" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">close</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Closes the project on the server.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -867,11 +2091,11 @@ close(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.open"></a></p>
-<h2 id="open">open</h2>
-<pre><code class="python">@verify_connector_and_id
-open(self)
-</code></pre>
+<p><a name="gns3fy.Project.open"></a></p>
+<h3 id="open">open<a class="headerlink" href="#open" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="nb">open</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Opens the project on the server.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -879,11 +2103,11 @@ open(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.get_stats"></a></p>
-<h2 id="get_stats">get_stats</h2>
-<pre><code class="python">@verify_connector_and_id
-get_stats(self)
-</code></pre>
+<p><a name="gns3fy.Project.get_stats"></a></p>
+<h3 id="get_stats">get_stats<a class="headerlink" href="#get_stats" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_stats</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieve the stats of the project.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -891,11 +2115,11 @@ get_stats(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.get_file"></a></p>
-<h2 id="get_file_1">get_file</h2>
-<pre><code class="python">@verify_connector_and_id
-get_file(self, path)
-</code></pre>
+<p><a name="gns3fy.Project.get_file"></a></p>
+<h3 id="get_file_1">get_file<a class="headerlink" href="#get_file_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_file</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Retrieve a file in the project directory. Beware you have warranty to be able to
 access only to file global to the project.</p>
@@ -905,21 +2129,21 @@ access only to file global to the project.</p>
 <li><code>connector</code></li>
 <li><code>path</code>: Project's relative path of the file</li>
 </ul>
-<p><a name=".gns3fy.Project.write_file"></a></p>
-<h2 id="write_file_1">write_file</h2>
-<pre><code class="python">@verify_connector_and_id
-write_file(self, path, data)
-</code></pre>
+<p><a name="gns3fy.Project.write_file"></a></p>
+<h3 id="write_file_1">write_file<a class="headerlink" href="#write_file_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Places a file content on a specified project file path. Beware you have warranty
 to be able to access only to file global to the project.</p>
 <p>Example to create a README.txt for the project:</p>
-<pre><code class="python">&gt;&gt;&gt; data = '''
-    This is a README description!
-    '''
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;</span>
+<span class="s1">    This is a README description!</span>
+<span class="s1">    &#39;&#39;&#39;</span>
 
-&gt;&gt;&gt; project.write_file(path='README.txt', data=data)
-</code></pre>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">project</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="s1">&#39;README.txt&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span>
+</code></pre></div>
 
 <p><strong>Required Attributes:</strong></p>
 <ul>
@@ -928,11 +2152,11 @@ to be able to access only to file global to the project.</p>
 <li><code>path</code>: Project's relative path of the file</li>
 <li><code>data</code>: Data to be included in the file</li>
 </ul>
-<p><a name=".gns3fy.Project.get_nodes"></a></p>
-<h2 id="get_nodes_1">get_nodes</h2>
-<pre><code class="python">@verify_connector_and_id
-get_nodes(self)
-</code></pre>
+<p><a name="gns3fy.Project.get_nodes"></a></p>
+<h3 id="get_nodes_1">get_nodes<a class="headerlink" href="#get_nodes_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_nodes</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieve the nodes of the project.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -940,11 +2164,11 @@ get_nodes(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.get_links"></a></p>
-<h2 id="get_links_2">get_links</h2>
-<pre><code class="python">@verify_connector_and_id
-get_links(self)
-</code></pre>
+<p><a name="gns3fy.Project.get_links"></a></p>
+<h3 id="get_links_2">get_links<a class="headerlink" href="#get_links_2" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_links</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieve the links of the project.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -952,11 +2176,11 @@ get_links(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.start_nodes"></a></p>
-<h2 id="start_nodes">start_nodes</h2>
-<pre><code class="python">@verify_connector_and_id
-start_nodes(self, poll_wait_time=5)
-</code></pre>
+<p><a name="gns3fy.Project.start_nodes"></a></p>
+<h3 id="start_nodes">start_nodes<a class="headerlink" href="#start_nodes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">start_nodes</span><span class="p">(</span><span class="n">poll_wait_time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Starts all the nodes inside the project.</p>
 <ul>
@@ -968,11 +2192,11 @@ nodes status.</li>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.stop_nodes"></a></p>
-<h2 id="stop_nodes">stop_nodes</h2>
-<pre><code class="python">@verify_connector_and_id
-stop_nodes(self, poll_wait_time=5)
-</code></pre>
+<p><a name="gns3fy.Project.stop_nodes"></a></p>
+<h3 id="stop_nodes">stop_nodes<a class="headerlink" href="#stop_nodes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">stop_nodes</span><span class="p">(</span><span class="n">poll_wait_time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Stops all the nodes inside the project.</p>
 <ul>
@@ -984,11 +2208,11 @@ nodes status.</li>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.reload_nodes"></a></p>
-<h2 id="reload_nodes">reload_nodes</h2>
-<pre><code class="python">@verify_connector_and_id
-reload_nodes(self, poll_wait_time=5)
-</code></pre>
+<p><a name="gns3fy.Project.reload_nodes"></a></p>
+<h3 id="reload_nodes">reload_nodes<a class="headerlink" href="#reload_nodes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">reload_nodes</span><span class="p">(</span><span class="n">poll_wait_time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Reloads all the nodes inside the project.</p>
 <ul>
@@ -1000,11 +2224,11 @@ nodes status.</li>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.suspend_nodes"></a></p>
-<h2 id="suspend_nodes">suspend_nodes</h2>
-<pre><code class="python">@verify_connector_and_id
-suspend_nodes(self, poll_wait_time=5)
-</code></pre>
+<p><a name="gns3fy.Project.suspend_nodes"></a></p>
+<h3 id="suspend_nodes">suspend_nodes<a class="headerlink" href="#suspend_nodes" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">suspend_nodes</span><span class="p">(</span><span class="n">poll_wait_time</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Suspends all the nodes inside the project.</p>
 <ul>
@@ -1016,10 +2240,10 @@ nodes status.</li>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.nodes_summary"></a></p>
-<h2 id="nodes_summary">nodes_summary</h2>
-<pre><code class="python">nodes_summary(self, is_print=True)
-</code></pre>
+<p><a name="gns3fy.Project.nodes_summary"></a></p>
+<h3 id="nodes_summary">nodes_summary<a class="headerlink" href="#nodes_summary" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">nodes_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a summary of the nodes insode the project. If <code>is_print</code> is <code>False</code>, it
 will return a list of tuples like:</p>
@@ -1029,10 +2253,10 @@ will return a list of tuples like:</p>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.nodes_inventory"></a></p>
-<h2 id="nodes_inventory">nodes_inventory</h2>
-<pre><code class="python">nodes_inventory(self)
-</code></pre>
+<p><a name="gns3fy.Project.nodes_inventory"></a></p>
+<h3 id="nodes_inventory">nodes_inventory<a class="headerlink" href="#nodes_inventory" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">nodes_inventory</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Returns an inventory-style dictionary of the nodes</p>
 <p>Example:</p>
@@ -1049,10 +2273,10 @@ will return a list of tuples like:</p>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.links_summary"></a></p>
-<h2 id="links_summary">links_summary</h2>
-<pre><code class="python">links_summary(self, is_print=True)
-</code></pre>
+<p><a name="gns3fy.Project.links_summary"></a></p>
+<h3 id="links_summary">links_summary<a class="headerlink" href="#links_summary" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">links_summary</span><span class="p">(</span><span class="n">is_print</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns a summary of the links insode the project. If <code>is_print</code> is False, it
 will return a list of tuples like:</p>
@@ -1062,10 +2286,10 @@ will return a list of tuples like:</p>
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.get_node"></a></p>
-<h2 id="get_node_1">get_node</h2>
-<pre><code class="python">get_node(self, name=None, node_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.get_node"></a></p>
+<h3 id="get_node_1">get_node<a class="headerlink" href="#get_node_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">node_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the Node object by searching for the <code>name</code> or the <code>node_id</code>.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -1077,10 +2301,10 @@ will return a list of tuples like:</p>
 - <code>name</code> or <code>node_id</code></p>
 <p><strong>NOTE:</strong> Run method <code>get_nodes()</code> manually to refresh list of nodes if
 necessary</p>
-<p><a name=".gns3fy.Project.get_link"></a></p>
-<h2 id="get_link_1">get_link</h2>
-<pre><code class="python">get_link(self, link_id)
-</code></pre>
+<p><a name="gns3fy.Project.get_link"></a></p>
+<h3 id="get_link_1">get_link<a class="headerlink" href="#get_link_1" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_link</span><span class="p">(</span><span class="n">link_id</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the Link object by locating its ID</p>
 <p><strong>Required Attributes:</strong></p>
@@ -1091,15 +2315,15 @@ necessary</p>
 </ul>
 <p><strong>NOTE:</strong> Run method <code>get_links()</code> manually to refresh list of links if
 necessary</p>
-<p><a name=".gns3fy.Project.create_node"></a></p>
-<h2 id="create_node">create_node</h2>
-<pre><code class="python">create_node(self, **kwargs)
-</code></pre>
+<p><a name="gns3fy.Project.create_node"></a></p>
+<h3 id="create_node">create_node<a class="headerlink" href="#create_node" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create_node</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Creates a node. To know available parameters see <code>Node</code> object, specifically
 the <code>create</code> method. The most basic example would be:</p>
-<pre><code class="python">project.create_node(name='test-switch01', template='Ethernet switch')
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="n">project</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;test-switch01&#39;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s1">&#39;Ethernet switch&#39;</span><span class="p">)</span>
+</code></pre></div>
 
 <p><strong>Required Project instance attributes:</strong></p>
 <ul>
@@ -1110,10 +2334,10 @@ the <code>create</code> method. The most basic example would be:</p>
 <ul>
 <li><code>template</code> or <code>template_id</code></li>
 </ul>
-<p><a name=".gns3fy.Project.create_link"></a></p>
-<h2 id="create_link">create_link</h2>
-<pre><code class="python">create_link(self, node_a, port_a, node_b, port_b)
-</code></pre>
+<p><a name="gns3fy.Project.create_link"></a></p>
+<h3 id="create_link">create_link<a class="headerlink" href="#create_link" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">create_link</span><span class="p">(</span><span class="n">node_a</span><span class="p">,</span> <span class="n">port_a</span><span class="p">,</span> <span class="n">node_b</span><span class="p">,</span> <span class="n">port_b</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Creates a link.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -1127,11 +2351,11 @@ port)</li>
 <li><code>port_b</code>: Port name of the B side (must match the <code>name</code> attribute of the
 port)</li>
 </ul>
-<p><a name=".gns3fy.Project.get_snapshots"></a></p>
-<h2 id="get_snapshots">get_snapshots</h2>
-<pre><code class="python">@verify_connector_and_id
-get_snapshots(self)
-</code></pre>
+<p><a name="gns3fy.Project.get_snapshots"></a></p>
+<h3 id="get_snapshots">get_snapshots<a class="headerlink" href="#get_snapshots" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_snapshots</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieves list of snapshots of the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1139,10 +2363,10 @@ get_snapshots(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.get_snapshot"></a></p>
-<h2 id="get_snapshot">get_snapshot</h2>
-<pre><code class="python">get_snapshot(self, name=None, snapshot_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.get_snapshot"></a></p>
+<h3 id="get_snapshot">get_snapshot<a class="headerlink" href="#get_snapshot" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_snapshot</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snapshot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the Snapshot by searching for the <code>name</code> or the <code>snapshot_id</code>.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -1152,11 +2376,11 @@ get_snapshots(self)
 </ul>
 <p><strong>Required keyword arguments:</strong>
 - <code>name</code> or <code>snapshot_id</code></p>
-<p><a name=".gns3fy.Project.create_snapshot"></a></p>
-<h2 id="create_snapshot">create_snapshot</h2>
-<pre><code class="python">@verify_connector_and_id
-create_snapshot(self, name)
-</code></pre>
+<p><a name="gns3fy.Project.create_snapshot"></a></p>
+<h3 id="create_snapshot">create_snapshot<a class="headerlink" href="#create_snapshot" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">create_snapshot</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Creates a snapshot of the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1168,11 +2392,11 @@ create_snapshot(self, name)
 <ul>
 <li><code>name</code></li>
 </ul>
-<p><a name=".gns3fy.Project.delete_snapshot"></a></p>
-<h2 id="delete_snapshot">delete_snapshot</h2>
-<pre><code class="python">@verify_connector_and_id
-delete_snapshot(self, name=None, snapshot_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.delete_snapshot"></a></p>
+<h3 id="delete_snapshot">delete_snapshot<a class="headerlink" href="#delete_snapshot" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">delete_snapshot</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snapshot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Deletes a snapshot of the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1184,11 +2408,11 @@ delete_snapshot(self, name=None, snapshot_id=None)
 <ul>
 <li><code>name</code> or <code>snapshot_id</code></li>
 </ul>
-<p><a name=".gns3fy.Project.restore_snapshot"></a></p>
-<h2 id="restore_snapshot">restore_snapshot</h2>
-<pre><code class="python">@verify_connector_and_id
-restore_snapshot(self, name=None, snapshot_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.restore_snapshot"></a></p>
+<h3 id="restore_snapshot">restore_snapshot<a class="headerlink" href="#restore_snapshot" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">restore_snapshot</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snapshot_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Restore a snapshot from disk</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1200,10 +2424,10 @@ restore_snapshot(self, name=None, snapshot_id=None)
 <ul>
 <li><code>name</code> or <code>snapshot_id</code></li>
 </ul>
-<p><a name=".gns3fy.Project.arrange_nodes_circular"></a></p>
-<h2 id="arrange_nodes_circular">arrange_nodes_circular</h2>
-<pre><code class="python">arrange_nodes_circular(self, radius=120)
-</code></pre>
+<p><a name="gns3fy.Project.arrange_nodes_circular"></a></p>
+<h3 id="arrange_nodes_circular">arrange_nodes_circular<a class="headerlink" href="#arrange_nodes_circular" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">arrange_nodes_circular</span><span class="p">(</span><span class="n">radius</span><span class="o">=</span><span class="mi">120</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Re-arrgange the existing nodes
 in a circular fashion</p>
@@ -1212,14 +2436,14 @@ in a circular fashion</p>
 <li>project instance created</li>
 </ul>
 <p><strong>Example</strong></p>
-<pre><code class="python">&gt;&gt;&gt; proj = Project(name='project_name', connector=Gns3connector)
-&gt;&gt;&gt; proj.arrange_nodes()
-</code></pre>
+<div class="highlight"><pre><span></span><code><span class="o">&gt;&gt;&gt;</span> <span class="n">proj</span> <span class="o">=</span> <span class="n">Project</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;project_name&#39;</span><span class="p">,</span> <span class="n">connector</span><span class="o">=</span><span class="n">Gns3connector</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">proj</span><span class="o">.</span><span class="n">arrange_nodes</span><span class="p">()</span>
+</code></pre></div>
 
-<p><a name=".gns3fy.Project.get_drawing"></a></p>
-<h2 id="get_drawing">get_drawing</h2>
-<pre><code class="python">get_drawing(self, drawing_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.get_drawing"></a></p>
+<h3 id="get_drawing">get_drawing<a class="headerlink" href="#get_drawing" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="n">get_drawing</span><span class="p">(</span><span class="n">drawing_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Returns the drawing by searching for the <code>svg</code> or the <code>drawing_id</code>.</p>
 <p><strong>Required Attributes:</strong></p>
@@ -1229,11 +2453,11 @@ in a circular fashion</p>
 </ul>
 <p><strong>Required keyword arguments:</strong>
 - <code>svg</code> or <code>drawing_id</code></p>
-<p><a name=".gns3fy.Project.get_drawings"></a></p>
-<h2 id="get_drawings">get_drawings</h2>
-<pre><code class="python">@verify_connector_and_id
-get_drawings(self)
-</code></pre>
+<p><a name="gns3fy.Project.get_drawings"></a></p>
+<h3 id="get_drawings">get_drawings<a class="headerlink" href="#get_drawings" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">get_drawings</span><span class="p">()</span>
+</code></pre></div>
 
 <p>Retrieves list of drawings  of the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1241,11 +2465,11 @@ get_drawings(self)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.create_drawing"></a></p>
-<h2 id="create_drawing">create_drawing</h2>
-<pre><code class="python">@verify_connector_and_id
-create_drawing(self, svg, locked=False, x=10, y=10, z=1)
-</code></pre>
+<p><a name="gns3fy.Project.create_drawing"></a></p>
+<h3 id="create_drawing">create_drawing<a class="headerlink" href="#create_drawing" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">create_drawing</span><span class="p">(</span><span class="n">svg</span><span class="p">,</span> <span class="n">locked</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Creates a drawing on the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1253,11 +2477,11 @@ create_drawing(self, svg, locked=False, x=10, y=10, z=1)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.update_drawing"></a></p>
-<h2 id="update_drawing">update_drawing</h2>
-<pre><code class="python">@verify_connector_and_id
-update_drawing(self, drawing_id, svg=None, locked=None, x=None, y=None, z=None)
-</code></pre>
+<p><a name="gns3fy.Project.update_drawing"></a></p>
+<h3 id="update_drawing">update_drawing<a class="headerlink" href="#update_drawing" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">update_drawing</span><span class="p">(</span><span class="n">drawing_id</span><span class="p">,</span> <span class="n">svg</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">locked</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Updates a drawing on the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1265,11 +2489,11 @@ update_drawing(self, drawing_id, svg=None, locked=None, x=None, y=None, z=None)
 <li><code>project_id</code></li>
 <li><code>connector</code></li>
 </ul>
-<p><a name=".gns3fy.Project.delete_drawing"></a></p>
-<h2 id="delete_drawing">delete_drawing</h2>
-<pre><code class="python">@verify_connector_and_id
-delete_drawing(self, drawing_id=None)
-</code></pre>
+<p><a name="gns3fy.Project.delete_drawing"></a></p>
+<h3 id="delete_drawing">delete_drawing<a class="headerlink" href="#delete_drawing" title="Permanent link">#</a></h3>
+<div class="highlight"><pre><span></span><code> <span class="o">|</span> <span class="nd">@verify_connector_and_id</span>
+ <span class="o">|</span> <span class="n">delete_drawing</span><span class="p">(</span><span class="n">drawing_id</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
 
 <p>Deletes a drawing of the project</p>
 <p><strong>Required Project instance attributes:</strong></p>
@@ -1280,94 +2504,103 @@ delete_drawing(self, drawing_id=None)
 <p><strong>Required keyword aguments:</strong></p>
 <ul>
 <li><code>drawing_id</code></li>
-</ul></div>
+</ul>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href="../user-guide/" class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                User Guide
+              </div>
+            </div>
+          </a>
         
         
+          <a href="../about/changelog/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Release Notes
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
     </div>
-
-    <footer class="col-md-12 text-center">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
         
-        <hr>
-        <p>
-        <small>Copyright &copy; 2019 David Flores<br></small>
+          <div class="md-footer-copyright__highlight">
+            Copyright &copy; 2020 David Flores
+          </div>
         
-        <small>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a>.</p></small>
-
-        
-        
-    </footer>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="../js/bootstrap-3.0.3.min.js"></script>
-    <script src="../js/highlight.pack.js"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script>var base_url = ".."</script>
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+  <div class="md-footer-social">
     
-    <script src="../js/base.js"></script>
-    <script src="../search/main.js"></script>
+      
+      
+        
+        
+      
+      <a href="https://twitter.com/davidban77" target="_blank" rel="noopener" title="twitter.com" class="md-footer-social__link">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+      </a>
+    
+  </div>
 
-    <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    From here you can search these documents. Enter
-                    your search terms below.
-                </p>
-                <form>
-                    <div class="form-group">
-                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
-                    </div>
-                </form>
-                <div id="mkdocs-search-results"></div>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
     </div>
-</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th style="width: 20%;">Keys</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="help shortcut"><kbd>?</kbd></td>
-                    <td>Open this help</td>
-                  </tr>
-                  <tr>
-                    <td class="next shortcut"><kbd>n</kbd></td>
-                    <td>Next page</td>
-                  </tr>
-                  <tr>
-                    <td class="prev shortcut"><kbd>p</kbd></td>
-                    <td>Previous page</td>
-                  </tr>
-                  <tr>
-                    <td class="search shortcut"><kbd>s</kbd></td>
-                    <td>Search</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <div class="modal-footer">
-            </div>
-        </div>
+  </div>
+</footer>
+      
     </div>
-</div>
-    </body>
-
+    
+      <script src="../assets/javascripts/vendor.6a3d08fc.min.js"></script>
+      <script src="../assets/javascripts/bundle.71201edf.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: ['toc.autohide'],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
 </html>
