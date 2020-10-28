@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gns3fy"
-version = "0.7.0"
+version = "0.7.1"
 description = "Python wrapper around GNS3 Server API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
@@ -20,16 +20,14 @@ requests = "^2.22"
 pydantic = "^1.0"
 
 [tool.poetry.dev-dependencies]
-ipython = "^7.7"
 pytest = "^5.0"
 flake8 = "^3.7"
-black = {version = "^19.10b0", allow-prereleases = true}
 requests-mock = "^1.6"
 pytest-cov = "^2.7"
 mkdocs = "^1.0"
-pydoc-markdown = {git = "https://github.com/NiklasRosenstein/pydoc-markdown.git", branch = "develop"}
-mkdocs-cinder = "^0.17.0"
-tox = "^3.13"
+pydoc-markdown = "^3.5.0"
+black = {version = "^20.8b1", allow-prereleases = true}
+mkdocs-material = "^6.1.0"
 
 [build-system]
 requires = ["poetry>=1.0"]

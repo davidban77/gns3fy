@@ -1,0 +1,47 @@
+site_name: gns3fy
+site_url: https://davidban77.github.io/gns3fy/
+site_description: GNS3 REST API python library.
+site_author: David Flores
+repo_url: https://github.com/davidban77/gns3fy/
+repo_name: davidban77/gns3fy
+docs_dir: "docs/content/"
+theme:
+  name: material
+  favicon: https://fontawesome.com/icons/stream?style=solid
+  icon:
+    logo: fontawesome/solid/server
+    repo: fontawesome/brands/github
+  font:
+    text: Nunito
+    code: Source Code Pro
+  palette:
+    scheme: slate
+    primary: light blue
+    accent: blue grey
+  features:
+    # - navigation.tabs
+    - toc.autohide
+
+markdown_extensions:
+  - toc:
+      permalink: "#"
+      toc_depth: 2-4
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - admonition
+
+extra:
+  social:
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/davidban77
+
+nav:
+  - Overview: index.md
+  - User Guide: user-guide.md
+  - API Reference: api_reference.md
+  - About:
+    - Release Notes: about/changelog.md
+    - License: about/license.md
+
+copyright: 'Copyright &copy; 2020 David Flores'

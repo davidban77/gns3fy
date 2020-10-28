@@ -1,10 +1,11 @@
-# `gns3fy`
+<a name="gns3fy"></a>
+# gns3fy
 
-
-## `Gns3Connector` Objects
+<a name="gns3fy.Gns3Connector"></a>
+## Gns3Connector Objects
 
 ```python
-def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
+class Gns3Connector()
 ```
 
 Connector to be use for interaction against GNS3 server controller API.
@@ -32,17 +33,11 @@ Connector to be use for interaction against GNS3 server controller API.
 {'local': False, 'version': '2.2.0b4'}
 ```
 
-### `Gns3Connector.__init__()`
+<a name="gns3fy.Gns3Connector.http_call"></a>
+### http\_call
 
 ```python
-def __init__(self, url=None, user=None, cred=None, verify=False, api_version=2)
-```
-
-
-### `Gns3Connector.http_call()`
-
-```python
-def http_call(self, method, url, data=None, json_data=None, headers=None, verify=False, params=None)
+ | http_call(method, url, data=None, json_data=None, headers=None, verify=False, params=None)
 ```
 
 Performs the HTTP operation actioned
@@ -58,18 +53,20 @@ patch (**required**)
 - `verify`: SSL Verification
 - `params`: Dictionary or bytes to be sent in the query string for the Request
 
-### `Gns3Connector.get_version()`
+<a name="gns3fy.Gns3Connector.get_version"></a>
+### get\_version
 
 ```python
-def get_version(self)
+ | get_version()
 ```
 
 Returns the version information of GNS3 server
 
-### `Gns3Connector.projects_summary()`
+<a name="gns3fy.Gns3Connector.projects_summary"></a>
+### projects\_summary
 
 ```python
-def projects_summary(self, is_print=True)
+ | projects_summary(is_print=True)
 ```
 
 Returns a summary of the projects in the server. If `is_print` is `False`, it
@@ -77,18 +74,20 @@ will return a list of tuples like:
 
 `[(name, project_id, total_nodes, total_links, status) ...]`
 
-### `Gns3Connector.get_projects()`
+<a name="gns3fy.Gns3Connector.get_projects"></a>
+### get\_projects
 
 ```python
-def get_projects(self)
+ | get_projects()
 ```
 
 Returns the list of the projects on the server
 
-### `Gns3Connector.get_project()`
+<a name="gns3fy.Gns3Connector.get_project"></a>
+### get\_project
 
 ```python
-def get_project(self, name=None, project_id=None)
+ | get_project(name=None, project_id=None)
 ```
 
 Retrieves a project from either a name or ID
@@ -97,10 +96,11 @@ Retrieves a project from either a name or ID
 
 - `name` or `project_id`
 
-### `Gns3Connector.templates_summary()`
+<a name="gns3fy.Gns3Connector.templates_summary"></a>
+### templates\_summary
 
 ```python
-def templates_summary(self, is_print=True)
+ | templates_summary(is_print=True)
 ```
 
 Returns a summary of the templates in the server. If `is_print` is `False`, it
@@ -108,18 +108,20 @@ will return a list of tuples like:
 
 `[(name, template_id, template_type, builtin, console_type, category) ...]`
 
-### `Gns3Connector.get_templates()`
+<a name="gns3fy.Gns3Connector.get_templates"></a>
+### get\_templates
 
 ```python
-def get_templates(self)
+ | get_templates()
 ```
 
 Returns the templates defined on the server.
 
-### `Gns3Connector.get_template()`
+<a name="gns3fy.Gns3Connector.get_template"></a>
+### get\_template
 
 ```python
-def get_template(self, name=None, template_id=None)
+ | get_template(name=None, template_id=None)
 ```
 
 Retrieves a template from either a name or ID
@@ -128,10 +130,11 @@ Retrieves a template from either a name or ID
 
 - `name` or `template_id`
 
-### `Gns3Connector.update_template()`
+<a name="gns3fy.Gns3Connector.update_template"></a>
+### update\_template
 
 ```python
-def update_template(self, name=None, template_id=None, kwargs)
+ | update_template(name=None, template_id=None, **kwargs)
 ```
 
 Updates a template by giving its name or UUID. For more information [API INFO]
@@ -142,10 +145,11 @@ templatestemplateid.html#put-v2-templates-template-id)
 
 - `name` or `template_id`
 
-### `Gns3Connector.create_template()`
+<a name="gns3fy.Gns3Connector.create_template"></a>
+### create\_template
 
 ```python
-def create_template(self, kwargs)
+ | create_template(**kwargs)
 ```
 
 Creates a template by giving its attributes. For more information [API INFO]
@@ -158,10 +162,11 @@ templates.html#post-v2-templates)
 - `compute_id` by default is 'local'
 - `template_type`
 
-### `Gns3Connector.delete_template()`
+<a name="gns3fy.Gns3Connector.delete_template"></a>
+### delete\_template
 
 ```python
-def delete_template(self, name=None, template_id=None)
+ | delete_template(name=None, template_id=None)
 ```
 
 Deletes a template by giving its attributes. For more information [API INFO]
@@ -172,10 +177,11 @@ templatestemplateid.html#id16)
 
 - `name` or `template_id`
 
-### `Gns3Connector.get_nodes()`
+<a name="gns3fy.Gns3Connector.get_nodes"></a>
+### get\_nodes
 
 ```python
-def get_nodes(self, project_id)
+ | get_nodes(project_id)
 ```
 
 Retieves the nodes defined on the project
@@ -184,10 +190,11 @@ Retieves the nodes defined on the project
 
 - `project_id`
 
-### `Gns3Connector.get_node()`
+<a name="gns3fy.Gns3Connector.get_node"></a>
+### get\_node
 
 ```python
-def get_node(self, project_id, node_id)
+ | get_node(project_id, node_id)
 ```
 
 Returns the node by locating its ID.
@@ -197,10 +204,11 @@ Returns the node by locating its ID.
 - `project_id`
 - `node_id`
 
-### `Gns3Connector.get_links()`
+<a name="gns3fy.Gns3Connector.get_links"></a>
+### get\_links
 
 ```python
-def get_links(self, project_id)
+ | get_links(project_id)
 ```
 
 Retrieves the links defined in the project.
@@ -209,10 +217,11 @@ Retrieves the links defined in the project.
 
 - `project_id`
 
-### `Gns3Connector.get_link()`
+<a name="gns3fy.Gns3Connector.get_link"></a>
+### get\_link
 
 ```python
-def get_link(self, project_id, link_id)
+ | get_link(project_id, link_id)
 ```
 
 Returns the link by locating its ID.
@@ -222,10 +231,11 @@ Returns the link by locating its ID.
 - `project_id`
 - `link_id`
 
-### `Gns3Connector.create_project()`
+<a name="gns3fy.Gns3Connector.create_project"></a>
+### create\_project
 
 ```python
-def create_project(self, kwargs)
+ | create_project(**kwargs)
 ```
 
 Pass a dictionary type object with the project parameters to be created.
@@ -238,10 +248,11 @@ Pass a dictionary type object with the project parameters to be created.
 
 JSON project information
 
-### `Gns3Connector.delete_project()`
+<a name="gns3fy.Gns3Connector.delete_project"></a>
+### delete\_project
 
 ```python
-def delete_project(self, project_id)
+ | delete_project(project_id)
 ```
 
 Deletes a project from server.
@@ -250,10 +261,11 @@ Deletes a project from server.
 
 - `project_id`
 
-### `Gns3Connector.get_computes()`
+<a name="gns3fy.Gns3Connector.get_computes"></a>
+### get\_computes
 
 ```python
-def get_computes(self)
+ | get_computes()
 ```
 
 Returns a list of computes.
@@ -262,10 +274,11 @@ Returns a list of computes.
 
 List of dictionaries of the computes attributes like cpu/memory usage
 
-### `Gns3Connector.get_compute()`
+<a name="gns3fy.Gns3Connector.get_compute"></a>
+### get\_compute
 
 ```python
-def get_compute(self, compute_id="local")
+ | get_compute(compute_id="local")
 ```
 
 Returns a compute.
@@ -274,10 +287,11 @@ Returns a compute.
 
 Dictionary of the compute attributes like cpu/memory usage
 
-### `Gns3Connector.get_compute_images()`
+<a name="gns3fy.Gns3Connector.get_compute_images"></a>
+### get\_compute\_images
 
 ```python
-def get_compute_images(self, emulator, compute_id="local")
+ | get_compute_images(emulator, compute_id="local")
 ```
 
 Returns a list of images available for a compute.
@@ -292,10 +306,26 @@ Returns a list of images available for a compute.
 List of dictionaries with images available for the compute for the specified
 emulator
 
-### `Gns3Connector.get_compute_ports()`
+<a name="gns3fy.Gns3Connector.upload_compute_image"></a>
+### upload\_compute\_image
 
 ```python
-def get_compute_ports(self, compute_id="local")
+ | upload_compute_image(emulator, file_path, compute_id="local")
+```
+
+uploads an image for use by a compute.
+
+**Required Attributes:**
+
+- `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+- `file_path`: path of file to be uploaded
+- `compute_id` By default is 'local'
+
+<a name="gns3fy.Gns3Connector.get_compute_ports"></a>
+### get\_compute\_ports
+
+```python
+ | get_compute_ports(compute_id="local")
 ```
 
 Returns ports used and configured by a compute.
@@ -308,7 +338,23 @@ Returns ports used and configured by a compute.
 
 Dictionary of `console_ports` used and range, as well as the `udp_ports`
 
-## `Link` Objects
+<a name="gns3fy.verify_connector_and_id"></a>
+### verify\_connector\_and\_id
+
+```python
+verify_connector_and_id(f)
+```
+
+Main checker for connector object and respective object's ID for their retrieval
+or actions methods.
+
+<a name="gns3fy.Link"></a>
+## Link Objects
+
+```python
+@dataclass(config=Config)
+class Link()
+```
 
 GNS3 Link API object. For more information visit: [Links Endpoint API information](
 http://api.gns3.net/en/2.2/api/v2/controller/link/projectsprojectidlinks.html)
@@ -343,10 +389,12 @@ instance>)
 'ethernet'
 ```
 
-### `Link.get()`
+<a name="gns3fy.Link.get"></a>
+### get
 
 ```python
-def get(self)
+ | @verify_connector_and_id
+ | get()
 ```
 
 Retrieves the information from the link endpoint.
@@ -357,10 +405,12 @@ Retrieves the information from the link endpoint.
 - `connector`
 - `link_id`
 
-### `Link.delete()`
+<a name="gns3fy.Link.delete"></a>
+### delete
 
 ```python
-def delete(self)
+ | @verify_connector_and_id
+ | delete()
 ```
 
 Deletes a link endpoint from the project. It sets to `None` the attributes
@@ -372,10 +422,11 @@ Deletes a link endpoint from the project. It sets to `None` the attributes
 - `connector`
 - `link_id`
 
-### `Link.create()`
+<a name="gns3fy.Link.create"></a>
+### create
 
 ```python
-def create(self)
+ | create()
 ```
 
 Creates a link endpoint
@@ -386,7 +437,13 @@ Creates a link endpoint
 - `connector`
 - `nodes`
 
-## `Node` Objects
+<a name="gns3fy.Node"></a>
+## Node Objects
+
+```python
+@dataclass(config=Config)
+class Node()
+```
 
 GNS3 Node API object. For more information visit: [Node Endpoint API information](
 http://api.gns3.net/en/2.2/api/v2/controller/node/projectsprojectidnodes.html)
@@ -439,10 +496,12 @@ project_id=<pr_id>, connector=<Gns3Connector instance>)
 'SOME-UUID-GENERATED'
 ```
 
-### `Node.get()`
+<a name="gns3fy.Node.get"></a>
+### get
 
 ```python
-def get(self, get_links=True)
+ | @verify_connector_and_id
+ | get(get_links=True)
 ```
 
 Retrieves the node information. When `get_links` is `True` it also retrieves the
@@ -454,10 +513,12 @@ links respective to the node.
 - `connector`
 - `node_id`
 
-### `Node.get_links()`
+<a name="gns3fy.Node.get_links"></a>
+### get\_links
 
 ```python
-def get_links(self)
+ | @verify_connector_and_id
+ | get_links()
 ```
 
 Retrieves the links of the respective node. They will be saved at the `links`
@@ -469,10 +530,12 @@ attribute
 - `connector`
 - `node_id`
 
-### `Node.start()`
+<a name="gns3fy.Node.start"></a>
+### start
 
 ```python
-def start(self)
+ | @verify_connector_and_id
+ | start()
 ```
 
 Starts the node.
@@ -483,10 +546,12 @@ Starts the node.
 - `connector`
 - `node_id`
 
-### `Node.stop()`
+<a name="gns3fy.Node.stop"></a>
+### stop
 
 ```python
-def stop(self)
+ | @verify_connector_and_id
+ | stop()
 ```
 
 Stops the node.
@@ -497,10 +562,12 @@ Stops the node.
 - `connector`
 - `node_id`
 
-### `Node.reload()`
+<a name="gns3fy.Node.reload"></a>
+### reload
 
 ```python
-def reload(self)
+ | @verify_connector_and_id
+ | reload()
 ```
 
 Reloads the node.
@@ -511,10 +578,12 @@ Reloads the node.
 - `connector`
 - `node_id`
 
-### `Node.suspend()`
+<a name="gns3fy.Node.suspend"></a>
+### suspend
 
 ```python
-def suspend(self)
+ | @verify_connector_and_id
+ | suspend()
 ```
 
 Suspends the node.
@@ -525,10 +594,12 @@ Suspends the node.
 - `connector`
 - `node_id`
 
-### `Node.update()`
+<a name="gns3fy.Node.update"></a>
+### update
 
 ```python
-def update(self, kwargs)
+ | @verify_connector_and_id
+ | update(**kwargs)
 ```
 
 Updates the node instance by passing the keyword arguments of the attributes
@@ -547,10 +618,11 @@ This will update the project `auto_close` attribute to `True`
 - `project_id`
 - `connector`
 
-### `Node.create()`
+<a name="gns3fy.Node.create"></a>
+### create
 
 ```python
-def create(self)
+ | create()
 ```
 
 Creates a node.
@@ -566,10 +638,12 @@ by sending a dictionary of the properties under `extra_properties`.
 - `compute_id`: Defaults to "local"
 - `template` or `template_id` - if not passed as arguments
 
-### `Node.delete()`
+<a name="gns3fy.Node.delete"></a>
+### delete
 
 ```python
-def delete(self)
+ | @verify_connector_and_id
+ | delete()
 ```
 
 Deletes the node from the project. It sets to `None` the attributes `node_id`
@@ -581,10 +655,12 @@ and `name` when executed successfully
 - `connector`
 - `node_id`
 
-### `Node.get_file()`
+<a name="gns3fy.Node.get_file"></a>
+### get\_file
 
 ```python
-def get_file(self, path)
+ | @verify_connector_and_id
+ | get_file(path)
 ```
 
 Retrieve a file in the node directory.
@@ -595,10 +671,12 @@ Retrieve a file in the node directory.
 - `connector`
 - `path`: Node's relative path of the file
 
-### `Node.write_file()`
+<a name="gns3fy.Node.write_file"></a>
+### write\_file
 
 ```python
-def write_file(self, path, data)
+ | @verify_connector_and_id
+ | write_file(path, data)
 ```
 
 Places a file content on a specified node file path. Used mainly for docker
@@ -622,7 +700,13 @@ Example to update an alpine docker network interfaces:
 - `path`: Node's relative path of the file
 - `data`: Data to be included in the file
 
-## `Project` Objects
+<a name="gns3fy.Project"></a>
+## Project Objects
+
+```python
+@dataclass(config=Config)
+class Project()
+```
 
 GNS3 Project API object. For more information visit: [Project Endpoint API
 information](http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html)
@@ -667,10 +751,11 @@ information](http://api.gns3.net/en/2.2/api/v2/controller/project/projects.html)
 'opened'
 ```
 
-### `Project.get()`
+<a name="gns3fy.Project.get"></a>
+### get
 
 ```python
-def get(self, get_links=True, get_nodes=True, get_stats=True)
+ | get(get_links=True, get_nodes=True, get_stats=True)
 ```
 
 Retrieves the projects information.
@@ -679,15 +764,20 @@ Retrieves the projects information.
 - `get_nodes`: When true it also queries for the nodes inside the project
 - `get_stats`: When true it also queries for the stats inside the project
 
+It `get_stats` is set to `True`, it also verifies if snapshots and drawings are
+inside the project and stores them in their respective attributes
+(`snapshots` and `drawings`)
+
 **Required Attributes:**
 
 - `connector`
 - `project_id` or `name`
 
-### `Project.create()`
+<a name="gns3fy.Project.create"></a>
+### create
 
 ```python
-def create(self)
+ | create()
 ```
 
 Creates the project.
@@ -697,10 +787,12 @@ Creates the project.
 - `name`
 - `connector`
 
-### `Project.update()`
+<a name="gns3fy.Project.update"></a>
+### update
 
 ```python
-def update(self, kwargs)
+ | @verify_connector_and_id
+ | update(**kwargs)
 ```
 
 Updates the project instance by passing the keyword arguments of the attributes
@@ -719,10 +811,12 @@ This will update the project `auto_close` attribute to `True`
 - `project_id`
 - `connector`
 
-### `Project.delete()`
+<a name="gns3fy.Project.delete"></a>
+### delete
 
 ```python
-def delete(self)
+ | @verify_connector_and_id
+ | delete()
 ```
 
 Deletes the project from the server. It sets to `None` the attributes
@@ -733,10 +827,12 @@ Deletes the project from the server. It sets to `None` the attributes
 - `project_id`
 - `connector`
 
-### `Project.close()`
+<a name="gns3fy.Project.close"></a>
+### close
 
 ```python
-def close(self)
+ | @verify_connector_and_id
+ | close()
 ```
 
 Closes the project on the server.
@@ -746,10 +842,12 @@ Closes the project on the server.
 - `project_id`
 - `connector`
 
-### `Project.open()`
+<a name="gns3fy.Project.open"></a>
+### open
 
 ```python
-def open(self)
+ | @verify_connector_and_id
+ | open()
 ```
 
 Opens the project on the server.
@@ -759,10 +857,12 @@ Opens the project on the server.
 - `project_id`
 - `connector`
 
-### `Project.get_stats()`
+<a name="gns3fy.Project.get_stats"></a>
+### get\_stats
 
 ```python
-def get_stats(self)
+ | @verify_connector_and_id
+ | get_stats()
 ```
 
 Retrieve the stats of the project.
@@ -772,10 +872,12 @@ Retrieve the stats of the project.
 - `project_id`
 - `connector`
 
-### `Project.get_file()`
+<a name="gns3fy.Project.get_file"></a>
+### get\_file
 
 ```python
-def get_file(self, path)
+ | @verify_connector_and_id
+ | get_file(path)
 ```
 
 Retrieve a file in the project directory. Beware you have warranty to be able to
@@ -787,10 +889,12 @@ access only to file global to the project.
 - `connector`
 - `path`: Project's relative path of the file
 
-### `Project.write_file()`
+<a name="gns3fy.Project.write_file"></a>
+### write\_file
 
 ```python
-def write_file(self, path, data)
+ | @verify_connector_and_id
+ | write_file(path, data)
 ```
 
 Places a file content on a specified project file path. Beware you have warranty
@@ -813,10 +917,12 @@ Example to create a README.txt for the project:
 - `path`: Project's relative path of the file
 - `data`: Data to be included in the file
 
-### `Project.get_nodes()`
+<a name="gns3fy.Project.get_nodes"></a>
+### get\_nodes
 
 ```python
-def get_nodes(self)
+ | @verify_connector_and_id
+ | get_nodes()
 ```
 
 Retrieve the nodes of the project.
@@ -826,10 +932,12 @@ Retrieve the nodes of the project.
 - `project_id`
 - `connector`
 
-### `Project.get_links()`
+<a name="gns3fy.Project.get_links"></a>
+### get\_links
 
 ```python
-def get_links(self)
+ | @verify_connector_and_id
+ | get_links()
 ```
 
 Retrieve the links of the project.
@@ -839,10 +947,12 @@ Retrieve the links of the project.
 - `project_id`
 - `connector`
 
-### `Project.start_nodes()`
+<a name="gns3fy.Project.start_nodes"></a>
+### start\_nodes
 
 ```python
-def start_nodes(self, poll_wait_time=5)
+ | @verify_connector_and_id
+ | start_nodes(poll_wait_time=5)
 ```
 
 Starts all the nodes inside the project.
@@ -855,10 +965,12 @@ nodes status.
 - `project_id`
 - `connector`
 
-### `Project.stop_nodes()`
+<a name="gns3fy.Project.stop_nodes"></a>
+### stop\_nodes
 
 ```python
-def stop_nodes(self, poll_wait_time=5)
+ | @verify_connector_and_id
+ | stop_nodes(poll_wait_time=5)
 ```
 
 Stops all the nodes inside the project.
@@ -871,10 +983,12 @@ nodes status.
 - `project_id`
 - `connector`
 
-### `Project.reload_nodes()`
+<a name="gns3fy.Project.reload_nodes"></a>
+### reload\_nodes
 
 ```python
-def reload_nodes(self, poll_wait_time=5)
+ | @verify_connector_and_id
+ | reload_nodes(poll_wait_time=5)
 ```
 
 Reloads all the nodes inside the project.
@@ -887,10 +1001,12 @@ nodes status.
 - `project_id`
 - `connector`
 
-### `Project.suspend_nodes()`
+<a name="gns3fy.Project.suspend_nodes"></a>
+### suspend\_nodes
 
 ```python
-def suspend_nodes(self, poll_wait_time=5)
+ | @verify_connector_and_id
+ | suspend_nodes(poll_wait_time=5)
 ```
 
 Suspends all the nodes inside the project.
@@ -903,10 +1019,11 @@ nodes status.
 - `project_id`
 - `connector`
 
-### `Project.nodes_summary()`
+<a name="gns3fy.Project.nodes_summary"></a>
+### nodes\_summary
 
 ```python
-def nodes_summary(self, is_print=True)
+ | nodes_summary(is_print=True)
 ```
 
 Returns a summary of the nodes insode the project. If `is_print` is `False`, it
@@ -919,10 +1036,11 @@ will return a list of tuples like:
 - `project_id`
 - `connector`
 
-### `Project.nodes_inventory()`
+<a name="gns3fy.Project.nodes_inventory"></a>
+### nodes\_inventory
 
 ```python
-def nodes_inventory(self)
+ | nodes_inventory()
 ```
 
 Returns an inventory-style dictionary of the nodes
@@ -943,10 +1061,11 @@ Example:
 - `project_id`
 - `connector`
 
-### `Project.links_summary()`
+<a name="gns3fy.Project.links_summary"></a>
+### links\_summary
 
 ```python
-def links_summary(self, is_print=True)
+ | links_summary(is_print=True)
 ```
 
 Returns a summary of the links insode the project. If `is_print` is False, it
@@ -959,10 +1078,11 @@ will return a list of tuples like:
 - `project_id`
 - `connector`
 
-### `Project.get_node()`
+<a name="gns3fy.Project.get_node"></a>
+### get\_node
 
 ```python
-def get_node(self, name=None, node_id=None)
+ | get_node(name=None, node_id=None)
 ```
 
 Returns the Node object by searching for the `name` or the `node_id`.
@@ -978,10 +1098,11 @@ Returns the Node object by searching for the `name` or the `node_id`.
 **NOTE:** Run method `get_nodes()` manually to refresh list of nodes if
 necessary
 
-### `Project.get_link()`
+<a name="gns3fy.Project.get_link"></a>
+### get\_link
 
 ```python
-def get_link(self, link_id)
+ | get_link(link_id)
 ```
 
 Returns the Link object by locating its ID
@@ -995,10 +1116,11 @@ Returns the Link object by locating its ID
 **NOTE:** Run method `get_links()` manually to refresh list of links if
 necessary
 
-### `Project.create_node()`
+<a name="gns3fy.Project.create_node"></a>
+### create\_node
 
 ```python
-def create_node(self, kwargs)
+ | create_node(**kwargs)
 ```
 
 Creates a node. To know available parameters see `Node` object, specifically
@@ -1017,10 +1139,11 @@ project.create_node(name='test-switch01', template='Ethernet switch')
 
 - `template` or `template_id`
 
-### `Project.create_link()`
+<a name="gns3fy.Project.create_link"></a>
+### create\_link
 
 ```python
-def create_link(self, node_a, port_a, node_b, port_b)
+ | create_link(node_a, port_a, node_b, port_b)
 ```
 
 Creates a link.
@@ -1036,10 +1159,12 @@ port)
 - `port_b`: Port name of the B side (must match the `name` attribute of the
 port)
 
-### `Project.get_snapshots()`
+<a name="gns3fy.Project.get_snapshots"></a>
+### get\_snapshots
 
 ```python
-def get_snapshots(self)
+ | @verify_connector_and_id
+ | get_snapshots()
 ```
 
 Retrieves list of snapshots of the project
@@ -1049,10 +1174,11 @@ Retrieves list of snapshots of the project
 - `project_id`
 - `connector`
 
-### `Project.get_snapshot()`
+<a name="gns3fy.Project.get_snapshot"></a>
+### get\_snapshot
 
 ```python
-def get_snapshot(self, name=None, snapshot_id=None)
+ | get_snapshot(name=None, snapshot_id=None)
 ```
 
 Returns the Snapshot by searching for the `name` or the `snapshot_id`.
@@ -1065,10 +1191,12 @@ Returns the Snapshot by searching for the `name` or the `snapshot_id`.
 **Required keyword arguments:**
 - `name` or `snapshot_id`
 
-### `Project.create_snapshot()`
+<a name="gns3fy.Project.create_snapshot"></a>
+### create\_snapshot
 
 ```python
-def create_snapshot(self, name)
+ | @verify_connector_and_id
+ | create_snapshot(name)
 ```
 
 Creates a snapshot of the project
@@ -1082,10 +1210,12 @@ Creates a snapshot of the project
 
 - `name`
 
-### `Project.delete_snapshot()`
+<a name="gns3fy.Project.delete_snapshot"></a>
+### delete\_snapshot
 
 ```python
-def delete_snapshot(self, name=None, snapshot_id=None)
+ | @verify_connector_and_id
+ | delete_snapshot(name=None, snapshot_id=None)
 ```
 
 Deletes a snapshot of the project
@@ -1099,10 +1229,12 @@ Deletes a snapshot of the project
 
 - `name` or `snapshot_id`
 
-### `Project.restore_snapshot()`
+<a name="gns3fy.Project.restore_snapshot"></a>
+### restore\_snapshot
 
 ```python
-def restore_snapshot(self, name=None, snapshot_id=None)
+ | @verify_connector_and_id
+ | restore_snapshot(name=None, snapshot_id=None)
 ```
 
 Restore a snapshot from disk
@@ -1116,10 +1248,11 @@ Restore a snapshot from disk
 
 - `name` or `snapshot_id`
 
-### `Project.arrange_nodes_circular()`
+<a name="gns3fy.Project.arrange_nodes_circular"></a>
+### arrange\_nodes\_circular
 
 ```python
-def arrange_nodes_circular(self, radius=120)
+ | arrange_nodes_circular(radius=120)
 ```
 
 Re-arrgange the existing nodes
@@ -1136,10 +1269,29 @@ in a circular fashion
 >>> proj.arrange_nodes()
 ```
 
-### `Project.get_drawings()`
+<a name="gns3fy.Project.get_drawing"></a>
+### get\_drawing
 
 ```python
-def get_drawings(self)
+ | get_drawing(drawing_id=None)
+```
+
+Returns the drawing by searching for the `svg` or the `drawing_id`.
+
+**Required Attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword arguments:**
+- `svg` or `drawing_id`
+
+<a name="gns3fy.Project.get_drawings"></a>
+### get\_drawings
+
+```python
+ | @verify_connector_and_id
+ | get_drawings()
 ```
 
 Retrieves list of drawings  of the project
@@ -1148,4 +1300,53 @@ Retrieves list of drawings  of the project
 
 - `project_id`
 - `connector`
+
+<a name="gns3fy.Project.create_drawing"></a>
+### create\_drawing
+
+```python
+ | @verify_connector_and_id
+ | create_drawing(svg, locked=False, x=10, y=10, z=1)
+```
+
+Creates a drawing on the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+<a name="gns3fy.Project.update_drawing"></a>
+### update\_drawing
+
+```python
+ | @verify_connector_and_id
+ | update_drawing(drawing_id, svg=None, locked=None, x=None, y=None, z=None)
+```
+
+Updates a drawing on the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+<a name="gns3fy.Project.delete_drawing"></a>
+### delete\_drawing
+
+```python
+ | @verify_connector_and_id
+ | delete_drawing(drawing_id=None)
+```
+
+Deletes a drawing of the project
+
+**Required Project instance attributes:**
+
+- `project_id`
+- `connector`
+
+**Required keyword aguments:**
+
+- `drawing_id`
 
