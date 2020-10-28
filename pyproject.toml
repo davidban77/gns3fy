@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gns3fy"
-version = "0.7.0"
+version = "0.7.1"
 description = "Python wrapper around GNS3 Server API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
@@ -25,7 +25,6 @@ flake8 = "^3.7"
 requests-mock = "^1.6"
 pytest-cov = "^2.7"
 mkdocs = "^1.0"
-tox = "^3.13"
 pydoc-markdown = "^3.5.0"
 black = {version = "^20.8b1", allow-prereleases = true}
 mkdocs-material = "^6.1.0"
