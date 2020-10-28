@@ -6,6 +6,16 @@ pip install -U gns3fy
 
 ## Releases
 
+### 0.7.1
+
+**Enhancement:**
+
+- Refactored docs for `mkdocs-material` theme
+- Improved CircleCI pipeline config to use workflows, parameters and reusable commands
+- Changed CI image from `miniconda3` to `circleci`. It has latest `poetry` and `curl` installed, which is needed for testing and publishing coverage.
+- Added labels to `create_link` method. [PR-78](https://github.com/davidban77/gns3fy/pull/78)
+- Testing is done on a per-python interpreter basis, meaning that `tox` is no longer needed.
+
 ### 0.7.0
 
 **Enhancement:**
