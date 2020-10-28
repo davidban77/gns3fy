@@ -5,23 +5,29 @@ orbs:
 
 commands:
   build:
+    parameters:
+      python_env:
+        type: string
+        default: py38
     steps:
       - checkout
+      - run: sudo chown -R circleci:circleci /usr/local/bin
+      - run: sudo chown -R circleci:circleci /usr/local/lib
       - restore_cache:
           keys:
-            - deps-{{ checksum "poetry.lock" }}
+            - deps-{{ .Branch }}-<< parameters.python_env >>-{{ checksum "poetry.lock" }}
             # - deps-clear
       - run:
           name: Install Dependencies
           command: |
             poetry install --no-interaction
       - save_cache:
-          key: deps-{{ checksum "poetry.lock" }}
+          key: deps-{{ .Branch }}-<< parameters.python_env >>-{{ checksum "poetry.lock" }}
           # key: deps-clear
           paths:
             - "~/.cache/pypoetry/virtualenvs"
             - "/usr/local/bin"
-            - "/usr/local/lib/"
+            - "/usr/local/lib"
 
   linting:
     steps:
@@ -56,19 +62,22 @@ jobs:
   test-with-py36:
     executor: py36-executor
     steps:
-      - build
+      - build:
+          python_env: py36
       - linting
       - test
   test-with-py37:
     executor: py37-executor
     steps:
-      - build
+      - build:
+          python_env: py37
       - linting
       - test
   test-with-py38:
     executor: py38-executor
     steps:
-      - build
+      - build:
+          python_env: py38
       - linting
       - test
 

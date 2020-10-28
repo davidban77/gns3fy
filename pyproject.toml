@@ -28,6 +28,7 @@ mkdocs = "^1.0"
 tox = "^3.13"
 pydoc-markdown = "^3.5.0"
 black = {version = "^20.8b1", allow-prereleases = true}
+mkdocs-material = "^6.1.0"
 
 [build-system]
 requires = ["poetry>=1.0"]
