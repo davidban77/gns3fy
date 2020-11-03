@@ -436,6 +436,11 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/drawings/{CDRAWING['id']}",
             status_code=204,
         )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/links/NEW_LINK_ID",
+            status_code=204,
+        )
         # Extra project
         self.adapter.register_uri(
             "GET",
@@ -1428,6 +1433,13 @@ class TestProject:
         link = api_test_project.get_link(link_id="NEW_LINK_ID")
         assert link.link_id == "NEW_LINK_ID"
         assert link.link_type == "ethernet"
+
+    def test_delete_link(self, api_test_project):
+        api_test_project.links = []
+        api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
+        link = api_test_project.get_link(link_id="NEW_LINK_ID")
+        api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
+        assert api_test_project.get_link(link_id="NEW_LINK_ID") is None
 
     @pytest.mark.parametrize(
         "link,expected",

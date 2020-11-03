@@ -1758,17 +1758,13 @@ class Project:
                     node_id=_node_a.node_id,
                     adapter_number=_port_a["adapter_number"],
                     port_number=_port_a["port_number"],
-                    label=dict(
-                        text=_port_a["name"],
-                    ),
+                    label=dict(text=_port_a["name"]),
                 ),
                 dict(
                     node_id=_node_b.node_id,
                     adapter_number=_port_b["adapter_number"],
                     port_number=_port_b["port_number"],
-                    label=dict(
-                        text=_port_b["name"],
-                    ),
+                    label=dict(text=_port_b["name"]),
                 ),
             ],
         )
@@ -1776,6 +1772,71 @@ class Project:
         _link.create()
         self.links.append(_link)
         print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
+
+    def delete_link(self, node_a, port_a, node_b, port_b):
+        """
+        Deletes  a link.
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `node_a`: Node name of the A side
+        - `port_a`: Port name of the A side (must match the `name` attribute of the
+        port)
+        - `node_b`: Node name of the B side
+        - `port_b`: Port name of the B side (must match the `name` attribute of the
+        port)
+        """
+        if not self.nodes:
+            self.get_nodes()
+        if not self.links:
+            self.get_links()
+
+        # checking link info
+        _node_a = self.get_node(name=node_a)
+        if not _node_a:
+            raise ValueError(f"node_a: {node_a} not found")
+        try:
+            _port_a = [_p for _p in _node_a.ports if _p["name"] == port_a][0]
+        except IndexError:
+            raise ValueError(f"port_a: {port_a} not found")
+
+        _node_b = self.get_node(name=node_b)
+        if not _node_b:
+            raise ValueError(f"node_b: {node_b} not found")
+        try:
+            _port_b = [_p for _p in _node_b.ports if _p["name"] == port_b][0]
+        except IndexError:
+            raise ValueError(f"port_b: {port_b} not found")
+
+        _matches = []
+        for _l in self.links:
+            if not _l.nodes:
+                continue
+            if (
+                _l.nodes[0]["node_id"] == _node_a.node_id
+                and _l.nodes[0]["adapter_number"] == _port_a["adapter_number"]
+                and _l.nodes[0]["port_number"] == _port_a["port_number"]
+            ):
+                _matches.append(_l)
+            elif (
+                _l.nodes[1]["node_id"] == _node_b.node_id
+                and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
+                and _l.nodes[1]["port_number"] == _port_b["port_number"]
+            ):
+                _matches.append(_l)
+        if not _matches:
+            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")
+
+            # now to delete the link via GNS3_api
+        _link = _matches[0]
+        self.links.remove(_link)
+        _link_id = _link.link_id
+        _link.delete()
+        print(
+            f"Deleted Link-ID: {_link_id} From node {node_a }, port: {port_a} <-->  to node {node_b}, port: {port_b} "
+        )
 
     @verify_connector_and_id
     def get_snapshots(self):
