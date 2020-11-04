@@ -1818,16 +1818,24 @@ class Project:
                 _l.nodes[0]["node_id"] == _node_a.node_id
                 and _l.nodes[0]["adapter_number"] == _port_a["adapter_number"]
                 and _l.nodes[0]["port_number"] == _port_a["port_number"]
-            ):
-                _matches.append(_l)
-            elif (
-                _l.nodes[1]["node_id"] == _node_b.node_id
+                and _l.nodes[1]["node_id"] == _node_b.node_id
                 and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
                 and _l.nodes[1]["port_number"] == _port_b["port_number"]
             ):
                 _matches.append(_l)
+            elif (
+                _l.nodes[1]["node_id"] == _node_a.node_id
+                and _l.nodes[1]["adapter_number"] == _port_a["adapter_number"]
+                and _l.nodes[1]["port_number"] == _port_a["port_number"]
+                and _l.nodes[0]["node_id"] == _node_b.node_id
+                and _l.nodes[0]["adapter_number"] == _port_b["adapter_number"]
+                and _l.nodes[0]["port_number"] == _port_b["port_number"]
+            ):
+                _matches.append(_l)
         if not _matches:
-            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")
+            raise ValueError(
+                f"Link not found: {node_a}: {port_a} <===> {node_b}: {port_b}"
+            )
 
             # now to delete the link via GNS3_api
         _link = _matches[0]
