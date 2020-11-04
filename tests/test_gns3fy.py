@@ -1439,6 +1439,7 @@ class TestProject:
         api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
         link = api_test_project.get_link(link_id="NEW_LINK_ID")
         api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
+        assert link is not None
         assert api_test_project.get_link(link_id="NEW_LINK_ID") is None
 
     @pytest.mark.parametrize(
