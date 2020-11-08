@@ -1467,6 +1467,33 @@ class TestProject:
         with pytest.raises(ValueError, match=expected):
             api_test_project.create_link(*link)
 
+    @pytest.mark.parametrize(
+        "link,expected",
+        [
+            (
+                ("IOU1", "Ethernet77/1", "vEOS", "Ethernet2"),
+                "port_a: Ethernet77/1 not found",
+            ),
+            (
+                ("IOU1", "Ethernet1/1", "vEOS", "Ethernet77"),
+                "port_b: Ethernet77 not found",
+            ),
+            (
+                ("IOU77", "Ethernet1/1", "vEOS", "Ethernet2"),
+                "node_a: IOU77 not found",
+            ),
+            (
+                ("IOU1", "Ethernet1/1", "vEOS77", "Ethernet2"),
+                "node_b: vEOS77 not found",
+            ),
+        ],
+    )
+    def test_error_delete_link_with_invalid_param(
+        self, api_test_project, link, expected
+    ):
+        with pytest.raises(ValueError, match=expected):
+            api_test_project.delete_link(*link)
+
     def test_get_file(self, api_test_project):
         text_data = api_test_project.get_file(path="README.txt")
         assert "This is a README" in text_data
