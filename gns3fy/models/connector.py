@@ -1,4 +1,4 @@
-"""Module for python GNS3 Connector entity with raw API methods
+"""Model for python GNS3 Connector entity with raw API methods
 """
 import os
 import requests
@@ -19,9 +19,9 @@ class Connector:
     - `cred` (str): Password used for authentication
     - `verify` (bool): Whether or not to verify SSL
     - `api_version` (int): GNS3 server REST API version
-    - `api_calls`: Counter of amount of `http_calls` has been performed
-    - `base_url`: url passed + api_version
-    - `session`: Requests Session object
+    - `retries (int, optional)`: Retry values to connect. Defaults to 3.
+    - `timeout (int, optional)`: Timeout value in secs. Defaults to 5.
+    - `proxies (Optional[Dict[str, Any]], optional)`: Proxies dictionary. Optional
 
     **Returns:**
 
@@ -132,7 +132,7 @@ class Connector:
                 params=params,
             )
 
-        self.session.prepare_request(_request)
+        _request = self.session.prepare_request(_request)
         self.api_calls += 1
 
         try:
@@ -196,42 +196,43 @@ class Connector:
         _url = f"{self.base_url}/computes/{compute_id}/ports"
         return self.http_call("get", _url).json()
 
+    def get_compute_images(
+        self, emulator: str, compute_id: str = "local"
+    ) -> List[Dict[str, Any]]:
+        """
+        Returns a list of images available for a compute.
 
-def get_compute_images(
-    connector: Connector, emulator: str, compute_id: str = "local"
-) -> List[Dict[str, Any]]:
-    """
-    Returns a list of images available for a compute.
+        **Required Attributes:**
 
-    **Required Attributes:**
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
+        - `compute_id` By default is 'local'
 
-    - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
-    - `compute_id` By default is 'local'
+        **Returns:**
 
-    **Returns:**
+        List of dictionaries with images available for the compute for the specified
+        emulator
+        """
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
+        return self.http_call("get", _url).json()
 
-    List of dictionaries with images available for the compute for the specified
-    emulator
-    """
-    _url = f"{connector.base_url}/computes/{compute_id}/{emulator}/images"
-    return connector.http_call("get", _url).json()
+    def upload_compute_image(
+        self,
+        emulator: str,
+        file_path: str,
+        compute_id: str = "local",
+    ) -> None:
+        """
+        uploads an image for use by a compute.
 
+        **Required Attributes:**
 
-def upload_compute_image(
-    connector: Connector, emulator: str, file_path: str, compute_id: str = "local"
-) -> None:
-    """
-    uploads an image for use by a compute.
+        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...∫
+        - `file_path`: path of file to be uploaded
+        - `compute_id` By default is 'local'
+        """
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Could not find file: {file_path}")
 
-    **Required Attributes:**
-
-    - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
-    - `file_path`: path of file to be uploaded
-    - `compute_id` By default is 'local'
-    """
-    if not os.path.exists(file_path):
-        raise FileNotFoundError(f"Could not find file: {file_path}")
-
-    _filename = os.path.basename(file_path)
-    _url = f"{connector.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
-    connector.http_call("post", _url, data=open(file_path, "rb"))  # type: ignore
+        _filename = os.path.basename(file_path)
+        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
+        self.http_call("post", _url, data=open(file_path, "rb"))  # type: ignore
