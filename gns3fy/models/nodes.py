@@ -4,42 +4,45 @@ from .connector import Connector
 from .links import Link
 from .ports import Port
 from .base import verify_attributes
-from enum import Enum
 from typing import Optional, Any, List, Set
-from pydantic import BaseModel, PrivateAttr, Field
+from pydantic import BaseModel, PrivateAttr, Field, validator
 
 
-class NodeType(Enum):
-    cloud = "cloud"
-    nat = "nat"
-    ethernet_hub = "ethernet_hub"
-    ethernet_switch = "ethernet_switch"
-    frame_relay_switch = "frame_relay_switch"
-    atm_switch = "atm_switch"
-    docker = "docker"
-    dynamips = "dynamips"
-    vpcs = "vpcs"
-    traceng = "traceng"
-    virtualbox = "virtualbox"
-    vmware = "vmware"
-    iou = "iou"
-    qemu = "qemu"
+NODE_TYPES = [
+    "cloud",
+    "nat",
+    "ethernet_hub",
+    "ethernet_switch",
+    "frame_relay_switch",
+    "atm_switch",
+    "docker",
+    "dynamips",
+    "vpcs",
+    "traceng",
+    "virtualbox",
+    "vmware",
+    "iou",
+    "qemu"
+]
 
 
-class ConsoleType(Enum):
-    vnc = "vnc"
-    telnet = "telnet"
-    http = "http"
-    https = "https"
-    spice = "spice"
-    none = "none"
-    null = "null"
+CONSOLE_TYPES = [
+    "vnc",
+    "telnet",
+    "http",
+    "https",
+    "spice",
+    "spice+agent",
+    "none",
+    "null"
+]
 
 
-class NodeStatus(Enum):
-    stopped = "stopped"
-    started = "started"
-    suspended = "suspended"
+NODE_STATUS = [
+    "stopped",
+    "started",
+    "suspended"
+]
 
 
 class Node(BaseModel):
@@ -102,9 +105,9 @@ class Node(BaseModel):
     name: Optional[str] = None
     node_id: Optional[str] = None
     compute_id: str = "local"
-    node_type: Optional[NodeType] = None
+    node_type: Optional[str] = None
     node_directory: Optional[str] = None
-    status: Optional[NodeStatus] = None
+    status: Optional[str] = None
     port_name_format: Optional[str] = None
     port_segment_size: Optional[int] = None
     first_port_name: Optional[str] = None
@@ -112,7 +115,7 @@ class Node(BaseModel):
     label: Optional[Any] = None
     console: Optional[int] = None
     console_host: Optional[str] = None
-    console_type: Optional[ConsoleType] = None
+    console_type: Optional[str] = None
     console_auto_start: Optional[bool] = None
     command_line: Optional[str] = None
     custom_adapters: Optional[List[Any]] = None
@@ -128,6 +131,25 @@ class Node(BaseModel):
     template: Optional[str] = None
     ports: List[Port] = Field(default_factory=list)
     links: Set[Link] = Field(default_factory=set)
+
+    @validator("node_type")
+    def valid_node_type(cls, v):
+        if not any(x for x in NODE_TYPES if x == v):
+            raise ValueError("Not a valid GNS3 Node type")
+        return v
+
+    @validator("status")
+    def valid_status(cls, v):
+        if not any(x for x in NODE_STATUS if x == v):
+            raise ValueError("Not a valid GNS3 Node status")
+        return v
+
+    @validator("console_type")
+    def valid_console_type(cls, v):
+        if not any(x for x in CONSOLE_TYPES if x == v):
+            if v is not None:
+                raise ValueError("Not a valid GNS3 Console type")
+        return v
 
     class Config:
         validate_assignment = True
@@ -332,6 +354,10 @@ class Node(BaseModel):
             f"{self.project_id}/nodes/{self.node_id}"
         )
 
+        # Apply first values on object to validate types
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
         # TODO: Verify that the passed kwargs are supported ones
         _response = self._connector.http_call("put", _url, json_data=kwargs)
 
@@ -357,20 +383,24 @@ class Node(BaseModel):
         if self.node_id:
             raise ValueError("Node already created")
 
-        cached_data = {
-            k: v
-            for k, v in self.dict().items()
-            if k
-            not in (
-                "project_id",
-                "template",
-                "template_id",
-                "links",
-                "connector",
-                "__initialised__",
-            )
-            if v is not None
-        }
+        # data = {
+        #     k: v
+        #     for k, v in self.dict().items()
+        #     if k
+        #     not in (
+        #         "project_id",
+        #         "template",
+        #         "template_id",
+        #         "links",
+        #         "connector",
+        #         "__initialised__",
+        #     )
+        #     if v is not None
+        # }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"project_id", "template", "template_id", "links", "_connector"},
+        )
 
         _url = (
             f"{self._connector.base_url}/projects/{self.project_id}/"
@@ -385,7 +415,7 @@ class Node(BaseModel):
         self._update(_response.json())
 
         # Update the node attributes based on cached data
-        self.update(**cached_data)
+        self.update(**data)
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
     def delete(self) -> None:

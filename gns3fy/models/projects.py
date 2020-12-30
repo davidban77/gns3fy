@@ -6,14 +6,11 @@ from .nodes import Node
 from .drawings import Drawing
 from .snapshots import Snapshot
 from .base import verify_attributes, BaseResourceModel
-from enum import Enum
 from typing import Optional, Any, List, Dict, Set
-from pydantic import PrivateAttr, Field
+from pydantic import PrivateAttr, Field, validator
 
 
-class ProjectStatus(Enum):
-    opened = "opened"
-    closed = "closed"
+PROJECT_STATUS = ["opened", "closed"]
 
 
 class Project(BaseResourceModel):
@@ -67,7 +64,7 @@ class Project(BaseResourceModel):
     _connector: Connector = PrivateAttr()
 
     project_id: Optional[str] = None
-    status: Optional[ProjectStatus] = None
+    status: Optional[str] = None
     path: Optional[str] = None
     filename: Optional[str] = None
     auto_start: Optional[bool] = None
@@ -90,6 +87,12 @@ class Project(BaseResourceModel):
     drawings: Set[Drawing] = Field(default_factory=set)
     nodes: Set[Node] = Field(default_factory=set)
     links: Set[Link] = Field(default_factory=set)
+
+    @validator("status")
+    def valid_status(cls, v):
+        if not any(x for x in PROJECT_STATUS if x == v):
+            raise ValueError("Not a valid GNS3 Project status")
+        return v
 
     class Config:
         validate_assignment = True
@@ -155,12 +158,10 @@ class Project(BaseResourceModel):
         """
         _url = f"{self._connector.base_url}/projects"
 
-        data = {
-            k: v
-            for k, v in self.dict().items()
-            if k not in ("stats", "nodes", "links", "connector", "__initialised__")
-            if v is not None
-        }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"stats", "nodes", "links", "snapshots", "_connector", "drawings"},
+        )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 
@@ -187,6 +188,10 @@ class Project(BaseResourceModel):
         - `connector`
         """
         _url = f"{self._connector.base_url}/projects/{self.project_id}"
+
+        # Apply first values on object to validate types
+        for k, v in kwargs.items():
+            setattr(self, k, v)
 
         # TODO: Verify that the passed kwargs are supported ones
         _response = self._connector.http_call("put", _url, json_data=kwargs)

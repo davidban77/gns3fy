@@ -1,0 +1,8 @@
+[
+    {
+        "node_a": "alpine-1",
+        "port_a": "eth1",
+        "node_b": "vEOS",
+        "port_b": "Management1"
+    }
+]

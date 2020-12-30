@@ -41,25 +41,21 @@ class TestTemplates:
             assert n[1] == templates[index].template_type
             assert n[2] == templates[index].category
 
-    def test_get_veos_template(self, connector_mock):
-        template = search_template(connector_mock, "vEOS")
-        template.get()
-        assert template.name == "vEOS"
-        assert template.template_id == "c6203d4b-d0ce-4951-bf18-c44369d46804"
-
     @pytest.mark.parametrize(
         "params,expected",
         [
-            (("alpine", "name"), ("alpine", "docker", "guest")),
+            (({"name": "alpine"}), ("alpine", "docker", "guest")),
             (
-                ("c6203d4b-d0ce-4951-bf18-c44369d46804", "template_id"),
+                ({"template_id": "c6203d4b-d0ce-4951-bf18-c44369d46804"}),
                 ("vEOS", "qemu", "router"),
             ),
         ],
         ids=["by_name", "by_id"],
     )
     def test_search_template(self, connector_mock, params, expected):
-        template = search_template(connector_mock, params[0], type=params[1])
+        template = search_template(connector_mock, **params)
+        # Refresh
+        template.get()
         assert expected[0] == template.name
         assert expected[1] == template.template_type
         assert expected[2] == template.category
@@ -68,19 +64,19 @@ class TestTemplates:
         "params",
         [
             (("dummy", "name")),
-            (("dummy", "invalid")),
+            ((None, None)),
         ],
-        ids=["template_not_found", "invalid_query_type"],
+        ids=["template_not_found", "invalid_query"],
     )
     def test_search_template_error(self, connector_mock, params):
         if params[1] == "name":
-            template = search_template(connector_mock, "dummy")
+            template = search_template(connector_mock, name=params[0])
             assert template is None
-        elif params[1] == "invalid":
+        elif params[1] is None:
             with pytest.raises(
-                ValueError, match="type must be 'name' or 'template_id'"
+                ValueError, match="Need to submit either name or template_id"
             ):
-                search_template(connector_mock, "dummy", type="dummy")
+                search_template(connector_mock, params[0], params[1])
 
     def test_create_template(self, connector_mock):
         new_data_template = templates_new_data()[0]
@@ -112,16 +108,13 @@ class TestTemplates:
     @pytest.mark.parametrize(
         "params",
         [
-            (("alpine", "name")),
-            (("847e5333-6ac9-411f-a400-89838584371b", "template_id")),
+            (({"name": "alpine"})),
+            (({"template_id": "847e5333-6ac9-411f-a400-89838584371b"})),
         ],
         ids=["by_name", "by_id"],
     )
     def test_delete_template(self, connector_mock, params):
-        if params[1] == "template_id":
-            response = delete_template(connector_mock, template_id=params[0])
-        else:
-            response = delete_template(connector_mock, name=params[0])
+        response = delete_template(connector_mock, **params)
         assert response is None
 
     @pytest.mark.parametrize(

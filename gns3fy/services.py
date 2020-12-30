@@ -92,39 +92,51 @@ def refresh_project(
 
 
 def search_project(
-    connector: connector.Connector, value: str, type: str = "name"
+    connector: connector.Connector,
+    name: Optional[str] = None,
+    project_id: Optional[str] = None,
 ) -> Optional[projects.Project]:
     """Searches for GNS3 Project from a given project name or ID
 
     Args:
 
     - `connector (Connector)`: GNS3 connector object
-    - `value (str)`: Project name or ID
-    - `type (str)`: Type of attribute. `name` or `project_id`
+    - `name (Optional[str], optional)`: Project name. Defaults to None.
+    - `project_id (Optional[str], optional)`: Project ID. Defaults to None.
+
+    Raises:
+
+    - `ValueError`: If name or project ID is not submitted
 
     Returns:
 
     - `Optional[Project]`: `Project` if found, else `None`
     """
     try:
-        if type == "name":
-            return next(prj for prj in get_projects(connector) if prj.name == value)
-        elif type == "project_id":
+        if name is not None:
+            return next(prj for prj in get_projects(connector) if prj.name == name)
+
+        elif project_id is not None:
             return next(
-                prj for prj in get_projects(connector) if prj.project_id == value
+                prj for prj in get_projects(connector) if prj.project_id == project_id
             )
-        return None
+
+        else:
+            raise ValueError("Need to submit either name or project_id")
     except StopIteration:
         return None
 
 
-def create_project(connector: connector.Connector, name: str) -> projects.Project:
+def create_project(
+    connector: connector.Connector, name: str, **kwargs: Dict[str, Any]
+) -> projects.Project:
     """Creates a GNS3 Project
 
     Args:
 
     - `connector (Connector)`: GNS3 connector object
     - `name (str)`: Name of the project
+    - `kwargs (Dict[str, Any])`: Keyword attributes of the project to create
 
     Raises:
 
@@ -134,12 +146,12 @@ def create_project(connector: connector.Connector, name: str) -> projects.Projec
 
     - `Project`: Project object
     """
-    _sproject = search_project(connector, name)
+    _sproject = search_project(connector, name=name)
 
     if _sproject:
         raise ValueError(f"Project with same name already exists: {name}")
 
-    _project = projects.Project(connector=connector, name=name)
+    _project = projects.Project(connector=connector, name=name, **kwargs)
 
     _project.create()
     return _project
@@ -163,12 +175,7 @@ def delete_project(
     - `ValueError`: If name of project ID is not submitted
     - `ValueError`: If project is not found
     """
-    if name is not None:
-        _sproject = search_project(connector, name)
-    elif project_id is not None:
-        _sproject = search_project(connector, project_id, type="project_id")
-    else:
-        raise ValueError("Need to submit either name or project_id")
+    _sproject = search_project(connector=connector, name=name, project_id=project_id)
 
     if _sproject is None:
         raise ValueError("Project not found")
@@ -396,15 +403,21 @@ def get_nodes(project: projects.Project) -> List[nodes.Node]:
 
 
 def search_node(
-    project: projects.Project, value: str, type: str = "name"
+    project: projects.Project,
+    name: Optional[str] = None,
+    node_id: Optional[str] = None,
 ) -> Optional[nodes.Node]:
     """Searches for a GNS3 Node if found based a node name.
 
     Args:
 
     - `project (Project)`: Project object
-    - `value (str)`: Node name of ID
-    - `type (str)`: Type of attribute. `name` or `node_id`
+    - `name (Optional[str], optional)`: Node name. Defaults to None.
+    - `node_id (Optional[str], optional)`: Node ID. Defaults to None.
+
+    Raises:
+
+    - `ValueError`: If name or node ID is not submitted
 
     Returns:
 
@@ -414,17 +427,27 @@ def search_node(
     refresh_project(project, nodes=True)
 
     try:
-        if type == "name":
-            return next(_node for _node in project.nodes if _node.name == value)
-        elif type == "node_id":
-            return next(_node for _node in get_nodes(project) if _node.node_id == value)
-        return None
+        if name is not None:
+            return next(_node for _node in project.nodes if _node.name == name)
+
+        elif node_id is not None:
+            return next(
+                _node for _node in get_nodes(project) if _node.node_id == node_id
+            )
+
+        else:
+            raise ValueError("Need to submit either name or node_id")
     except StopIteration:
         return None
 
 
 def create_node(
-    project: projects.Project, name: str, template_name: str, x: int = 0, y: int = 0
+    project: projects.Project,
+    name: str,
+    template_name: str,
+    x: int = 0,
+    y: int = 0,
+    **kwargs: Dict[str, Any],
 ) -> nodes.Node:
     """Creates a GNS3 Node on a project based on given template.
 
@@ -435,6 +458,7 @@ def create_node(
     - `template_name (str)`: Name of the template of the node
     - `x (int)`: X coordinate to place the node
     - `y (int)`: Y coordinate to place the node
+    - `kwargs (Dict[str, Any])`: Keyword attributes of the node to create
 
     Raises:
 
@@ -444,13 +468,12 @@ def create_node(
 
     - `Node`: Node object
     """
-
-    _snode = search_node(project, name)
+    _snode = search_node(project, name=name)
 
     if _snode:
         raise ValueError(f"Node with same name already exists: {name}")
 
-    _template = search_template(connector=project._connector, value=template_name)
+    _template = search_template(connector=project._connector, name=template_name)
     if not _template:
         raise ValueError(f"Template not found: {template_name}")
 
@@ -462,6 +485,7 @@ def create_node(
         template_id=_template.template_id,
         x=x,
         y=y,
+        **kwargs,
     )
 
     _node.create()
@@ -485,13 +509,7 @@ def delete_node(
     - `ValueError`: When neither name nor ID was submitted
     - `ValueError`: When node was not found
     """
-
-    if name is not None:
-        _snode = search_node(project, name)
-    elif node_id is not None:
-        _snode = search_node(project, node_id, type="node_id")
-    else:
-        raise ValueError("Need to submit either name or node_id")
+    _snode = search_node(project=project, name=name, node_id=node_id)
 
     if _snode is None:
         raise ValueError("Node not found")
@@ -680,33 +698,37 @@ def get_templates(connector: connector.Connector) -> List[templates.Template]:
 
 
 def search_template(
-    connector: connector.Connector, value: str, type: str = "name"
+    connector: connector.Connector,
+    name: Optional[str] = None,
+    template_id: Optional[str] = None,
 ) -> Optional[templates.Template]:
     """Searches for GNS3 Template from a given template name or ID
 
     Args:
 
     - `connector (Connector)`: GNS3 connector object
-    - `value (str)`: Template name of ID
-    - `type (str)`: Type of attribute. `name` or `template_id`
+    - `name (Optional[str], optional)`: Template name. Defaults to None.
+    - `template_id (Optional[str], optional)`: Template ID. Defaults to None.
 
     Raises:
 
-    - `ValueError`: If query type is not either name or template_id
+    - `ValueError`: If name or template ID is not submitted
 
     Returns:
 
     - `Optional[Template]`: `Template` if found, else `None`
     """
     try:
-        if type == "name":
-            return next(tplt for tplt in get_templates(connector) if tplt.name == value)
-        elif type == "template_id":
+        if name is not None:
+            return next(tplt for tplt in get_templates(connector) if tplt.name == name)
+
+        elif template_id is not None:
             return next(
-                tplt for tplt in get_templates(connector) if tplt.template_id == value
+                tp for tp in get_templates(connector) if tp.template_id == template_id
             )
+
         else:
-            raise ValueError("type must be 'name' or 'template_id'")
+            raise ValueError("Need to submit either name or template_id")
     except StopIteration:
         return None
 
@@ -730,7 +752,7 @@ def create_template(
 
     - `Template`: Template object
     """
-    _stemplate = search_template(connector, name)
+    _stemplate = search_template(connector, name=name)
 
     if _stemplate:
         raise ValueError(f"Template with same name already exists: {name}")
@@ -756,15 +778,12 @@ def delete_template(
 
     Raises:
 
-    - `ValueError`: If name of template ID is not submitted
+    - `ValueError`: If name or template ID is not submitted
     - `ValueError`: If template is not found
     """
-    if name is not None:
-        _stemplate = search_template(connector, name)
-    elif template_id is not None:
-        _stemplate = search_template(connector, template_id, type="template_id")
-    else:
-        raise ValueError("Need to submit either name or template_id")
+    _stemplate = search_template(
+        connector=connector, name=name, template_id=template_id
+    )
 
     if _stemplate is None:
         raise ValueError("Template not found")

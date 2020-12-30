@@ -93,6 +93,18 @@ class Template(BaseModel):
         for k, v in data_dict.items():
             setattr(self, k, v)
 
+    def __eq__(self, other: Any) -> bool:
+        if not isinstance(other, Template):
+            return False
+        if self.template_id is None:
+            raise ValueError("No template_id present. Need to initialize first")
+        return other.template_id == self.template_id
+
+    def __hash__(self) -> int:
+        if self.template_id is None:
+            raise ValueError("No template_id present. Need to initialize first")
+        return hash(self.template_id)
+
     @verify_attributes(attrs=["_connector", "template_id"])
     def get(self) -> None:
         """
@@ -176,12 +188,10 @@ class Template(BaseModel):
         """
         _url = f"{self._connector.base_url}/templates"
 
-        data = {
-            k: v
-            for k, v in self.dict().items()
-            if k not in ("_connector", "__initialised__")
-            if v is not None
-        }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"_connector"},
+        )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 

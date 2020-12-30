@@ -79,30 +79,6 @@
         "capture_file_path": null,
         "capturing": false,
         "filters": {},
-        "link_id": "d1f77e00-29d9-483b-988e-1dad66aa0e5f",
-        "link_type": "ethernet",
-        "nodes": [],
-        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
-        "suspend": true
-    },
-    {
-        "capture_compute_id": null,
-        "capture_file_name": null,
-        "capture_file_path": null,
-        "capturing": false,
-        "filters": {},
-        "link_id": "374b409d-90f2-44e8-b70d-a9d0b2844fd5",
-        "link_type": "ethernet",
-        "nodes": [],
-        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
-        "suspend": false
-    },
-    {
-        "capture_compute_id": null,
-        "capture_file_name": null,
-        "capture_file_path": null,
-        "capturing": false,
-        "filters": {},
         "link_id": "fb27704f-7be5-4152-8ecd-1db6633b2bd9",
         "link_type": "ethernet",
         "nodes": [

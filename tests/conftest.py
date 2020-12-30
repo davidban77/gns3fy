@@ -1,3 +1,4 @@
+from gns3fy.models.projects import Project
 import json
 import pytest
 import requests
@@ -118,9 +119,12 @@ def post_put_matcher(request):
         elif request.path_url.endswith("/projects"):
             # Now verify the data
             _data = request.json()
-            if _data["name"] == "API_TEST":
-                resp.status_code = 200
-                resp.json = json_api_test_project  # type: ignore
+            if _data["name"] == "new_project":
+                _data["project_id"] = "7777777-4444-PROJECT"
+                _data["path"] = f"/opt/gns3/projects/{_data['project_id']}"
+                _data["status"] = "opened"
+                resp.status_code = 201
+                resp.json = lambda: _data  # type: ignore
                 return resp
             elif _data["name"] == "DUPLICATE":
                 resp.status_code = 409
@@ -137,13 +141,15 @@ def post_put_matcher(request):
             resp.status_code = 204
             resp.json = lambda: _returned  # type: ignore
             return resp
-        # elif request.path_url.endswith(
-        #     f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"
-        # ):
-        #     _returned = json_api_test_node()
-        #     resp.status_code = 201
-        #     resp.json = lambda: _returned  # type: ignore
-        #     return resp
+        elif request.path_url.endswith(
+            f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"
+        ):
+            _data = request.json()
+            _returned = json_api_test_node()
+            _returned["name"] = "new_node"
+            resp.status_code = 201
+            resp.json = lambda: {**_returned, **_data}  # type: ignore
+            return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/files/README.txt"):
             resp.status_code = 200
             return resp
@@ -266,11 +272,13 @@ def post_put_matcher(request):
             _returned = json_api_test_link()
             resp.status_code = 201
             if any(x for x in nodes if x["node_id"] == CNODE["id"]):
-                resp.json = lambda: _returned  # type: ignore
-            else:
                 _returned.update(**_data)
-                _returned.update(link_id="NEW_LINK_ID")
+                _returned.update(link_id="7777777-4444-link")
                 resp.json = lambda: _returned  # type: ignore
+            # else:
+            #     _returned.update(**_data)
+            #     _returned.update(link_id="NEW_LINK_ID")
+            #     resp.json = lambda: _returned  # type: ignore
             return resp
         elif request.path_url.endswith("/templates"):
             _data = request.json()
@@ -288,20 +296,27 @@ def post_put_matcher(request):
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}"):
             _data = request.json()
-            _returned = json_api_test_node()
-            # Update the node data based on the _data sent on the request
-            for sitem in _data:
-                if sitem in _returned:
-                    if isinstance(_returned[sitem], list):
-                        continue
-                    elif isinstance(_returned[sitem], dict):
-                        for k, v in _data[sitem].items():
-                            if k in _returned[sitem]:
-                                _returned[sitem][k] = v
-                    else:
-                        _returned[sitem] = _data[sitem]
-            if _data.get("name") != "alpine-1":
-                _returned.update(node_id="NEW_NODE_ID")
+            print(_data)
+            if _data.get("name") == "new_node":
+                _returned = json_api_test_node()
+                _returned["name"] = "new_node"
+                _returned["template"] = "alpine"
+                _returned["console"] = 5007
+                _returned["properties"]["aux"] = 5008
+                _returned["node_id"] = "7777777-4444-node"
+            else:
+                _returned = json_api_test_node()
+                # Update the node data based on the _data sent on the request
+                for sitem in _data:
+                    if sitem in _returned:
+                        if isinstance(_returned[sitem], list):
+                            continue
+                        elif isinstance(_returned[sitem], dict):
+                            for k, v in _data[sitem].items():
+                                if k in _returned[sitem]:
+                                    _returned[sitem][k] = v
+                        else:
+                            _returned[sitem] = _data[sitem]
             resp.status_code = 200
             resp.json = lambda: _returned  # type: ignore
             return resp
@@ -389,11 +404,12 @@ class ConnectorMock(Connector):
         self.adapter.register_uri(
             "GET", f"{self.base_url}/projects", json=projects_data()
         )
-        self.adapter.register_uri(
-            "GET",
-            f"{self.base_url}/projects/{CPROJECT['id']}",
-            json=json_api_test_project(),
-        )
+        for _project in projects_data():
+            self.adapter.register_uri(
+                "GET",
+                f"{self.base_url}/projects/{_project['project_id']}",
+                json=_project,
+            )
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}/stats",
@@ -586,3 +602,9 @@ class ConnectorMockSuspended(ConnectorMock):
 @pytest.fixture(scope="class")
 def connector_mock():
     return ConnectorMock(url=BASE_URL)
+
+
+@pytest.fixture(scope="class")
+def project_mock():
+    conn = ConnectorMock(url=BASE_URL)
+    return Project(connector=conn, **json_api_test_project())

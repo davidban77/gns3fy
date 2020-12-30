@@ -4,13 +4,10 @@ from .connector import Connector
 from .base import verify_attributes
 from .ports import Port
 from typing import Any, List, Optional
-from enum import Enum
-from pydantic import BaseModel, PrivateAttr, Field
+from pydantic import BaseModel, PrivateAttr, Field, validator
 
 
-class LinkType(Enum):
-    ethernet = "ethernet"
-    serial = "serial"
+LINK_TYPES = ["ethernet", "serial"]
 
 
 class Link(BaseModel):
@@ -52,7 +49,7 @@ class Link(BaseModel):
     project_id: str
     _connector: Connector = PrivateAttr()
     link_id: Optional[str] = None
-    link_type: Optional[LinkType] = None
+    link_type: Optional[str] = None
     suspend: Optional[bool] = None
     filters: Optional[Any] = None
     capturing: Optional[bool] = None
@@ -60,6 +57,12 @@ class Link(BaseModel):
     capture_file_name: Optional[str] = None
     capture_compute_id: Optional[str] = None
     nodes: List[Port] = Field(default_factory=list)
+
+    @validator("link_type")
+    def valid_link_type(cls, v):
+        if not any(x for x in LINK_TYPES if x == v):
+            raise ValueError("Not a valid GNS3 Link type")
+        return v
 
     class Config:
         validate_assignment = True
@@ -147,12 +150,16 @@ class Link(BaseModel):
         """
         _url = f"{self._connector.base_url}/projects/{self.project_id}/links"
 
-        data = {
-            k: v
-            for k, v in self.dict().items()
-            if k not in ("_connector", "__initialised__")
-            if v is not None
-        }
+        # data = {
+        #     k: v
+        #     for k, v in self.dict().items()
+        #     if k not in ("_connector", "__initialised__")
+        #     if v is not None
+        # }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"_connector"},
+        )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 
