@@ -1,21 +1,15 @@
+import os
 import time
 
 from typing import List, Dict, Any, Optional, Tuple
 from urllib.parse import urlparse
 from math import pi, sin, cos
-from .models import (
-    connector,
-    drawings,
-    projects,
-    ports,
-    nodes,
-    templates,
-    links,
-    snapshots,
-)
+from .models import Connector, Drawing, Project, Port, Node, Template, Link, Snapshot
 
 
-# ############## Connector ###############
+# #########################################################
+#                      Connector
+# #########################################################
 def create_connector(
     url: str,
     user: Optional[str] = None,
@@ -25,7 +19,7 @@ def create_connector(
     retries: int = 3,
     timeout: int = 5,
     proxies: Optional[Dict[str, Any]] = None,
-) -> connector.Connector:
+) -> Connector:
     """Creates a GNS3 Connector object
 
     Args:
@@ -41,9 +35,9 @@ def create_connector(
 
     Returns:
 
-    - `connector.Connector`: GNS3 Connector object
+    - `Connector`: GNS3 Connector object
     """
-    return connector.Connector(
+    return Connector(
         url=url,
         user=user,
         cred=cred,
@@ -55,8 +49,122 @@ def create_connector(
     )
 
 
-# ############## Projects ###############
-def get_projects(connector: connector.Connector) -> List[projects.Project]:
+# #########################################################
+#                    Server Methods
+# #########################################################
+def get_version(connector: Connector) -> Dict[str, Any]:
+    """Returns the version information of GNS3 server
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+
+    Returns:
+
+    - `Dict[str, Any]`: GNS3 server version and if is local server
+    """
+    return connector.http_call("get", url=f"{connector.base_url}/version").json()
+
+
+def get_computes(connector: Connector) -> List[Dict[str, Any]]:
+    """Returns a list of computes.
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+
+    Returns:
+
+    - `List[Dict]`List of dictionaries of the computes attributes like cpu/memory usage
+    """
+    _url = f"{connector.base_url}/computes"
+    return connector.http_call("get", _url).json()
+
+
+def get_compute(connector: Connector, compute_id: str = "local") -> Dict[str, Any]:
+    """Returns a compute.
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+    - `compute_id (str)`: GNS3 Compute ID. Default local
+
+    Returns:
+
+    - `Dict[str, Any]`: Dictionary of the compute attributes like cpu/memory usage
+    """
+    _url = f"{connector.base_url}/computes/{compute_id}"
+    return connector.http_call("get", _url).json()
+
+
+def get_compute_ports(
+    connector: Connector, compute_id: str = "local"
+) -> Dict[str, Any]:
+    """
+    Returns ports used and configured by a compute.
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+    - `compute_id (str)`: GNS3 Compute ID. Default local
+
+    **Returns:**
+
+    Dictionary of `console_ports` used and range, as well as the `udp_ports`
+    """
+    _url = f"{connector.base_url}/computes/{compute_id}/ports"
+    return connector.http_call("get", _url).json()
+
+
+def get_compute_images(
+    connector: Connector, emulator: str, compute_id: str = "local"
+) -> List[Dict[str, Any]]:
+    """
+    Returns a list of images available for a compute.
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+    - `emulator (str)`: Emulator. For example: `docker`, `iou`, `qemu`, and so on...
+    - `compute_id (str)`: GNS3 Compute ID. Default local
+
+    Returns:
+
+    - `List[Dict]: `List of dictionaries with images available for the compute for the
+    specified emulator
+    """
+    _url = f"{connector.base_url}/computes/{compute_id}/{emulator}/images"
+    return connector.http_call("get", _url).json()
+
+
+def upload_compute_image(
+    connector: Connector,
+    emulator: str,
+    file_path: str,
+    compute_id: str = "local",
+) -> None:
+    """
+    uploads an image for use by a compute.
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+    - `emulator (str)`: Emulator. For example: `docker`, `iou`, `qemu`, and so on...
+    - `file_path`: path of file to be uploaded
+    - `compute_id` By default is 'local'
+    """
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Could not find file: {file_path}")
+
+    _filename = os.path.basename(file_path)
+    _url = f"{connector.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
+    connector.http_call("post", _url, data=open(file_path, "rb"))  # type: ignore
+
+
+# #########################################################
+#                        Projects
+# #########################################################
+def get_projects(connector: Connector) -> List[Project]:
     """Retrieves all GNS3 Projects
 
     Args:
@@ -71,11 +179,11 @@ def get_projects(connector: connector.Connector) -> List[projects.Project]:
         "get", url=f"{connector.base_url}/projects"
     ).json()
 
-    return [projects.Project(connector=connector, **proj) for proj in _raw_projects]
+    return [Project(connector=connector, **proj) for proj in _raw_projects]
 
 
 def refresh_project(
-    project: projects.Project,
+    project: Project,
     links: bool = True,
     nodes: bool = True,
     snapshots: bool = True,
@@ -92,10 +200,10 @@ def refresh_project(
 
 
 def search_project(
-    connector: connector.Connector,
+    connector: Connector,
     name: Optional[str] = None,
     project_id: Optional[str] = None,
-) -> Optional[projects.Project]:
+) -> Optional[Project]:
     """Searches for GNS3 Project from a given project name or ID
 
     Args:
@@ -128,8 +236,8 @@ def search_project(
 
 
 def create_project(
-    connector: connector.Connector, name: str, **kwargs: Dict[str, Any]
-) -> projects.Project:
+    connector: Connector, name: str, **kwargs: Dict[str, Any]
+) -> Project:
     """Creates a GNS3 Project
 
     Args:
@@ -151,14 +259,14 @@ def create_project(
     if _sproject:
         raise ValueError(f"Project with same name already exists: {name}")
 
-    _project = projects.Project(connector=connector, name=name, **kwargs)
+    _project = Project(connector=connector, name=name, **kwargs)
 
     _project.create()
     return _project
 
 
 def delete_project(
-    connector: connector.Connector,
+    connector: Connector,
     name: Optional[str] = None,
     project_id: Optional[str] = None,
 ) -> None:
@@ -183,8 +291,10 @@ def delete_project(
     _sproject.delete()
 
 
-# ############## Drawing ###############
-def get_drawings(project: projects.Project) -> List[drawings.Drawing]:
+# #########################################################
+#                        Drawings
+# #########################################################
+def get_drawings(project: Project) -> List[Drawing]:
     """Retrieves all GNS3 Project Snapshots
 
     Args:
@@ -202,14 +312,13 @@ def get_drawings(project: projects.Project) -> List[drawings.Drawing]:
     ).json()
 
     return [
-        drawings.Drawing(connector=project._connector, **_drawing)
-        for _drawing in _raw_drawings
+        Drawing(connector=project._connector, **_drawing) for _drawing in _raw_drawings
     ]
 
 
 def search_drawing(
-    project: projects.Project, value: str, type: str = "svg"
-) -> Optional[drawings.Drawing]:
+    project: Project, value: str, type: str = "svg"
+) -> Optional[Drawing]:
     """Searches for GNS3 Drawing from a given drawing svg or ID
 
     Args:
@@ -237,7 +346,7 @@ def search_drawing(
         return None
 
 
-def create_drawing(project: projects.Project, svg: str) -> drawings.Drawing:
+def create_drawing(project: Project, svg: str) -> Drawing:
     """Creates a GNS3 Project Drawing
 
     Args:
@@ -259,7 +368,7 @@ def create_drawing(project: projects.Project, svg: str) -> drawings.Drawing:
     if _sdrawing:
         raise ValueError(f"Drawing with same svg already exists: {_sdrawing}")
 
-    _drawing = drawings.Drawing(
+    _drawing = Drawing(
         connector=project._connector, project_id=project.project_id, svg=svg
     )
 
@@ -269,7 +378,7 @@ def create_drawing(project: projects.Project, svg: str) -> drawings.Drawing:
 
 
 def delete_drawing(
-    project: projects.Project,
+    project: Project,
     name: Optional[str] = None,
     drawing_id: Optional[str] = None,
 ) -> None:
@@ -359,8 +468,10 @@ def parsed_y(y: int, obj_height: int = 100) -> int:
     return (y * obj_height) * -1
 
 
-# ############## Ports ###############
-def search_port(node: nodes.Node, name: str) -> Optional[ports.Port]:
+# #########################################################
+#                        Ports
+# #########################################################
+def search_port(node: Node, name: str) -> Optional[Port]:
     """Searches a Port and its attributes
 
     Args:
@@ -381,8 +492,10 @@ def search_port(node: nodes.Node, name: str) -> Optional[ports.Port]:
         return None
 
 
-# ############## Nodes ###############
-def get_nodes(project: projects.Project) -> List[nodes.Node]:
+# #########################################################
+#                        Nodes
+# #########################################################
+def get_nodes(project: Project) -> List[Node]:
     """Retrieves all GNS3 Project Nodes
 
     Args:
@@ -399,14 +512,14 @@ def get_nodes(project: projects.Project) -> List[nodes.Node]:
         url=f"{project._connector.base_url}/projects/{project.project_id}/nodes",
     ).json()
 
-    return [nodes.Node(connector=project._connector, **_node) for _node in _raw_nodes]
+    return [Node(connector=project._connector, **_node) for _node in _raw_nodes]
 
 
 def search_node(
-    project: projects.Project,
+    project: Project,
     name: Optional[str] = None,
     node_id: Optional[str] = None,
-) -> Optional[nodes.Node]:
+) -> Optional[Node]:
     """Searches for a GNS3 Node if found based a node name.
 
     Args:
@@ -442,13 +555,13 @@ def search_node(
 
 
 def create_node(
-    project: projects.Project,
+    project: Project,
     name: str,
     template_name: str,
     x: int = 0,
     y: int = 0,
     **kwargs: Dict[str, Any],
-) -> nodes.Node:
+) -> Node:
     """Creates a GNS3 Node on a project based on given template.
 
     Args:
@@ -477,7 +590,7 @@ def create_node(
     if not _template:
         raise ValueError(f"Template not found: {template_name}")
 
-    _node = nodes.Node(
+    _node = Node(
         project_id=project.project_id,  # type: ignore
         connector=project._connector,
         name=name,
@@ -494,7 +607,7 @@ def create_node(
 
 
 def delete_node(
-    project: projects.Project, name: Optional[str] = None, node_id: Optional[str] = None
+    project: Project, name: Optional[str] = None, node_id: Optional[str] = None
 ) -> None:
     """Deletes a GNS3 Node in a given project
 
@@ -518,7 +631,7 @@ def delete_node(
     project.nodes.remove(_snode)
 
 
-def start_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
+def start_nodes(project: Project, poll_wait_time: int = 5) -> None:
     """Starts all the Nodes from a given project
 
     Args:
@@ -534,7 +647,7 @@ def start_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
     get_nodes(project)
 
 
-def stop_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
+def stop_nodes(project: Project, poll_wait_time: int = 5) -> None:
     """Stops all the Nodes from a given project
 
     Args:
@@ -550,7 +663,7 @@ def stop_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
     get_nodes(project)
 
 
-def reload_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
+def reload_nodes(project: Project, poll_wait_time: int = 5) -> None:
     """Reloads all the Nodes from a given project
 
     Args:
@@ -566,7 +679,7 @@ def reload_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
     get_nodes(project)
 
 
-def suspend_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
+def suspend_nodes(project: Project, poll_wait_time: int = 5) -> None:
     """Suspends all the Nodes from a given project
 
     Args:
@@ -582,7 +695,7 @@ def suspend_nodes(project: projects.Project, poll_wait_time: int = 5) -> None:
     get_nodes(project)
 
 
-def nodes_summary(project: projects.Project) -> List[Any]:
+def nodes_summary(project: Project) -> List[Any]:
     """Returns a summary of the nodes inside of a given project.
 
     Args:
@@ -602,7 +715,7 @@ def nodes_summary(project: projects.Project) -> List[Any]:
     return [(_n.name, _n.status, _n.console, _n.node_id) for _n in project.nodes]
 
 
-def get_nodes_inventory(project: projects.Project) -> Dict[str, Any]:
+def get_nodes_inventory(project: Project) -> Dict[str, Any]:
     """Returns an inventory-style dictionary of the nodes
 
     Example:
@@ -646,7 +759,7 @@ def get_nodes_inventory(project: projects.Project) -> Dict[str, Any]:
     return _nodes_inventory
 
 
-def arrange_nodes_circular(project: projects.Project, radius: int = 120) -> None:
+def arrange_nodes_circular(project: Project, radius: int = 120) -> None:
     """Re-arrgange the existing nodes in a circular fashion
 
     Args:
@@ -675,8 +788,10 @@ def arrange_nodes_circular(project: projects.Project, radius: int = 120) -> None
         n.update(x=_x, y=_y)
 
 
-# ############## Templates ###############
-def get_templates(connector: connector.Connector) -> List[templates.Template]:
+# #########################################################
+#                        Templates
+# #########################################################
+def get_templates(connector: Connector) -> List[Template]:
     """Retrieves all GNS3 Node Templates
 
     Args:
@@ -691,17 +806,14 @@ def get_templates(connector: connector.Connector) -> List[templates.Template]:
         "get", url=f"{connector.base_url}/templates"
     ).json()
 
-    return [
-        templates.Template(connector=connector, **_template)
-        for _template in _raw_templates
-    ]
+    return [Template(connector=connector, **_template) for _template in _raw_templates]
 
 
 def search_template(
-    connector: connector.Connector,
+    connector: Connector,
     name: Optional[str] = None,
     template_id: Optional[str] = None,
-) -> Optional[templates.Template]:
+) -> Optional[Template]:
     """Searches for GNS3 Template from a given template name or ID
 
     Args:
@@ -734,8 +846,8 @@ def search_template(
 
 
 def create_template(
-    connector: connector.Connector, name: str, **kwargs: Dict[str, Any]
-) -> templates.Template:
+    connector: Connector, name: str, **kwargs: Dict[str, Any]
+) -> Template:
     """Creates a GNS3 Template
 
     Args:
@@ -757,14 +869,14 @@ def create_template(
     if _stemplate:
         raise ValueError(f"Template with same name already exists: {name}")
 
-    _template = templates.Template(connector=connector, name=name, **kwargs)
+    _template = Template(connector=connector, name=name, **kwargs)
 
     _template.create()
     return _template
 
 
 def delete_template(
-    connector: connector.Connector,
+    connector: Connector,
     name: Optional[str] = None,
     template_id: Optional[str] = None,
 ) -> None:
@@ -791,8 +903,10 @@ def delete_template(
     _stemplate.delete()
 
 
-# ############## Links ###############
-def get_links(project: projects.Project) -> List[links.Link]:
+# #########################################################
+#                        Links
+# #########################################################
+def get_links(project: Project) -> List[Link]:
     """Retrieves all GNS3 Project Links
 
     Args:
@@ -811,14 +925,14 @@ def get_links(project: projects.Project) -> List[links.Link]:
 
     for _link in _raw_links:
         if _link["nodes"]:
-            _link["nodes"] = [ports.Port(**_port) for _port in _link["nodes"]]
+            _link["nodes"] = [Port(**_port) for _port in _link["nodes"]]
 
-    return [links.Link(connector=project._connector, **_link) for _link in _raw_links]
+    return [Link(connector=project._connector, **_link) for _link in _raw_links]
 
 
 def _link_nodes_and_ports(
-    project: projects.Project, node_a: str, port_a: str, node_b: str, port_b: str
-) -> Tuple[nodes.Node, ports.Port, nodes.Node, ports.Port]:
+    project: Project, node_a: str, port_a: str, node_b: str, port_b: str
+) -> Tuple[Node, Port, Node, Port]:
     """Generates Nodes and Ports objects if they exist in the project
 
     Args:
@@ -859,12 +973,12 @@ def _link_nodes_and_ports(
 
 
 def _search_link(
-    project: projects.Project,
-    node_a: nodes.Node,
-    port_a: ports.Port,
-    node_b: nodes.Node,
-    port_b: ports.Port,
-) -> Optional[links.Link]:
+    project: Project,
+    node_a: Node,
+    port_a: Port,
+    node_b: Node,
+    port_b: Port,
+) -> Optional[Link]:
     """Returns a Link if found given a pair of Node and port attributes. For example
     of how port attribute data looks like see in the API documentation.
 
@@ -925,8 +1039,8 @@ def _search_link(
 
 
 def search_link(
-    project: projects.Project, node_a: str, port_a: str, node_b: str, port_b: str
-) -> Optional[links.Link]:
+    project: Project, node_a: str, port_a: str, node_b: str, port_b: str
+) -> Optional[Link]:
     """Searches for a GNS3 Link of a given project and set of endpoints of nodes and
     ports.
 
@@ -957,8 +1071,8 @@ def search_link(
 
 
 def create_link(
-    project: projects.Project, node_a: str, port_a: str, node_b: str, port_b: str
-) -> links.Link:
+    project: Project, node_a: str, port_a: str, node_b: str, port_b: str
+) -> Link:
     """Creates a GNS3 Link between 2 nodes in a given project
 
     Args:
@@ -990,7 +1104,7 @@ def create_link(
         raise ValueError(f"At least one port is used, ID: {_slink.link_id}")
 
     # Now create the link!
-    _link = links.Link(
+    _link = Link(
         project_id=project.project_id,  # type: ignore
         connector=project._connector,
         nodes=[
@@ -1019,7 +1133,7 @@ def create_link(
 
 
 def delete_link(
-    project: projects.Project, node_a: str, port_a: str, node_b: str, port_b: str
+    project: Project, node_a: str, port_a: str, node_b: str, port_b: str
 ) -> None:
     """Deletes a GNS3 Link between 2 nodes in a given project
 
@@ -1044,7 +1158,7 @@ def delete_link(
     project.links.remove(_link)
 
 
-def links_summary(project: projects.Project) -> List[Any]:
+def links_summary(project: Project) -> List[Any]:
     """Returns a summary of the links inside the Project.
 
     Args:
@@ -1085,8 +1199,10 @@ def links_summary(project: projects.Project) -> List[Any]:
     return _links_summary
 
 
-# ############## Snapshots ###############
-def get_snapshots(project: projects.Project) -> List[snapshots.Snapshot]:
+# #########################################################
+#                        Snapshots
+# #########################################################
+def get_snapshots(project: Project) -> List[Snapshot]:
     """Retrieves all GNS3 Project Snapshots
 
     Args:
@@ -1104,14 +1220,14 @@ def get_snapshots(project: projects.Project) -> List[snapshots.Snapshot]:
     ).json()
 
     return [
-        snapshots.Snapshot(connector=project._connector, **_snapshot)
+        Snapshot(connector=project._connector, **_snapshot)
         for _snapshot in _raw_snapshots
     ]
 
 
 def search_snapshot(
-    project: projects.Project, value: str, type: str = "name"
-) -> Optional[snapshots.Snapshot]:
+    project: Project, value: str, type: str = "name"
+) -> Optional[Snapshot]:
     """Searches for GNS3 Snapshot from a given snapshot name or ID
 
     Args:
@@ -1139,7 +1255,7 @@ def search_snapshot(
         return None
 
 
-def create_snapshot(project: projects.Project, name: str) -> snapshots.Snapshot:
+def create_snapshot(project: Project, name: str) -> Snapshot:
     """Creates a GNS3 Project Snapshot
 
     Args:
@@ -1161,7 +1277,7 @@ def create_snapshot(project: projects.Project, name: str) -> snapshots.Snapshot:
     if _ssnapshot:
         raise ValueError(f"Snapshot with same name already exists: {_ssnapshot}")
 
-    _snapshot = snapshots.Snapshot(
+    _snapshot = Snapshot(
         connector=project._connector, project_id=project.project_id, name=name
     )
 
@@ -1171,7 +1287,7 @@ def create_snapshot(project: projects.Project, name: str) -> snapshots.Snapshot:
 
 
 def delete_snapshot(
-    project: projects.Project,
+    project: Project,
     name: Optional[str] = None,
     snapshot_id: Optional[str] = None,
 ) -> None:
@@ -1204,7 +1320,7 @@ def delete_snapshot(
 
 
 def restore_snapshot(
-    project: projects.Project,
+    project: Project,
     name: Optional[str] = None,
     snapshot_id: Optional[str] = None,
 ) -> bool:

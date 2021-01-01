@@ -1,4 +1,3 @@
-from enum import Enum
 from functools import wraps
 from typing import Optional, Any, Callable, List, TypeVar
 
@@ -40,30 +39,30 @@ class BaseResourceModel(BaseModel):
         for k, v in data_dict.items():
             setattr(self, k, v)
 
-    # NOTE: Workaround for returning Enum type values
-    def dict(
-        self,
-        *,
-        include=None,
-        exclude=None,
-        by_alias=False,
-        skip_defaults=None,
-        exclude_unset=False,
-        exclude_defaults=False,
-        exclude_none=False,
-    ):
-        _data = super().dict(
-            include=include,
-            exclude=exclude,
-            by_alias=by_alias,
-            skip_defaults=skip_defaults,
-            exclude_unset=exclude_unset,
-            exclude_defaults=exclude_defaults,
-            exclude_none=exclude_none,
-        )
-        _copia = dict()
-        for k, v in _data.items():
-            if isinstance(v, Enum):
-                v = v.value
-            _copia.update({k: v})
-        return _copia
+    # # NOTE: Workaround for returning Enum type values
+    # def dict(
+    #     self,
+    #     *,
+    #     include=None,
+    #     exclude=None,
+    #     by_alias=False,
+    #     skip_defaults=None,
+    #     exclude_unset=False,
+    #     exclude_defaults=False,
+    #     exclude_none=False,
+    # ):
+    #     _data = super().dict(
+    #         include=include,
+    #         exclude=exclude,
+    #         by_alias=by_alias,
+    #         skip_defaults=skip_defaults,
+    #         exclude_unset=exclude_unset,
+    #         exclude_defaults=exclude_defaults,
+    #         exclude_none=exclude_none,
+    #     )
+    #     _copia = dict()
+    #     for k, v in _data.items():
+    #         if isinstance(v, Enum):
+    #             v = v.value
+    #         _copia.update({k: v})
+    #     return _copia

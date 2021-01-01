@@ -1,8 +1,7 @@
 """Model for python GNS3 Connector entity with raw API methods
 """
-import os
 import requests
-from typing import Optional, Any, Dict, Union, List
+from typing import Optional, Any, Dict, Union
 from requests import HTTPError
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
@@ -152,87 +151,3 @@ class Connector:
             raise err
 
         return _response
-
-    def get_version(self) -> Dict[str, Any]:
-        """
-        Returns the version information of GNS3 server
-        """
-        return self.http_call("get", url=f"{self.base_url}/version").json()
-
-    def get_computes(self) -> List[Dict[str, Any]]:
-        """
-        Returns a list of computes.
-
-        **Returns:**
-
-        List of dictionaries of the computes attributes like cpu/memory usage
-        """
-        _url = f"{self.base_url}/computes"
-        return self.http_call("get", _url).json()
-
-    def get_compute(self, compute_id: str = "local") -> Dict[str, Any]:
-        """
-        Returns a compute.
-
-        **Returns:**
-
-        Dictionary of the compute attributes like cpu/memory usage
-        """
-        _url = f"{self.base_url}/computes/{compute_id}"
-        return self.http_call("get", _url).json()
-
-    def get_compute_ports(self, compute_id: str = "local") -> Dict[str, Any]:
-        """
-        Returns ports used and configured by a compute.
-
-        **Required Attributes:**
-
-        - `compute_id` By default is 'local'
-
-        **Returns:**
-
-        Dictionary of `console_ports` used and range, as well as the `udp_ports`
-        """
-        _url = f"{self.base_url}/computes/{compute_id}/ports"
-        return self.http_call("get", _url).json()
-
-    def get_compute_images(
-        self, emulator: str, compute_id: str = "local"
-    ) -> List[Dict[str, Any]]:
-        """
-        Returns a list of images available for a compute.
-
-        **Required Attributes:**
-
-        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...
-        - `compute_id` By default is 'local'
-
-        **Returns:**
-
-        List of dictionaries with images available for the compute for the specified
-        emulator
-        """
-        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images"
-        return self.http_call("get", _url).json()
-
-    def upload_compute_image(
-        self,
-        emulator: str,
-        file_path: str,
-        compute_id: str = "local",
-    ) -> None:
-        """
-        uploads an image for use by a compute.
-
-        **Required Attributes:**
-
-        - `emulator`: the likes of 'qemu', 'iou', 'docker' ...∫
-        - `file_path`: path of file to be uploaded
-        - `compute_id` By default is 'local'
-        """
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(f"Could not find file: {file_path}")
-
-        _filename = os.path.basename(file_path)
-        _url = f"{self.base_url}/computes/{compute_id}/{emulator}/images/{_filename}"
-        self.http_call("post", _url, data=open(file_path, "rb"))  # type: ignore

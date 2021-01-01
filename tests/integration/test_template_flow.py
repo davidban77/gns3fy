@@ -26,7 +26,7 @@ def test_create_template(gns3_conn):
         "start_command": "",
         "symbol": ":/symbols/affinity/circle/gray/docker.svg",
         "template_type": "docker",
-        "usage": "New template"
+        "usage": "New template",
     }
     template = create_template(gns3_conn, **data)
 

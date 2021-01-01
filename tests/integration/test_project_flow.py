@@ -2,7 +2,8 @@ import pytest
 from gns3fy.services import (
     create_link,
     create_node,
-    delete_link, delete_node,
+    delete_link,
+    delete_node,
     search_link,
     search_node,
 )

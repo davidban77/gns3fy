@@ -379,20 +379,11 @@ class Node(BaseModel):
         if self.node_id:
             raise ValueError("Node already created")
 
-        # data = {
-        #     k: v
-        #     for k, v in self.dict().items()
-        #     if k
-        #     not in (
-        #         "project_id",
-        #         "template",
-        #         "template_id",
-        #         "links",
-        #         "connector",
-        #         "__initialised__",
-        #     )
-        #     if v is not None
-        # }
+        _url = (
+            f"{self._connector.base_url}/projects/{self.project_id}/"
+            f"templates/{self.template_id}"
+        )
+
         data = self.dict(
             exclude_unset=True,
             exclude={
@@ -403,11 +394,6 @@ class Node(BaseModel):
                 "_connector",
                 "node_id",
             },
-        )
-
-        _url = (
-            f"{self._connector.base_url}/projects/{self.project_id}/"
-            f"templates/{self.template_id}"
         )
 
         # TODO: To set x, y more dynamic

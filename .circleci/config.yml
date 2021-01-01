@@ -50,7 +50,14 @@ commands:
       - run:
           name: Running tests
           command: |
-            poetry run pytest tests/ -v
+            poetry run pytest tests/unit/ -v
+
+  integration-test:
+    steps:
+      - run:
+          name: Running tests
+          command: |
+            poetry run pytest tests/integration/ -v
 
 executors:
   py36-executor:
@@ -62,6 +69,7 @@ executors:
   py38-executor:
     docker:
       - image: circleci/python:3.8
+      - image: davidban77/gns3-server:latest
 
 jobs:
   test-with-py36:
@@ -85,6 +93,7 @@ jobs:
           python_env: py38
       - linting
       - test
+      - integration-test
 
   coverage_publish:
     executor: py38-executor
@@ -93,7 +102,7 @@ jobs:
       - run:
           name: Running tests with coverage
           command: |
-            poetry run pytest --cov-report=xml --cov=gns3fy tests/
+            poetry run pytest --cov-report=xml --cov=gns3fy tests/unit/
       - codecov/upload:
           file: coverage.xml
 
