@@ -131,12 +131,10 @@ class Drawing(BaseModel):
         """
         _url = f"{self._connector.base_url}/projects/{self.project_id}/drawings"
 
-        data = {
-            k: v
-            for k, v in self.dict().items()
-            if k not in ("_connector", "__initialised__")
-            if v is not None
-        }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"_connector", "drawing_id"},
+        )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 
@@ -168,7 +166,10 @@ class Drawing(BaseModel):
             f"{self.project_id}/drawings/{self.drawing_id}"
         )
 
-        # TODO: Verify that the passed kwargs are supported ones
+        # Apply first values on object to validate types
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
         _response = self._connector.http_call("put", _url, json_data=kwargs)
 
         # Update object

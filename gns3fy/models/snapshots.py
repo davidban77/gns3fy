@@ -120,12 +120,10 @@ class Snapshot(BaseModel):
         """
         _url = f"{self._connector.base_url}/templates"
 
-        data = {
-            k: v
-            for k, v in self.dict().items()
-            if k not in ("_connector", "__initialised__")
-            if v is not None
-        }
+        data = self.dict(
+            exclude_unset=True,
+            exclude={"_connector", "snapshot_id"},
+        )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 

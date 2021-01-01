@@ -248,7 +248,9 @@ class Project(BaseResourceModel):
         _response = self._connector.http_call("post", _url)
 
         # Update object
-        self._update(_response.json())
+        if _response.status_code == 204:
+            # TODO: Bug on pylance - remove ignore
+            self.status = "opened"  # type: ignore
 
     @verify_attributes(attrs=["project_id", "_connector"])
     def get_stats(self) -> None:

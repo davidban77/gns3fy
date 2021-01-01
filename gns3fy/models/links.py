@@ -158,10 +158,37 @@ class Link(BaseModel):
         # }
         data = self.dict(
             exclude_unset=True,
-            exclude={"_connector"},
+            exclude={"_connector", "link_id"},
         )
 
         _response = self._connector.http_call("post", _url, json_data=data)
 
         # Now update it
+        self._update(_response.json())
+
+    @verify_attributes(attrs=["project_id", "_connector", "link_id"])
+    def update(self, **kwargs) -> None:
+        """
+        Updates the link instance by passing the keyword arguments of the attributes
+        you want updated
+
+        Required Attributes:
+
+        - `project_id`
+        - `connector`
+        - `link_id`
+        """
+        _url = (
+            f"{self._connector.base_url}/projects/"
+            f"{self.project_id}/links/{self.link_id}"
+        )
+
+        # Apply first values on object to validate types
+        for k, v in kwargs.items():
+            setattr(self, k, v)
+
+        # TODO: Verify that the passed kwargs are supported ones
+        _response = self._connector.http_call("put", _url, json_data=kwargs)
+
+        # Update object
         self._update(_response.json())

@@ -22,7 +22,7 @@ NODE_TYPES = [
     "virtualbox",
     "vmware",
     "iou",
-    "qemu"
+    "qemu",
 ]
 
 
@@ -34,15 +34,11 @@ CONSOLE_TYPES = [
     "spice",
     "spice+agent",
     "none",
-    "null"
+    "null",
 ]
 
 
-NODE_STATUS = [
-    "stopped",
-    "started",
-    "suspended"
-]
+NODE_STATUS = ["stopped", "started", "suspended"]
 
 
 class Node(BaseModel):
@@ -104,7 +100,7 @@ class Node(BaseModel):
 
     name: Optional[str] = None
     node_id: Optional[str] = None
-    compute_id: str = "local"
+    compute_id: Optional[str] = "local"
     node_type: Optional[str] = None
     node_directory: Optional[str] = None
     status: Optional[str] = None
@@ -399,7 +395,14 @@ class Node(BaseModel):
         # }
         data = self.dict(
             exclude_unset=True,
-            exclude={"project_id", "template", "template_id", "links", "_connector"},
+            exclude={
+                "project_id",
+                "template",
+                "template_id",
+                "links",
+                "_connector",
+                "node_id",
+            },
         )
 
         _url = (

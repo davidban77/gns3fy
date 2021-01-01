@@ -60,7 +60,7 @@ class Template(BaseModel):
     _connector: Connector = PrivateAttr()
     name: Optional[str] = None
     template_id: Optional[str] = None
-    compute_id: str = "local"
+    compute_id: Optional[str] = "local"
     builtin: bool = False
     category: Optional[str] = None
     default_name_format: Optional[str] = None
@@ -190,7 +190,7 @@ class Template(BaseModel):
 
         data = self.dict(
             exclude_unset=True,
-            exclude={"_connector"},
+            exclude={"_connector", "template_id"},
         )
 
         _response = self._connector.http_call("post", _url, json_data=data)
