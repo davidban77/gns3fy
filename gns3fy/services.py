@@ -317,15 +317,17 @@ def get_drawings(project: Project) -> List[Drawing]:
 
 
 def search_drawing(
-    project: Project, value: str, type: str = "svg"
+    project: Project,
+    svg: Optional[str] = None,
+    drawing_id: Optional[str] = None,
 ) -> Optional[Drawing]:
     """Searches for GNS3 Drawing from a given drawing svg or ID
 
     Args:
 
     - `project (Project)`: Project object
-    - `value (str)`: Drawing name of ID
-    - `type (str)`: Type of attribute. `name` or `drawing_id`
+    - `svg (Optional[str], optional)`: Drawing svg string. Defaults to None.
+    - `drawing_id (Optional[str], optional)`: Drawing ID. Defaults to None.
 
     Returns:
 
@@ -335,24 +337,28 @@ def search_drawing(
     refresh_project(project, drawings=True)
 
     try:
-        if type == "svg":
-            return next(draw for draw in get_drawings(project) if draw.svg == value)
-        elif type == "drawing_id":
+        if svg is not None:
+            return next(draw for draw in get_drawings(project) if draw.svg == svg)
+
+        elif drawing_id is not None:
             return next(
-                draw for draw in get_drawings(project) if draw.drawing_id == value
+                draw for draw in get_drawings(project) if draw.drawing_id == drawing_id
             )
-        return None
+
+        else:
+            raise ValueError("Need to submit either svg string or drawing_id")
     except StopIteration:
         return None
 
 
-def create_drawing(project: Project, svg: str) -> Drawing:
+def create_drawing(project: Project, svg: str, **kwargs: Dict[str, Any]) -> Drawing:
     """Creates a GNS3 Project Drawing
 
     Args:
 
     - `project (Project)`: Project object
     - `svg (str)`: Drawing svg
+    - `kwargs (Dict[str, Any])`: Keyword attributes of the project to create
 
     Raises:
 
@@ -369,7 +375,7 @@ def create_drawing(project: Project, svg: str) -> Drawing:
         raise ValueError(f"Drawing with same svg already exists: {_sdrawing}")
 
     _drawing = Drawing(
-        connector=project._connector, project_id=project.project_id, svg=svg
+        connector=project._connector, project_id=project.project_id, svg=svg, **kwargs
     )
 
     _drawing.create()
@@ -379,15 +385,15 @@ def create_drawing(project: Project, svg: str) -> Drawing:
 
 def delete_drawing(
     project: Project,
-    name: Optional[str] = None,
+    svg: Optional[str] = None,
     drawing_id: Optional[str] = None,
 ) -> None:
-    """Deletes GNS3 Project Drawing
+    """Deletes GNS3 Project Drawing based on svg string or drawing ID
 
     Args:
 
     - `project (Project)`: Project object
-    - `name (Optional[str], optional)`: Drawing name. Defaults to None.
+    - `svg (Optional[str], optional)`: Drawing svg string. Defaults to None.
     - `drawing_id (Optional[str], optional)`: Drawing ID. Defaults to None.
 
     Raises:
@@ -396,12 +402,7 @@ def delete_drawing(
     - `ValueError`: When drawing was not found
     """
 
-    if name is not None:
-        _sdrawing = search_drawing(project, name)
-    elif drawing_id is not None:
-        _sdrawing = search_drawing(project, drawing_id, type="drawing_id")
-    else:
-        raise ValueError("Need to submit either name or drawing_id")
+    _sdrawing = search_drawing(project, svg=svg, drawing_id=drawing_id)
 
     if _sdrawing is None:
         raise ValueError("Snapshot not found")
@@ -437,6 +438,7 @@ def generate_ellipse_svg(
     stroke: str = "#000000",
     stroke_width: int = 2,
 ) -> str:
+    """Generated an ellipse SVG string for a Drawing"""
     return (
         f'<svg height="{height}" width="{width}"><ellipse cx="{cx}" cy="{cy}" fill="'
         f'{fill}" fill-opacity="{fill_opacity}" rx="{rx}" ry="{ry}" stroke="{stroke}" '
@@ -454,6 +456,7 @@ def generate_line_svg(
     stroke: str = "#000000",
     stroke_width: int = 2,
 ) -> str:
+    """Generated an line SVG string for a Drawing"""
     return (
         f'<svg height="{height}" width="{width}"><line stroke="{stroke}" stroke-width="'
         f'{stroke_width}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}" /></svg>'
@@ -461,10 +464,12 @@ def generate_line_svg(
 
 
 def parsed_x(x: int, obj_width: int = 100) -> int:
+    """Parses the X coordinate of an GNS3 drawing object"""
     return x * obj_width
 
 
 def parsed_y(y: int, obj_height: int = 100) -> int:
+    """Parses the Y coordinate of an GNS3 drawing object"""
     return (y * obj_height) * -1
 
 
@@ -1226,15 +1231,15 @@ def get_snapshots(project: Project) -> List[Snapshot]:
 
 
 def search_snapshot(
-    project: Project, value: str, type: str = "name"
+    project: Project, name: Optional[str] = None, snapshot_id: Optional[str] = None
 ) -> Optional[Snapshot]:
     """Searches for GNS3 Snapshot from a given snapshot name or ID
 
     Args:
 
     - `project (Project)`: Project object
-    - `value (str)`: Snapshot name of ID
-    - `type (str)`: Type of attribute. `name` or `snapshot_id`
+    - `name (Optional[str], optional)`: Snapshot name. Defaults to None.
+    - `snapshot_id (Optional[str], optional)`: Snapshot ID. Defaults to None.
 
     Returns:
 
@@ -1244,13 +1249,18 @@ def search_snapshot(
     refresh_project(project, snapshots=True)
 
     try:
-        if type == "name":
-            return next(snap for snap in get_snapshots(project) if snap.name == value)
-        elif type == "snapshot_id":
+        if name is not None:
+            return next(snap for snap in get_snapshots(project) if snap.name == name)
+
+        elif snapshot_id:
             return next(
-                snap for snap in get_snapshots(project) if snap.snapshot_id == value
+                snap
+                for snap in get_snapshots(project)
+                if snap.snapshot_id == snapshot_id
             )
-        return None
+
+        else:
+            raise ValueError("Need to submit either name or snapshot_id")
     except StopIteration:
         return None
 
@@ -1305,12 +1315,7 @@ def delete_snapshot(
     - `ValueError`: When snapshot was not found
     """
 
-    if name is not None:
-        _ssnapshot = search_snapshot(project, name)
-    elif snapshot_id is not None:
-        _ssnapshot = search_snapshot(project, snapshot_id, type="snapshot_id")
-    else:
-        raise ValueError("Need to submit either name or snapshot_id")
+    _ssnapshot = search_snapshot(project, name=name, snapshot_id=snapshot_id)
 
     if _ssnapshot is None:
         raise ValueError("Snapshot not found")
@@ -1341,12 +1346,7 @@ def restore_snapshot(
     - `ValueError`: When neither name nor ID was submitted
     """
 
-    if name is not None:
-        _snapshot = search_snapshot(project, name)
-    elif snapshot_id is not None:
-        _snapshot = search_snapshot(project, snapshot_id, type="snapshot_id")
-    else:
-        raise ValueError("Need to submit either name or snapshot_id")
+    _snapshot = search_snapshot(project, name=name, snapshot_id=snapshot_id)
 
     _url = (
         f"{project._connector.base_url}/projects/{project.project_id}/"

@@ -52,12 +52,12 @@ commands:
           command: |
             poetry run pytest tests/unit/ -v
 
-  integration-test:
-    steps:
-      - run:
-          name: Running tests
-          command: |
-            poetry run pytest tests/integration/ -v
+  # integration-test:
+  #   steps:
+  #     - run:
+  #         name: Running tests
+  #         command: |
+  #           poetry run pytest tests/integration/ -v
 
 executors:
   py36-executor:
@@ -69,7 +69,7 @@ executors:
   py38-executor:
     docker:
       - image: circleci/python:3.8
-      - image: davidban77/gns3-server:latest
+      # - image: davidban77/gns3-server:latest
 
 jobs:
   test-with-py36:
@@ -93,7 +93,7 @@ jobs:
           python_env: py38
       - linting
       - test
-      - integration-test
+      # - integration-test
 
   coverage_publish:
     executor: py38-executor

@@ -24,3 +24,14 @@ docker-settings:
 
 local-settings:
 	cp .vscode/local-settings.json .vscode/settings.json
+
+run-server:
+	docker run \
+		--rm -d \
+		--name gns3 \
+		--privileged \
+		-p 7070:7070 \
+		davidban77/gns3-server:latest
+
+stop-server:
+	docker container stop gns3
