@@ -5,6 +5,80 @@
         "capture_file_path": null,
         "capturing": false,
         "filters": {},
+        "link_id": "d7dd01d6-9577-4076-b7f2-911b231044f8",
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "e0/0",
+                    "x": 69,
+                    "y": 27
+                },
+                "node_id": "de23a89a-aa1f-446a-a950-31d4bf98653c",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 0,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "e1",
+                    "x": -4,
+                    "y": 18
+                },
+                "node_id": "da28e1c0-9465-4f7c-b42c-49b2f4e1c64d",
+                "port_number": 1
+            }
+        ],
+        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "cda8707a-79e2-4088-a5f8-c1664928453b",
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 1,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "e1/0",
+                    "x": 17,
+                    "y": 67
+                },
+                "node_id": "de23a89a-aa1f-446a-a950-31d4bf98653c",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 1,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "e1/0",
+                    "x": 42,
+                    "y": -7
+                },
+                "node_id": "0d10d697-ef8d-40af-a4f3-fafe71f5458b",
+                "port_number": 0
+            }
+        ],
+        "project_id": "4b21dfb3-675a-4efa-8613-2f7fb32e76fe",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
         "link_id": "fb27704f-7be5-4152-8ecd-1db6633b2bd9",
         "link_type": "ethernet",
         "nodes": [

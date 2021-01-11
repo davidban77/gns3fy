@@ -43,54 +43,91 @@ You can start the library and use the `Gns3Connector` object and the `Project` o
 For example:
 
 ```python
->>> import gns3fy
->>> from tabulate import tabulate
+import gns3fy.services as gns3
 
-# Define the server object to establish the connection
->>> gns3_server = gns3fy.Gns3Connector("http://<server address>:3080")
+# For a pretty output
+from rich.table import Table
+from rich import print as rprint
 
-# Show the available projects on the server
->>> print(
-        tabulate(
-            gns3_server.projects_summary(is_print=False),
-            headers=["Project Name", "Project ID", "Total Nodes", "Total Links", "Status"],
-        )
-    )
+# Create GNS3 connector object
+server = gns3.create_connector("http://gns3-server:80")
+
+# Create Rich table for pretty printing
+table = Table("Project Name", "Total Nodes", "Total Links", "Status", "Project ID", title="GNS3 Projectes")
+
+for prj in gns3.get_projects(server):
+    # Retrieve all attributes (nodes, links, snapshots, drawings) from a project
+    prj.get()
+    # Add a row per project
+    table.add_row(prj.name, str(len(prj.nodes)), str(len(prj.links)), prj.status, prj.project_id)
+
+
+rprint(table)
 """
-Project Name    Project ID                              Total Nodes    Total Links  Status
---------------  ------------------------------------  -------------  -------------  --------
-test2           c9dc56bf-37b9-453b-8f95-2845ce8908e3             10              9  opened
-API_TEST        4b21dfb3-675a-4efa-8613-2f7fb32e76fe              6              4  opened
-mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             40  closed
+                                       GNS3 Projectes
+┏━━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Project Name ┃ Total Nodes ┃ Total Links ┃ Status ┃ Project ID                           ┃
+┡━━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│ labby_test   │ 5           │ 7           │ closed │ 944ee3f1-977f-4794-bbbb-b52d993b502a │
+│ oob_site2    │ 4           │ 3           │ opened │ d000bbc4-6540-4039-b366-cf873cdebc53 │
+│ mpls_v2      │ 7           │ 8           │ closed │ 6ba8cf63-8441-42e1-8d67-8798651a97a9 │
+│ netmon       │ 7           │ 12          │ opened │ 01e7f910-7ed6-407d-a0a3-cb1e1c0cc6f6 │
+│ test2        │ 0           │ 0           │ closed │ 5f250655-5ebf-4475-b296-9093b422c735 │
+└──────────────┴─────────────┴─────────────┴────────┴──────────────────────────────────────┘
 """
 
 # Define the lab you want to load and assign the server connector
->>> lab = gns3fy.Project(name="API_TEST", connector=gns3_server)
-
-# Retrieve its information and display
->>> lab.get()
->>> print(lab)
-"Project(project_id='4b21dfb3-675a-4efa-8613-2f7fb32e76fe', name='API_TEST', status='opened', ...)"
+lab = gns3.search_project(server, name="labby_test")
+repr(lab)
+"""
+Project(name='labby_test', project_id='944ee3f1-977f-4794-bbbb-b52d993b502a', status='closed', ...)
+"""
 
 # Access the project attributes
->>> print(f"Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}")
-"Name: API_TEST -- Status: closed -- Is auto_closed?: False"
+print(f"Name: {lab.name} -- Status: {lab.status} -- Is auto_closed?: {lab.auto_close}")
+"""
+Name: labby_test -- Status: closed -- Is auto_closed?: True
+"""
 
 # Open the project
->>> lab.open()
->>> lab.status
+lab.open()
+lab.status
+"""
 opened
+"""
 
-# Verify the stats
->>> lab.stats
-{'drawings': 0, 'links': 4, 'nodes': 6, 'snapshots': 0}
+# Verify the general stats of the project (these were retrieved with gns3.refresh_project)
+stats_table = Table("Nodes", "Links", "Snapshots", "Drawings", title=f"Project: {lab.name}")
+stats_table.add_row(
+    str(len(lab.nodes)), str(len(lab.links)), str(len(lab.snapshots)), str(len(lab.drawings))
+)
+rprint(stats_table)
+"""
+          Project: labby_test
+┏━━━━━━━┳━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━┓
+┃ Nodes ┃ Links ┃ Snapshots ┃ Drawings ┃
+┡━━━━━━━╇━━━━━━━╇━━━━━━━━━━━╇━━━━━━━━━━┩
+│ 5     │ 7     │ 0         │ 0        │
+└───────┴───────┴───────────┴──────────┘
+"""
 
 # List the names and status of all the nodes in the project
->>> for node in lab.nodes:
-...    print(f"Node: {node.name} -- Node Type: {node.node_type} -- Status: {node.status}")
+node_table = Table("Node Name", "Type", "Status", title="Projects Nodes")
+for node in lab.nodes:
+    node_table.add_row(node.name, node.node_type, node.status)
 
-"Node: Ethernetswitch-1 -- Node Type: ethernet_switch -- Status: started"
-...
+"""
+             Projects Nodes
+┏━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┳━━━━━━━━━┓
+┃ Node Name ┃ Type            ┃ Status  ┃
+┡━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━╇━━━━━━━━━┩
+│ r3        │ qemu            │ stopped │
+│ cloud1    │ cloud           │ started │
+│ r1        │ qemu            │ stopped │
+│ r2        │ qemu            │ stopped │
+│ sw1       │ ethernet_switch │ started │
+└───────────┴─────────────────┴─────────┘
+"""
 ```
 
 Take a look at the API documentation for complete information about the attributes retrieved.
@@ -100,6 +137,35 @@ Take a look at the API documentation for complete information about the attribut
 You have access to the `Node` and `Link` objects as well, this gives you the ability to start, stop, suspend the individual element in a GNS3 project.
 
 ```python
+# Search for a specific node in the lab project
+r3 = gns3.search_node(project=lab, name="r3")
+repr(r3)
+"""
+Node(name='r3', node_type='qemu', template='Cisco IOSv' ...)
+"""
+
+# You can access useful node information
+print(f"Name: {r3.name} -- Status: {r3.status} -- Console: {r3.console}")
+"""
+Name: r3 -- Status: stopped -- Console: 5006
+"""
+
+# Start the node
+r3.start()
+r3.status
+"""
+started
+"""
+
+# See links information
+repr(r3.links)
+"""
+{Link(link_id='4d9f1235-7fd1-466b-ad26-0b4b08beb778', link_type='ethernet', ...)}
+"""
+
+# Information of the links information
+
+
 >>> from gns3fy import Node, Link, Gns3Connector
 
 >>> PROJECT_ID = "<some project id>"

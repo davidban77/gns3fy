@@ -2,10 +2,10 @@
 """
 from .connector import Connector
 from .links import Link
-from .ports import Port
-from .base import verify_attributes
-from typing import Optional, Any, List, Set
-from pydantic import BaseModel, PrivateAttr, Field, validator
+from .ports import Port, gen_port_from_links
+from .base import verify_attributes, BaseResourceModel
+from typing import Optional, Any, List, Dict
+from pydantic import PrivateAttr, Field, validator
 
 
 NODE_TYPES = [
@@ -41,7 +41,7 @@ CONSOLE_TYPES = [
 NODE_STATUS = ["stopped", "started", "suspended"]
 
 
-class Node(BaseModel):
+class Node(BaseResourceModel):
     """
     GNS3 Node API object. For more information visit: [Node Endpoint API information](
     https://gns3-server.readthedocs.io/en/2.2/api/v2/controller/node.html)
@@ -98,8 +98,9 @@ class Node(BaseModel):
     project_id: str
     _connector: Connector = PrivateAttr()
 
-    name: Optional[str] = None
-    node_id: Optional[str] = None
+    # name: Optional[str] = None
+    name: str
+    node_id: str
     compute_id: Optional[str] = "local"
     node_type: Optional[str] = None
     node_directory: Optional[str] = None
@@ -123,10 +124,11 @@ class Node(BaseModel):
     z: int = 0
     template_id: Optional[str] = None
     properties: Optional[Any] = None
+    ports: List[Port] = Field(default_factory=list)
 
     template: Optional[str] = None
-    ports: List[Port] = Field(default_factory=list)
-    links: Set[Link] = Field(default_factory=set)
+    # links: Set[Link] = Field(default_factory=set)
+    links: Dict[str, Link] = Field(default_factory=dict)
 
     @validator("node_type")
     def valid_node_type(cls, v):
@@ -147,10 +149,6 @@ class Node(BaseModel):
                 raise ValueError("Not a valid GNS3 Console type")
         return v
 
-    class Config:
-        validate_assignment = True
-        extra = "ignore"
-
     def __init__(
         self,
         project_id: str,
@@ -161,11 +159,6 @@ class Node(BaseModel):
     ) -> None:
         super().__init__(project_id=project_id, name=name, node_id=node_id, **data)
         self._connector = connector
-
-    def _update(self, data_dict) -> None:
-        # Attributes are validated on assignment
-        for k, v in data_dict.items():
-            setattr(self, k, v)
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Node):
@@ -178,6 +171,16 @@ class Node(BaseModel):
         if self.node_id is None:
             raise ValueError("No node_id present. Need to initialize first")
         return hash(self.node_id)
+
+    def _resolve_ports_nodes(self) -> None:
+        for _p in self.ports:
+            _p.node_name = self.name
+            _p.node_id = self.node_id
+
+    def _resolve_template(self):
+        _url = f"{self._connector.base_url}/templates/{self.template_id}"
+        _response = self._connector.http_call("get", _url)
+        self.template = _response.json()["name"]
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
     def get(self, get_links: bool = True) -> None:
@@ -200,15 +203,44 @@ class Node(BaseModel):
         # Update object
         _data = _response.json()
         if _data["ports"]:
-            _data["ports"] = [Port(**_port) for _port in _data["ports"]]
+            _data["ports"] = [
+                Port(node_name=self.name, node_id=self.node_id, **_port)
+                for _port in _data["ports"]
+            ]
 
         self._update(_data)
 
         if get_links:
             self.get_links()
 
+        if self.template is None:
+            self._resolve_template()
+        if self.ports:
+            self._resolve_ports_nodes()
+
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def get_links(self) -> None:
+    def get_port(self, name: str) -> Optional[Port]:
+        """Searches a Port and its attributes
+
+        Args:
+
+        - `node (Node)`: Node object
+        - `name (str)`: Name of the port on the node
+
+        Returns:
+
+        - `Optional[Port]`: Port object if found else `None`
+        """
+        # Refresh node
+        self.get()
+
+        try:
+            return next(_p for _p in self.ports if _p.name == name)
+        except StopIteration:
+            return None
+
+    @verify_attributes(attrs=["project_id", "_connector", "node_id"])
+    def get_links(self, resolve_node: bool = True) -> None:
         """
         Retrieves the links of the respective node. They will be saved at the `links`
         attribute
@@ -231,11 +263,18 @@ class Node(BaseModel):
             self.links.clear()
         for _link in _response.json():
             if _link["nodes"]:
-                _link["nodes"] = [Port(**_port) for _port in _link["nodes"]]
-            self.links.add(Link(connector=self._connector, **_link))
+                _link["nodes"] = gen_port_from_links(
+                    connector=self._connector,
+                    project_id=self.project_id,
+                    port_data=_link["nodes"],
+                    resolve_node=resolve_node,
+                )
+            link = Link(connector=self._connector, **_link)
+            link.name = link._gen_name()
+            self.links.update({link.name: link})
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def start(self) -> None:
+    def start(self) -> bool:
         """
         Starts the node.
 
@@ -252,13 +291,15 @@ class Node(BaseModel):
         _response = self._connector.http_call("post", _url)
 
         # Update object or perform get() if change was not reflected
-        if _response.json().get("status") == "started":
+        if _response.status_code == 200:
             self._update(_response.json())
+            self._resolve_ports_nodes()
+            return True
         else:
-            self.get()
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def stop(self) -> None:
+    def stop(self) -> bool:
         """
         Stops the node.
 
@@ -275,13 +316,15 @@ class Node(BaseModel):
         _response = self._connector.http_call("post", _url)
 
         # Update object or perform get() if change was not reflected
-        if _response.json().get("status") == "stopped":
+        if _response.status_code == 200:
             self._update(_response.json())
+            self._resolve_ports_nodes()
+            return True
         else:
-            self.get()
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def reload(self) -> None:
+    def reload(self) -> bool:
         """
         Reloads the node.
 
@@ -298,13 +341,15 @@ class Node(BaseModel):
         _response = self._connector.http_call("post", _url)
 
         # Update object or perform get() if change was not reflected
-        if _response.json().get("status") == "started":
+        if _response.status_code == 200:
             self._update(_response.json())
+            self._resolve_ports_nodes()
+            return True
         else:
-            self.get()
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def suspend(self) -> None:
+    def suspend(self) -> bool:
         """
         Suspends the node.
 
@@ -321,13 +366,15 @@ class Node(BaseModel):
         _response = self._connector.http_call("post", _url)
 
         # Update object or perform get() if change was not reflected
-        if _response.json().get("status") == "suspended":
+        if _response.status_code == 200:
             self._update(_response.json())
+            self._resolve_ports_nodes()
+            return True
         else:
-            self.get()
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs) -> bool:
         """
         Updates the node instance by passing the keyword arguments of the attributes
         you want updated
@@ -350,65 +397,21 @@ class Node(BaseModel):
             f"{self.project_id}/nodes/{self.node_id}"
         )
 
-        # Apply first values on object to validate types
-        for k, v in kwargs.items():
-            setattr(self, k, v)
+        data = {k: v for k, v in kwargs.items() if k not in ("template", "links")}
 
-        # TODO: Verify that the passed kwargs are supported ones
-        _response = self._connector.http_call("put", _url, json_data=kwargs)
+        _response = self._connector.http_call("put", _url, json_data=data)
 
         # Update object
-        self._update(_response.json())
-
-    @verify_attributes(attrs=["project_id", "_connector", "template_id", "compute_id"])
-    def create(self) -> None:
-        """
-        Creates a node.
-
-        By default it will fetch the nodes properties for creation based on the
-        `template_id` attribute supplied. This can be overriden/updated
-        by sending a dictionary of the properties under `extra_properties`.
-
-        Args:
-
-        - `project_id`
-        - `connector`
-        - `compute_id`: Defaults to "local"
-        - `template_id`
-        """
-        if self.node_id:
-            raise ValueError("Node already created")
-
-        _url = (
-            f"{self._connector.base_url}/projects/{self.project_id}/"
-            f"templates/{self.template_id}"
-        )
-
-        data = self.dict(
-            exclude_unset=True,
-            exclude={
-                "project_id",
-                "template",
-                "template_id",
-                "links",
-                "_connector",
-                "node_id",
-            },
-        )
-
-        # TODO: To set x, y more dynamic
-        _response = self._connector.http_call(
-            "post", _url, json_data=dict(x=self.x, y=self.y, compute_id=self.compute_id)
-        )
-
-        self._update(_response.json())
-
-        # Update the node attributes based on cached data
-        self.update(**data)
+        if _response.status_code == 200:
+            self._update(_response.json())
+            self._resolve_ports_nodes()
+            return True
+        else:
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
-    def delete(self) -> None:
-        """Deletes the node from the project. It sets to `None` the attributes `node_id`
+    def delete(self) -> bool:
+        """Deletes the node from the project. It sets to `None` theattributes`node_id`
         and `name` when executed successfully
 
         Args:
@@ -422,7 +425,12 @@ class Node(BaseModel):
             f"{self.project_id}/nodes/{self.node_id}"
         )
 
-        self._connector.http_call("delete", _url)
+        _response = self._connector.http_call("delete", _url)
+
+        if _response.status_code == 204:
+            return True
+        else:
+            return False
 
     @verify_attributes(attrs=["project_id", "_connector", "node_id"])
     def get_file(self, path: str) -> str:
@@ -472,3 +480,71 @@ class Node(BaseModel):
         )
 
         self._connector.http_call("post", _url, data=data)
+
+
+def get_nodes(connector: Connector, project_id: str) -> List[Node]:
+    """Retrieves all GNS3 Project Nodes
+
+    Args:
+
+    - `project (Project)`: Project object
+
+    Raises:
+
+    - `ValueError`: If project_id attribute is not set
+
+    Returns:
+
+    - `List[Node]`: List of Node objects
+    """
+    _raw_nodes = connector.http_call(
+        "get",
+        url=f"{connector.base_url}/projects/{project_id}/nodes",
+    ).json()
+
+    for _node in _raw_nodes:
+        # Inject project ID (Cases where project is closed)
+        if _node.get("project_id") is None:
+            _node["project_id"] = project_id
+
+    return [Node(connector=connector, **_node) for _node in _raw_nodes]
+
+
+def create_node(
+    connector: Connector,
+    project_id: str,
+    template_id: str,
+    name: str,
+    x: int = 0,
+    y: int = 0,
+    compute_id: str = "local",
+    **kwargs,
+) -> Node:
+    """
+    Creates a node.
+
+    By default it will fetch the nodes properties for creation based on the
+    `template_id` attribute supplied. This can be overriden/updated
+    by sending a dictionary of the properties under `extra_properties`.
+
+    Args:
+
+    - `project_id`
+    - `connector`
+    - `compute_id`: Defaults to "local"
+    - `template_id`
+    """
+    _url = f"{connector.base_url}/projects/{project_id}/templates/{template_id}"
+
+    _response = connector.http_call(
+        "post", _url, json_data=dict(x=x, y=y, compute_id=compute_id)
+    )
+
+    node = Node(connector=connector, **_response.json())
+
+    # Update the node attributes based on cached data
+    node.update(name=name, **kwargs)
+    if node.ports:
+        node._resolve_ports_nodes()
+
+    return node

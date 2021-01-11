@@ -11,7 +11,7 @@ docs-show:
 test:
 	poetry run flake8 .
 	poetry run black --diff --check .
-	poetry run pytest --cov-report=html --cov=gns3fy tests/
+	poetry run pytest --cov-report=html --cov=gns3fy tests/unit
 
 build:
 	poetry build
@@ -31,6 +31,7 @@ run-server:
 		--name gns3 \
 		--privileged \
 		-p 7070:7070 \
+		-e BRIDGE_ADDRESS="172.21.1.1/24" \
 		davidban77/gns3-server:latest
 
 stop-server:

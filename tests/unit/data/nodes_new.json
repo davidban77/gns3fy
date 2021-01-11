@@ -1,6 +1,6 @@
 [
     {
         "name": "new_node",
-        "template_name": "alpine"
+        "template": "alpine"
     }
 ]

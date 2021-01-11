@@ -1,13 +1,13 @@
 """Model for python GNS3 Snapshots entity and useful snapshot related services
 """
 from .connector import Connector
-from .base import verify_attributes
-from typing import Any, Optional
+from .base import verify_attributes, BaseResourceModel
+from typing import Any, Optional, List
 from datetime import datetime
-from pydantic import BaseModel, PrivateAttr
+from pydantic import PrivateAttr
 
 
-class Snapshot(BaseModel):
+class Snapshot(BaseResourceModel):
     """
     GNS3 Snapshot API object. For more information visit:
     [Links Endpoint API information](
@@ -41,10 +41,6 @@ class Snapshot(BaseModel):
     snapshot_id: Optional[str] = None
     created_at: Optional[datetime] = None
 
-    class Config:
-        validate_assignment = True
-        extra = "ignore"
-
     def __init__(
         self,
         connector: Connector,
@@ -54,11 +50,6 @@ class Snapshot(BaseModel):
     ) -> None:
         super().__init__(name=name, project_id=project_id, **data)
         self._connector = connector
-
-    def _update(self, data_dict) -> None:
-        # Attributes are validated on assignment
-        for k, v in data_dict.items():
-            setattr(self, k, v)
 
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Snapshot):
@@ -85,7 +76,7 @@ class Snapshot(BaseModel):
         raise NotImplementedError
 
     @verify_attributes(attrs=["_connector", "snapshot_id"])
-    def delete(self) -> None:
+    def delete(self) -> bool:
         """
         Deletes a snapshot endpoint from the server.
 
@@ -94,38 +85,87 @@ class Snapshot(BaseModel):
         - `connector`
         - `snapshot_id`
         """
-        _url = f"{self._connector.base_url}/snapshots/{self.snapshot_id}"
-
-        self._connector.http_call("delete", _url)
-
-    @verify_attributes(attrs=["_connector"])
-    def create(self) -> None:
-        """
-        Creates a template. Is important to highlight that the default attributes are
-        explicitly specified and that this Model *allows* extra attributes to be passed,
-        making the model suitable for updating any kind of template in GNS3.
-
-        For example:
-
-        ```python
-        >>> data = dict(template_type="qemu", adapters=...)
-        # Note that `adapters` is an attribute related to the `qemu` hosts
-        >>> template_eos = Template(name="Arista vEOS", **data)
-        >>> template.create()
-        ```
-
-        **Required Attributes:**
-
-        - `connector`
-        """
-        _url = f"{self._connector.base_url}/templates"
-
-        data = self.dict(
-            exclude_unset=True,
-            exclude={"_connector", "snapshot_id"},
+        _url = (
+            f"{self._connector.base_url}/projects/{self.project_id}"
+            f"/snapshots/{self.snapshot_id}"
         )
 
-        _response = self._connector.http_call("post", _url, json_data=data)
+        _response = self._connector.http_call("delete", _url)
 
-        # Now update it
-        self._update(_response.json())
+        if _response.status_code == 204:
+            return True
+        else:
+            return False
+
+    @verify_attributes(attrs=["_connector", "snapshot_id", "project_id"])
+    def restore_snapshot(self) -> bool:
+        """Restores a GNS3 Project Snapshot given a snapshot name or ID.
+
+        Args:
+
+        - `project (Project)`: Project object
+        - `name (Optional[str])`: Snapshot name
+        - `snapshot_id (Optional[str], optional)`: Snapshot ID. Defaults to None.
+
+        Returns:
+
+        - `bool`: True when snapshot has been restored
+
+        Raises:
+
+        - `ValueError`: When neither name nor ID was submitted
+        """
+        _url = (
+            f"{self._connector.base_url}/projects/{self.project_id}/"
+            f"snapshots/{self.snapshot_id}/restore"
+        )
+        _response = self._connector.http_call("post", _url)
+
+        if _response.status_code == 201:
+            return True
+        else:
+            return False
+
+
+def get_snapshots(connector: Connector, project_id: str) -> List[Snapshot]:
+    """Retrieves all GNS3 Project Snapshots
+
+    Args:
+
+    - `project (Project)`: Project object
+
+    Returns:
+
+    - `List[Snapshot]`: List of Snapshot objects
+    """
+
+    _raw_snapshots = connector.http_call(
+        "get",
+        url=f"{connector.base_url}/projects/{project_id}/snapshots",
+    ).json()
+
+    return [Snapshot(connector=connector, **_snapshot) for _snapshot in _raw_snapshots]
+
+
+def create_snapshot(connector: Connector, project_id: str, name: str) -> Snapshot:
+    """Creates a GNS3 Project Snapshot
+
+    Args:
+
+    - `project (Project)`: Project object
+    - `name (str)`: Snapshot name
+
+    Raises:
+
+    - `ValueError`: If snapshot is already created
+
+    Returns:
+
+    - `Snapshot`: Snapshot object
+    """
+
+    _url = f"{connector.base_url}/projects/{project_id}/snapshots"
+
+    _response = connector.http_call("post", _url, json_data=dict(name=name))
+
+    return Snapshot(connector=connector, **_response.json())

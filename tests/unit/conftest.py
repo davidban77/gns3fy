@@ -1,10 +1,10 @@
-from gns3fy.models.projects import Project
 import json
 import pytest
 import requests
 import requests_mock
 from pathlib import Path
-from gns3fy.models.connector import Connector
+from gns3fy.connector import Connector
+from gns3fy.projects import Project
 
 
 DATA_FILES = Path(__file__).resolve().parent / "data"
@@ -329,7 +329,7 @@ def post_put_matcher(request):
             return resp
         elif request.path_url.endswith(f"/templates/{CTEMPLATE['id']}"):
             _data = request.json()
-            if _data["category"] == "switch":
+            if _data.get("category") == "switch":
                 resp.status_code = 200
                 resp.json = lambda: _data  # type: ignore
                 return resp
@@ -480,7 +480,7 @@ class ConnectorMock(Connector):
             status_code=404,
         )
         self.adapter.register_uri(
-            "DELETE", f"{self.base_url}/projects/{CPROJECT['id']}"
+            "DELETE", f"{self.base_url}/projects/{CPROJECT['id']}", status_code=204
         )
         #########
         # Nodes #

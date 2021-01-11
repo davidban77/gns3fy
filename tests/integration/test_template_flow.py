@@ -1,11 +1,4 @@
-from gns3fy.services import (
-    create_template,
-    delete_template,
-    search_template,
-)
-
-
-def test_create_template(gns3_conn):
+def test_create_template(gns3_server):
     data = {
         "adapters": 4,
         "builtin": False,
@@ -28,24 +21,24 @@ def test_create_template(gns3_conn):
         "template_type": "docker",
         "usage": "New template",
     }
-    template = create_template(gns3_conn, **data)
+    template = gns3_server.create_template(**data)
 
     assert template.name == "alpinev2"
-    assert template.console_http_port == 8080  # type: ignore
-    assert template.adapters == 4  # type: ignore
-    assert template.console_type == "telnet"  # type: ignore
-    assert template.usage == "New template"  # type: ignore
+    assert template.console_http_port == 8080
+    assert template.adapters == 4
+    assert template.console_type == "telnet"
+    assert template.usage == "New template"
 
 
-def test_update_template(gns3_conn):
-    template = search_template(gns3_conn, name="alpinev2")
+def test_update_template(gns3_server):
+    template = gns3_server.search_template(name="alpinev2")
     assert template.name == "alpinev2"
 
     template.update(console_http_port=7070, adapters=2)
-    assert template.console_http_port == 7070  # type: ignore
-    assert template.adapters == 2  # type: ignore
+    assert template.console_http_port == 7070
+    assert template.adapters == 2
 
 
-def test_delete_template(gns3_conn):
-    response = delete_template(gns3_conn, name="alpinev2")
-    assert response is None
+def test_delete_template(gns3_server):
+    response = gns3_server.delete_template(name="alpinev2")
+    assert response is True

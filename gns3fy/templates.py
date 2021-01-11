@@ -1,9 +1,9 @@
 """Model for python GNS3 Template entity and useful template related services
 """
 from .connector import Connector
-from .base import verify_attributes
-from typing import Any, Optional
-from pydantic import BaseModel, PrivateAttr, validator
+from .base import verify_attributes, BaseResourceModel
+from typing import Any, Optional, List, Dict
+from pydantic import PrivateAttr, validator
 
 
 TEMPLATE_TYPES = [
@@ -24,7 +24,7 @@ TEMPLATE_TYPES = [
 ]
 
 
-class Template(BaseModel):
+class Template(BaseResourceModel):
     """
     GNS3 Template API object. For more information visit:
     [Links Endpoint API information](
@@ -58,8 +58,8 @@ class Template(BaseModel):
     """
 
     _connector: Connector = PrivateAttr()
-    name: Optional[str] = None
-    template_id: Optional[str] = None
+    name: str
+    template_id: str
     compute_id: Optional[str] = "local"
     builtin: bool = False
     category: Optional[str] = None
@@ -88,11 +88,6 @@ class Template(BaseModel):
         super().__init__(name=name, template_id=template_id, **data)
         self._connector = connector
 
-    def _update(self, data_dict) -> None:
-        # Attributes are validated on assignment
-        for k, v in data_dict.items():
-            setattr(self, k, v)
-
     def __eq__(self, other: Any) -> bool:
         if not isinstance(other, Template):
             return False
@@ -106,7 +101,7 @@ class Template(BaseModel):
         return hash(self.template_id)
 
     @verify_attributes(attrs=["_connector", "template_id"])
-    def get(self) -> None:
+    def get(self) -> bool:
         """
         Retrieves the information from the template endpoint.
 
@@ -120,10 +115,14 @@ class Template(BaseModel):
         _response = self._connector.http_call("get", _url)
 
         # Update object
-        self._update(_response.json())
+        if _response.status_code == 200:
+            self._update(_response.json())
+            return True
+        else:
+            return False
 
     @verify_attributes(attrs=["_connector", "template_id"])
-    def delete(self) -> None:
+    def delete(self) -> bool:
         """
         Deletes a template endpoint from the server.
 
@@ -134,10 +133,15 @@ class Template(BaseModel):
         """
         _url = f"{self._connector.base_url}/templates/{self.template_id}"
 
-        self._connector.http_call("delete", _url)
+        _response = self._connector.http_call("delete", _url)
+
+        if _response.status_code == 204:
+            return True
+        else:
+            return False
 
     @verify_attributes(attrs=["_connector", "template_id"])
-    def update(self, **kwargs) -> None:
+    def update(self, **kwargs) -> bool:
         """
         Updates the template by passing the keyword arguments of the attributes
         you want updated
@@ -157,43 +161,61 @@ class Template(BaseModel):
         """
         _url = f"{self._connector.base_url}/templates/{self.template_id}"
 
-        # Apply first values on object to validate types
-        for k, v in kwargs.items():
-            setattr(self, k, v)
-
         _response = self._connector.http_call("put", _url, json_data=kwargs)
 
         # Update object
-        self._update(_response.json())
+        if _response.status_code == 200:
+            self._update(_response.json())
+            return True
+        else:
+            return False
 
-    @verify_attributes(attrs=["_connector"])
-    def create(self) -> None:
-        """
-        Creates a template. Is important to highlight that the default attributes are
-        explicitly specified and that this Model *allows* extra attributes to be passed,
-        making the model suitable for updating any kind of template in GNS3.
 
-        For example:
+def get_templates(connector: Connector) -> List[Template]:
+    """Retrieves all GNS3 Node Templates
 
-        ```python
-        >>> data = dict(template_type="qemu", adapters=...)
-        # Note that `adapters` is an attribute related to the `qemu` hosts
-        >>> template_eos = Template(name="Arista vEOS", **data)
-        >>> template.create()
-        ```
+    Args:
 
-        **Required Attributes:**
+    - `connector (Connector)`: GNS3 connector object
 
-        - `connector`
-        """
-        _url = f"{self._connector.base_url}/templates"
+    Returns:
 
-        data = self.dict(
-            exclude_unset=True,
-            exclude={"_connector", "template_id"},
-        )
+    - `List[Template]`: List of Template objects
+    """
+    _raw_templates = connector.http_call(
+        "get", url=f"{connector.base_url}/templates"
+    ).json()
 
-        _response = self._connector.http_call("post", _url, json_data=data)
+    return [Template(connector=connector, **_template) for _template in _raw_templates]
 
-        # Now update it
-        self._update(_response.json())
+
+def create_template(
+    connector: Connector,
+    name: str,
+    template_type: str,
+    compute_id: str = "local",
+    **kwargs: Dict[str, Any],
+) -> Template:
+    """Creates a GNS3 Template
+
+    Args:
+
+    - `connector (Connector)`: GNS3 connector object
+    - `name (str)`: Name of the template
+    - `kwargs (Dict[str, Any])`: Keyword attributes of the template to create
+
+    Raises:
+
+    - `ValueError`: If template already exists
+
+    Returns:
+
+    - `Template`: Template object
+    """
+    _url = f"{connector.base_url}/templates"
+
+    data = dict(name=name, template_type=template_type, compute_id=compute_id, **kwargs)
+
+    _response = connector.http_call("post", _url, json_data=data)
+
+    return Template(connector=connector, **_response.json())

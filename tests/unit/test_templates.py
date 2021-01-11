@@ -1,13 +1,7 @@
 import json
 import pytest
 from pathlib import Path
-from pydantic import ValidationError
-from gns3fy.services import (
-    get_templates,
-    search_template,
-    create_template,
-    delete_template,
-)
+from gns3fy.server import Server
 
 
 DATA_FILES = Path(__file__).resolve().parent / "data"
@@ -21,7 +15,9 @@ def templates_new_data():
 
 class TestTemplates:
     def test_get_templates(self, connector_mock):
-        templates = get_templates(connector_mock)
+        server = Server(connector_mock)
+        server.get_templates()
+        templates = list(server.templates.values())
         for index, n in enumerate(
             [
                 ("IOU-L3", "iou", "router"),
@@ -41,90 +37,54 @@ class TestTemplates:
             assert n[1] == templates[index].template_type
             assert n[2] == templates[index].category
 
-    @pytest.mark.parametrize(
-        "params,expected",
-        [
-            (({"name": "alpine"}), ("alpine", "docker", "guest")),
-            (
-                ({"template_id": "c6203d4b-d0ce-4951-bf18-c44369d46804"}),
-                ("vEOS", "qemu", "router"),
-            ),
-        ],
-        ids=["by_name", "by_id"],
-    )
-    def test_search_template(self, connector_mock, params, expected):
-        template = search_template(connector_mock, **params)
-        # Refresh
-        template.get()
-        assert expected[0] == template.name
-        assert expected[1] == template.template_type
-        assert expected[2] == template.category
+    def test_search_template(self, connector_mock):
+        server = Server(connector_mock)
+        template = server.search_template(name="alpine")
+        assert template.name == "alpine"
+        assert template.template_type == "docker"
+        assert template.category == "guest"
 
-    @pytest.mark.parametrize(
-        "params",
-        [
-            (("dummy", "name")),
-            ((None, None)),
-        ],
-        ids=["template_not_found", "invalid_query"],
-    )
-    def test_search_template_error(self, connector_mock, params):
-        if params[1] == "name":
-            template = search_template(connector_mock, name=params[0])
-            assert template is None
-        elif params[1] is None:
-            with pytest.raises(
-                ValueError, match="Need to submit either name or template_id"
-            ):
-                search_template(connector_mock, params[0], params[1])
+    def test_search_template_error(self, connector_mock):
+        server = Server(connector_mock)
+        template = server.search_template(name="dummy")
+        assert template is None
 
     def test_create_template(self, connector_mock):
         new_data_template = templates_new_data()[0]
-        new_template = create_template(connector_mock, **new_data_template)
+        server = Server(connector_mock)
+        new_template = server.create_template(**new_data_template)
         assert new_template.name == "alpinev2"
         assert new_template.template_type == "docker"
         assert new_template.category == "guest"
         assert new_template.template_id == "7777777-4444"
 
     def test_create_template_already_exists(self, connector_mock):
-        with pytest.raises(
-            ValueError, match="Template with same name already exists: alpine"
-        ):
-            create_template(connector_mock, "alpine")
+        server = Server(connector_mock)
+        with pytest.raises(ValueError, match="Template alpine already exists"):
+            server.create_template("alpine", "docker")
 
     def test_update_template(self, connector_mock):
-        template = search_template(connector_mock, "alpine")
+        server = Server(connector_mock)
+        template = server.search_template("alpine")
         assert template.category == "guest"
         # Update
         template.update(category="switch")
         assert template.name == "alpine"
         assert template.category == "switch"
 
-    def test_update_template_invalid_parameter(self, connector_mock):
-        template = search_template(connector_mock, "alpine")
-        with pytest.raises(ValidationError):
-            template.update(builtin="dummy")
+    # NOTE: Values are not validated on UPDATE, only on creation
+    # def test_update_template_invalid_parameter(self, connector_mock):
+    #     server = Server(connector_mock)
+    #     template = server.search_template("alpine")
+    #     with pytest.raises(ValidationError):
+    #         template.update(template_type="dummy")
 
-    @pytest.mark.parametrize(
-        "params",
-        [
-            (({"name": "alpine"})),
-            (({"template_id": "847e5333-6ac9-411f-a400-89838584371b"})),
-        ],
-        ids=["by_name", "by_id"],
-    )
-    def test_delete_template(self, connector_mock, params):
-        response = delete_template(connector_mock, **params)
-        assert response is None
+    def test_delete_template(self, connector_mock):
+        server = Server(connector_mock)
+        response = server.delete_template(name="alpine")
+        assert response is True
 
-    @pytest.mark.parametrize(
-        "params,expected",
-        [
-            ((None), ("Need to submit either name or template_id")),
-            (("dummy"), ("Template not found")),
-        ],
-        ids=["none_args", "template_not_found"],
-    )
-    def test_delete_template_error(self, connector_mock, params, expected):
-        with pytest.raises(ValueError, match=expected):
-            delete_template(connector_mock, params)
+    def test_delete_template_error(self, connector_mock):
+        server = Server(connector_mock)
+        with pytest.raises(ValueError, match="Template dummy not found"):
+            server.delete_template("dummy")

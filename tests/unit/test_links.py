@@ -1,7 +1,7 @@
 import json
 import pytest
 from pathlib import Path
-from gns3fy.services import get_links, search_link, create_link, delete_link
+from gns3fy.links import get_links
 
 
 DATA_FILES = Path(__file__).resolve().parent / "data"
@@ -14,12 +14,26 @@ def links_new_data():
 
 
 class Testlinks:
-    def test_get_links(self, project_mock):
-        links = get_links(project_mock)
+    def test_get_links_from_project(self, project_mock):
+        project_mock.get()
+        links = list(project_mock.links.values())
         for index, n in enumerate(
             [
-                ("d7dd01d6-9577-4076-b7f2-911b231044f8", "ethernet", "e1"),
-                ("cda8707a-79e2-4088-a5f8-c1664928453b", "ethernet", "e1/0"),
+                # ("d7dd01d6-9577-4076-b7f2-911b231044f8", "ethernet", "e1"),
+                # ("cda8707a-79e2-4088-a5f8-c1664928453b", "ethernet", "e1/0"),
+                ("fb27704f-7be5-4152-8ecd-1db6633b2bd9", "ethernet", "e0"),
+                ("4d9f1235-7fd1-466b-ad26-0b4b08beb778", "ethernet", "eth0"),
+                ("52cdd27d-fa97-47e7-ab99-ea810c20e614", "ethernet", "e7"),
+            ]
+        ):
+            assert n[0] == links[index].link_id
+            assert n[1] == links[index].link_type
+            assert n[2] == links[index].nodes[-1].label["text"]
+
+    def test_get_links_from_function(self, project_mock):
+        links = get_links(project_mock._connector, project_mock.project_id)
+        for index, n in enumerate(
+            [
                 ("fb27704f-7be5-4152-8ecd-1db6633b2bd9", "ethernet", "e0"),
                 ("4d9f1235-7fd1-466b-ad26-0b4b08beb778", "ethernet", "eth0"),
                 ("52cdd27d-fa97-47e7-ab99-ea810c20e614", "ethernet", "e7"),
@@ -30,8 +44,7 @@ class Testlinks:
             assert n[2] == links[index].nodes[-1].label["text"]
 
     def test_search_link(self, project_mock):
-        link = search_link(
-            project_mock,
+        link = project_mock.search_link(
             node_a="Cloud-1",
             port_a="eth1",
             node_b="Ethernetswitch-1",
@@ -73,11 +86,11 @@ class Testlinks:
     )
     def test_search_link_error(self, project_mock, params, expected):
         with pytest.raises(ValueError, match=expected):
-            search_link(project_mock, **params)
+            project_mock.search_link(**params)
 
     def test_create_link(self, project_mock):
         new_data_link = links_new_data()[0]
-        new_link = create_link(project_mock, **new_data_link)
+        new_link = project_mock.create_link(**new_data_link)
         assert new_link.link_type == "ethernet"
         assert new_link.suspend is False
         assert new_link.link_id == "7777777-4444-link"
@@ -87,8 +100,7 @@ class Testlinks:
             ValueError,
             match="At least one port is used, ID: 52cdd27d-fa97-47e7-ab99-ea810c20e614",
         ):
-            create_link(
-                project_mock,
+            project_mock.create_link(
                 node_a="Cloud-1",
                 port_a="eth1",
                 node_b="Ethernetswitch-1",
@@ -96,14 +108,13 @@ class Testlinks:
             )
 
     def test_delete_link(self, project_mock):
-        response = delete_link(
-            project_mock,
+        response = project_mock.delete_link(
             node_a="vEOS",
             port_a="Ethernet1",
             node_b="alpine-1",
             port_b="eth0",
         )
-        assert response is None
+        assert response is True
 
     @pytest.mark.parametrize(
         "params,expected",
@@ -135,4 +146,4 @@ class Testlinks:
     )
     def test_delete_link_error(self, project_mock, params, expected):
         with pytest.raises(ValueError, match=expected):
-            delete_link(project_mock, **params)
+            project_mock.delete_link(**params)

@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "gns3fy"
 version = "1.0.0"
-description = "Python wrapper around GNS3 Server API"
+description = "Python SDK around GNS3 Server REST API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
 readme = "README.md"
@@ -20,7 +20,7 @@ requests = "^2.22"
 pydantic = "^1.0"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.0"
+pytest = "^6.0"
 flake8 = "^3.7"
 requests-mock = "^1.6"
 pytest-cov = "^2.7"
@@ -28,6 +28,11 @@ mkdocs = "^1.0"
 pydoc-markdown = "^3.5.0"
 black = {version = "^20.8b1", allow-prereleases = true}
 mkdocs-material = "^6.1.0"
+
+[tool.pytest.ini_options]
+markers = [
+    "gns3vm: marks tests dependent of GNS3 VM (run with '--run_gns3vm')",
+]
 
 [build-system]
 requires = ["poetry>=1.0"]
