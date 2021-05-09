@@ -634,7 +634,8 @@ class Project(BaseResourceModel):
         )
 
         _link = self._search_link(_node_a, _port_a, _node_b, _port_b)
-        _link.name = _link._gen_name()
+        if _link:
+            _link.name = _link._gen_name()
         return _link
 
     @verify_attributes(attrs=["project_id", "_connector"])
