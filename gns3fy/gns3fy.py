@@ -555,6 +555,7 @@ class Link:
 
     link_id: Optional[str] = None
     link_type: Optional[str] = None
+    link_style: Optional[Any] = None
     project_id: Optional[str] = None
     suspend: Optional[bool] = None
     nodes: Optional[List[Any]] = None
