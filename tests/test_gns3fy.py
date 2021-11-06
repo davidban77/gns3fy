@@ -896,6 +896,7 @@ def api_test_link(gns3_server):
 class TestLink:
     def test_instatiation(self):
         for index, link_data in enumerate(links_data()):
+            print(repr(Link(**link_data)))
             assert links.LINKS_REPR[index] == repr(Link(**link_data))
 
     def test_error_instatiation_bad_link_type(self):
