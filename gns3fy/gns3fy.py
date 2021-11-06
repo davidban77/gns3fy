@@ -526,6 +526,7 @@ class Link:
 
     - `link_id` (str): Link UUID (**required** to be set when using `get` method)
     - `link_type` (enum): Possible values: ethernet, serial
+    - `link_style` (dict): Describes the visual style of the link
     - `project_id` (str): Project UUID (**required**)
     - `connector` (object): `Gns3Connector` instance used for interaction (**required**)
     - `suspend` (bool): Suspend the link
@@ -555,6 +556,7 @@ class Link:
 
     link_id: Optional[str] = None
     link_type: Optional[str] = None
+    link_style: Optional[Any] = None
     project_id: Optional[str] = None
     suspend: Optional[bool] = None
     nodes: Optional[List[Any]] = None
