@@ -992,7 +992,7 @@ class TestLink:
     def test_update(self, api_test_link):
         assert api_test_link.project_id is not None
         api_test_link.update(suspend=True)
-        assert api_test_link.suspend == True
+        assert api_test_link.suspend is True
 
     def test_delete(self, api_test_link):
         api_test_link.delete()
