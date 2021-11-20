@@ -320,6 +320,12 @@ def post_put_matcher(request):
                 resp.status_code = 201
                 resp.json = lambda: _data
                 return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/links/{CLINK['id']}"):
+            _data = request.json()
+            _returned = json_api_test_link()
+            resp.status_code = 200
+            resp.json = lambda: {**_returned, **_data}
+            return resp
     return None
 
 
@@ -535,6 +541,11 @@ class Gns3ConnectorMock(Gns3Connector):
         for _l in links_data():
             self.adapter.register_uri(
                 "GET",
+                f"{self.base_url}/projects/{CPROJECT['id']}/links/{_l['link_id']}",
+                json=_l,
+            )
+            self.adapter.register_uri(
+                "PUT",
                 f"{self.base_url}/projects/{CPROJECT['id']}/links/{_l['link_id']}",
                 json=_l,
             )
@@ -977,6 +988,11 @@ class TestLink:
         link = Link(connector=gns3_server, project_id=CPROJECT["id"], nodes=_link_data)
         with pytest.raises(HTTPError, match="409: Cannot connect to itself"):
             link.create()
+
+    def test_update(self, api_test_link):
+        assert api_test_link.project_id is not None
+        api_test_link.update(suspend=True)
+        assert api_test_link.suspend is True
 
     def test_delete(self, api_test_link):
         api_test_link.delete()

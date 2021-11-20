@@ -648,6 +648,36 @@ class Link:
         # Now update it
         self._update(_response.json())
 
+    @verify_connector_and_id
+    def update(self, **kwargs):
+        """
+        Updates the link instance by passing the keyword arguments of the attributes
+        you want updated
+
+        Example:
+
+        ```python
+        link1.update(suspend=True)
+        ```
+
+        This will update the link `suspend` attribute to `True`
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `link_id`
+        """
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
+        )
+
+        # TODO: Verify that the passed kwargs are supported ones
+        _response = self.connector.http_call("put", _url, json_data=kwargs)
+
+        # Update object
+        self._update(_response.json())
+
 
 @dataclass(config=Config)
 class Node:
