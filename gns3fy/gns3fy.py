@@ -47,7 +47,6 @@ CONSOLE_TYPES = [
 
 LINK_TYPES = ["ethernet", "serial"]
 
-
 class Gns3Connector:
     """
     Connector to be use for interaction against GNS3 server controller API.
@@ -558,7 +557,7 @@ class Link:
     project_id: Optional[str] = None
     suspend: Optional[bool] = None
     nodes: Optional[List[Any]] = None
-    filters: Optional[Any] = None
+    filters: Optional[Dict] = None
     capturing: Optional[bool] = None
     capture_file_path: Optional[str] = None
     capture_file_name: Optional[str] = None
@@ -567,9 +566,21 @@ class Link:
     connector: Optional[Any] = field(default=None, repr=False)
 
     @validator("link_type")
-    def _valid_node_type(cls, value):
+    def _valid_link_type(cls, value):
         if value not in LINK_TYPES and value is not None:
             raise ValueError(f"Not a valid link_type - {value}")
+        return value
+
+    @validator("suspend")
+    def _valid_suspend(cls, value):
+        if type(value) is not bool and value is not None:
+            raise ValueError(f"Not a valid suspend - {value}")
+        return value
+
+    @validator("filters")
+    def _valid_filters(cls, value):
+        if type(value) is not dict and value is not None:
+            raise ValueError(f"Not a valid filters - {value}")
         return value
 
     def _update(self, data_dict):
@@ -595,6 +606,30 @@ class Link:
 
         # Update object
         self._update(_response.json())
+
+
+    @verify_connector_and_id
+    def update(self, **kwargs):
+        """
+        Updates the link endpoing by passing the keyword arguments of the attributes
+        you want updated
+
+        **Required Attributes:**
+
+        - `project_id`
+        - `connector`
+        - `link_id`
+        """
+        _url = (
+            f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
+        )
+
+        # TODO: Verify that the passed kwargs are supported ones
+        _response = self.connector.http_call("put", _url, json_data=kwargs)
+
+        # Update object
+        self._update(_response.json())
+
 
     @verify_connector_and_id
     def delete(self):
@@ -1758,17 +1793,11 @@ class Project:
                     node_id=_node_a.node_id,
                     adapter_number=_port_a["adapter_number"],
                     port_number=_port_a["port_number"],
-                    label=dict(
-                        text=_port_a["name"],
-                    ),
                 ),
                 dict(
                     node_id=_node_b.node_id,
                     adapter_number=_port_b["adapter_number"],
                     port_number=_port_b["port_number"],
-                    label=dict(
-                        text=_port_b["name"],
-                    ),
                 ),
             ],
         )
@@ -2077,3 +2106,4 @@ class Project:
         self.connector.http_call("delete", _url)
 
         self.get_drawings()
+
