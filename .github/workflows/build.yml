@@ -3,10 +3,7 @@ name: Run on tests
 on:
   push:
     branches:
-      - "master"
-    pull_request:
-      branches:
-        - "master"
+      - "update_dependencies_CI"
 
 jobs:
   build:
@@ -15,7 +12,7 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6, 3.7, 3.8]
-        poetry-version: 1.1.6
+        poetry-version: [1.0, 1.1.6]
     
     steps:
       # Checkout the code from the repo
@@ -31,26 +28,14 @@ jobs:
         with:
           poetry-version: 1.1.6
       - name: Poetry config
-        run: |
-        poetry config virtualenvs.create false
+        run: poetry config virtualenvs.create false
       - name: Install dependencies
-        run: |
-        poetry install --no-interaction
-  
-  linting:
-    steps:
+        run: poetry install --no-interaction
       - name: Run flake8
-        run: |
-        poetry run flake8 .
+        run: poetry run flake8 .
       - name: Run black formatting check
-        run: |
-        poetry run black --diff --check
-
-  test:
-    steps:
+        run: poetry run black --diff --check
       - name: Running tests
-        run: |
-        poetry run pytest tests/ -v 
+        run: poetry run pytest tests/ -v 
       - name: Upload to codecov
-        run: |
-        poetry run pytest --cov-report=xml --cov=gns3fy tests/
+        run: poetry run pytest --cov-report=xml --cov=gns3fy tests/
