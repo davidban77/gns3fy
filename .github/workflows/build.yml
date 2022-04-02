@@ -26,13 +26,11 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install Poetry
-        run: | 
-        pip install poetry
-        poetry config virtualenvs.create false
+        run: pip install poetry
+        run: poetry config virtualenvs.create false
       - name: Install dependencies
-        run: |
-        poetry install --no-interaction
-  
+        run: poetry install --no-interaction
+ 
   linting:
     steps:
       - name: Run flake8
@@ -50,4 +48,3 @@ jobs:
       - name: Upload to codecov
         run: |
         poetry run pytest --cov-report=xml --cov=gns3fy tests/
-        
