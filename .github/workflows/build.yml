@@ -1,0 +1,53 @@
+name: Run on tests
+
+on:
+  push:
+    branches:
+      - "master"
+    pull_request:
+      branches:
+        - "master"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [3.6, 3.7, 3.8]
+    
+    steps:
+      # Checkout the code from the repo
+      - name: Checkout repo
+        uses: actions/checkout@v3
+      # Setup the python version
+      - name: Set Up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Poetry
+        run: | 
+        pip install poetry
+        poetry config virtualenvs.create false
+      - name: Install dependencies
+        run: |
+        poetry install --no-interaction
+  
+  linting:
+    steps:
+      - name: Run flake8
+        run: |
+        poetry run flake8 .
+      - name: Run black formatting check
+        run: |
+        poetry run black --diff --check
+
+  test:
+    steps:
+      - name: Running tests
+        run: |
+        poetry run pytest tests/ -v 
+      - name: Upload to codecov
+        run: |
+        poetry run pytest --cov-report=xml --cov=gns3fy tests/
+        
