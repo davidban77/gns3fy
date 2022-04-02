@@ -11,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.6]
+        python-version: [3.6, 3.7]
         poetry-version: [1.0, 1.1.6]
     
     steps:
