@@ -54,11 +54,7 @@ jobs:
  
       # Codecov coverage
       - name: Upload coverage to Codecov
-<<<<<<< HEAD
         uses: codecov/codecov-action@v2
-=======
-        uses: codecov/codecov-action@v1.0.5
->>>>>>> 83d63fc99d468761eccb9f2232ce2d0b4d5f921d
         with:
           fail_ci_if_error: true
       #- name: Upload to codecov
