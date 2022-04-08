@@ -1,6 +1,6 @@
 # gns3fy
 
-[![Tests]](https://github.com/davidban77/gns3fy/actions/workflows/tests.yml/badge.svg)
+[![Tests](https://github.com/davidban77/gns3fy/actions/workflows/tests.yml/badge.svg)]
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 [![codecov](https://codecov.io/gh/davidban77/gns3fy/branch/develop/graph/badge.svg)](https://codecov.io/gh/davidban77/gns3fy)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/alerts/)

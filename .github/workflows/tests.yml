@@ -1,6 +1,6 @@
 name: Run on push, and pull-request
 
-on: [push, pull-request]
+on: [push, pull_request]
 
 
 jobs:
@@ -10,7 +10,6 @@ jobs:
     strategy:
       matrix:
         python-version: [3.6]
-        poetry-version: [1.0, 1.1.6]
     
     steps:
       # Checkout the code from the repo
@@ -54,5 +53,8 @@ jobs:
       # Codecov coverage
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: true
       #- name: Upload to codecov
       #  run: poetry run pytest --cov-report=xml --cov=gns3fy tests/
