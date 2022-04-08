@@ -52,7 +52,7 @@ jobs:
       
       # Codecov coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v1.0.5
         with:
           file: ./coverage.xml
           fail_ci_if_error: true
