@@ -6,6 +6,19 @@ pip install -U gns3fy
 
 ## Releases
 
+### 0.8.0
+
+**Changes:**
+
+- Changed from CircleCI pipeline, to GitHub Actions.
+- Added `Links.update` function. [PR-98](https://github.com/davidban77/gns3fy/pull/98)
+- Added attribute and documentation for `links.style`. [PR-98](https://github.com/davidban77/gns3fy/pull/98)
+- Added `delete_links` for [issue #79] provide `delete_link` function. [PR-91](https://github.com/davidban77/gns3fy/pull/91)
+
+**Fix:**
+
+- Fixed some formatting typos.
+
 ### 0.7.1
 
 **Enhancement:**
