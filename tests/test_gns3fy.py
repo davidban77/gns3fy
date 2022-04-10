@@ -1458,6 +1458,14 @@ class TestProject:
         api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
         assert link is not None
         assert api_test_project.get_link(link_id="NEW_LINK_ID") is None
+        with pytest.raises(ValueError, match="node_a: IOU not found"):
+            api_test_project.delete_link("IOU", "Ethernet1/1", "vEOS", "Ethernet2")
+        with pytest.raises(ValueError, match="node_b: vEO not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/1", "vEO", "Ethernet2")
+        with pytest.raises(ValueError, match="port_a: Ethernet1/ not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/", "vEOS", "Ethernet2")
+        with pytest.raises(ValueError, match="port_b: Etherne not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Etherne")
 
     @pytest.mark.parametrize(
         "link,expected",
