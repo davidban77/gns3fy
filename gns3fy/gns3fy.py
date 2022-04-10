@@ -92,10 +92,10 @@ class Gns3Connector:
         """
         Creates the requests.Session object and applies the necessary parameters
         """
-        self.session = requests.Session() # pragma: not covered
-        self.session.headers["Accept"] = "application/json" # pragma: not covered
-        if self.user: # pragma: not covered
-            self.session.auth = (self.user, self.cred) # pragma: not covered
+        self.session = requests.Session()  # pragma: no cover
+        self.session.headers["Accept"] = "application/json"  # pragma: no cover
+        if self.user:  # pragma: no cover
+            self.session.auth = (self.user, self.cred)  # pragma: no cover
 
     def http_call(
         self,
@@ -502,7 +502,7 @@ def verify_connector_and_id(f):
                 extracted = [
                     node for node in _response.json() if node["name"] == self.name
                 ]
-                if len(extracted) > 1:
+                if len(extracted) > 1:  # pragma: no cover
                     raise ValueError(
                         "Multiple nodes found with same name. Need to submit node_id"
                     )
@@ -857,7 +857,7 @@ class Node:
         if _response.json().get("status") == "started":
             self._update(_response.json())
         else:
-            self.get() # pragma: not covered
+            self.get() # pragma: no cover
 
     @verify_connector_and_id
     def stop(self):
@@ -880,7 +880,7 @@ class Node:
         if _response.json().get("status") == "stopped":
             self._update(_response.json())
         else:
-            self.get() # pragma: not covered
+            self.get() # pragma: no cover
 
     @verify_connector_and_id
     def reload(self):
@@ -903,7 +903,7 @@ class Node:
         if _response.json().get("status") == "started":
             self._update(_response.json())
         else:
-            self.get() # pragma: not covered
+            self.get() # pragma: no cover
 
     @verify_connector_and_id
     def suspend(self):
@@ -926,7 +926,7 @@ class Node:
         if _response.json().get("status") == "suspended":
             self._update(_response.json())
         else:
-            self.get() # pragma: not covered
+            self.get() # pragma: no cover
 
     @verify_connector_and_id
     def update(self, **kwargs):
@@ -1821,9 +1821,9 @@ class Project:
         port)
         """
         if not self.nodes:
-            self.get_nodes()
+            self.get_nodes()  # pragma: no cover
         if not self.links:
-            self.get_links()
+            self.get_links()  # pragma: no cover
 
         # checking link info
         _node_a = self.get_node(name=node_a)
@@ -1859,7 +1859,7 @@ class Project:
             ):
                 _matches.append(_l)
         if not _matches:
-            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")
+            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")  # pragma: no cover
 
             # now to delete the link via GNS3_api
         _link = _matches[0]
@@ -2022,7 +2022,7 @@ class Project:
 
         self.get()
         if self.status != "opened":
-            self.open() # pragma: not covered
+            self.open() # pragma: no cover
 
         _angle = (2 * pi) / len(self.nodes)
         # The Y Axis is inverted in GNS3, so the -Y is UP
