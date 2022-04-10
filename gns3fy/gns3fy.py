@@ -857,7 +857,7 @@ class Node:
         if _response.json().get("status") == "started":
             self._update(_response.json())
         else:
-            self.get() # pragma: no cover
+            self.get()  # pragma: no cover
 
     @verify_connector_and_id
     def stop(self):
@@ -880,7 +880,7 @@ class Node:
         if _response.json().get("status") == "stopped":
             self._update(_response.json())
         else:
-            self.get() # pragma: no cover
+            self.get()  # pragma: no cover
 
     @verify_connector_and_id
     def reload(self):
@@ -903,7 +903,7 @@ class Node:
         if _response.json().get("status") == "started":
             self._update(_response.json())
         else:
-            self.get() # pragma: no cover
+            self.get()  # pragma: no cover
 
     @verify_connector_and_id
     def suspend(self):
@@ -926,7 +926,7 @@ class Node:
         if _response.json().get("status") == "suspended":
             self._update(_response.json())
         else:
-            self.get() # pragma: no cover
+            self.get()  # pragma: no cover
 
     @verify_connector_and_id
     def update(self, **kwargs):
@@ -1777,7 +1777,7 @@ class Project:
                 and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
                 and _l.nodes[1]["port_number"] == _port_b["port_number"]
             ):
-                _matches.append(_l) # pragma: not covered
+                _matches.append(_l)  # pragma: not covered
         if _matches:
             raise ValueError(f"At least one port is used, ID: {_matches[0].link_id}")
 
@@ -2022,7 +2022,7 @@ class Project:
 
         self.get()
         if self.status != "opened":
-            self.open() # pragma: no cover
+            self.open()  # pragma: no cover
 
         _angle = (2 * pi) / len(self.nodes)
         # The Y Axis is inverted in GNS3, so the -Y is UP
