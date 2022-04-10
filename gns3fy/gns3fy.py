@@ -1777,7 +1777,7 @@ class Project:
                 and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
                 and _l.nodes[1]["port_number"] == _port_b["port_number"]
             ):
-                _matches.append(_l)  # pragma: not covered
+                _matches.append(_l)  # pragma: no cover
         if _matches:
             raise ValueError(f"At least one port is used, ID: {_matches[0].link_id}")
 
