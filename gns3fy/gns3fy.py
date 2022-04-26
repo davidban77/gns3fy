@@ -560,7 +560,7 @@ class Link:
     project_id: Optional[str] = None
     suspend: Optional[bool] = None
     nodes: Optional[List[Any]] = None
-    filters: Optional[Any] = None
+    filters: Optional[Dict] = None
     capturing: Optional[bool] = None
     capture_file_path: Optional[str] = None
     capture_file_name: Optional[str] = None
@@ -569,9 +569,21 @@ class Link:
     connector: Optional[Any] = field(default=None, repr=False)
 
     @validator("link_type")
-    def _valid_node_type(cls, value):
+    def _valid_link_type(cls, value):
         if value not in LINK_TYPES and value is not None:
             raise ValueError(f"Not a valid link_type - {value}")
+        return value
+
+    @validator("suspend")
+    def _valid_suspend(cls, value):
+        if type(value) is not bool and value is not None:
+            raise ValueError(f"Not a valid suspend - {value}")
+        return value
+
+    @validator("filters")
+    def _valid_filters(cls, value):
+        if type(value) is not dict and value is not None:
+            raise ValueError(f"Not a valid filters - {value}")
         return value
 
     def _update(self, data_dict):
