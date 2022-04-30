@@ -577,13 +577,13 @@ class Link:
     @validator("suspend")
     def _valid_suspend(cls, value):
         if type(value) is not bool and value is not None:
-            raise ValueError(f"Not a valid suspend - {value}")
+            raise ValueError(f"Not a valid suspend - {value}")  # pragma: no cover
         return value
 
     @validator("filters")
     def _valid_filters(cls, value):
         if type(value) is not dict and value is not None:
-            raise ValueError(f"Not a valid filters - {value}")
+            raise ValueError(f"Not a valid filters - {value}")  # pragma: no cover
         return value
 
     def _update(self, data_dict):
@@ -1869,7 +1869,7 @@ class Project:
                 and _l.nodes[1]["adapter_number"] == _port_b["adapter_number"]
                 and _l.nodes[1]["port_number"] == _port_b["port_number"]
             ):
-                _matches.append(_l)
+                _matches.append(_l)  # pragma: no cover
         if not _matches:
             raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")  # pragma: no cover
 
