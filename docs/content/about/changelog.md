@@ -14,6 +14,8 @@ pip install -U gns3fy
 - Added `Links.update` function. [PR-98](https://github.com/davidban77/gns3fy/pull/98)
 - Added attribute and documentation for `links.style`. [PR-98](https://github.com/davidban77/gns3fy/pull/98)
 - Added `delete_links` for [issue #79] provide `delete_link` function. [PR-91](https://github.com/davidban77/gns3fy/pull/91)
+- Added a minimum validator for "suspernd" and "filters" fields. [PR-104](https://github.com/davidban77/gns3fy/pull/104)
+- Special thanks to [nmaludy](https://github.com/nmaludy)(PR-98) and [LucaV27](https://github.com/LucaV27)(PR-104) and everyone else who helped and contributed to this repository! 
 
 **Fix:**
 
