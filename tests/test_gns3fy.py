@@ -320,6 +320,12 @@ def post_put_matcher(request):
                 resp.status_code = 201
                 resp.json = lambda: _data
                 return resp
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/links/{CLINK['id']}"):
+            _data = request.json()
+            _returned = json_api_test_link()
+            resp.status_code = 200
+            resp.json = lambda: {**_returned, **_data}
+            return resp
     return None
 
 
@@ -436,6 +442,11 @@ class Gns3ConnectorMock(Gns3Connector):
             f"{self.base_url}/projects/{CPROJECT['id']}/drawings/{CDRAWING['id']}",
             status_code=204,
         )
+        self.adapter.register_uri(
+            "DELETE",
+            f"{self.base_url}/projects/{CPROJECT['id']}/links/NEW_LINK_ID",
+            status_code=204,
+        )
         # Extra project
         self.adapter.register_uri(
             "GET",
@@ -530,6 +541,11 @@ class Gns3ConnectorMock(Gns3Connector):
         for _l in links_data():
             self.adapter.register_uri(
                 "GET",
+                f"{self.base_url}/projects/{CPROJECT['id']}/links/{_l['link_id']}",
+                json=_l,
+            )
+            self.adapter.register_uri(
+                "PUT",
                 f"{self.base_url}/projects/{CPROJECT['id']}/links/{_l['link_id']}",
                 json=_l,
             )
@@ -891,6 +907,7 @@ def api_test_link(gns3_server):
 class TestLink:
     def test_instatiation(self):
         for index, link_data in enumerate(links_data()):
+            print(repr(Link(**link_data)))
             assert links.LINKS_REPR[index] == repr(Link(**link_data))
 
     def test_error_instatiation_bad_link_type(self):
@@ -971,6 +988,11 @@ class TestLink:
         link = Link(connector=gns3_server, project_id=CPROJECT["id"], nodes=_link_data)
         with pytest.raises(HTTPError, match="409: Cannot connect to itself"):
             link.create()
+
+    def test_update(self, api_test_link):
+        assert api_test_link.project_id is not None
+        api_test_link.update(suspend=True)
+        assert api_test_link.suspend is True
 
     def test_delete(self, api_test_link):
         api_test_link.delete()
@@ -1428,6 +1450,22 @@ class TestProject:
         link = api_test_project.get_link(link_id="NEW_LINK_ID")
         assert link.link_id == "NEW_LINK_ID"
         assert link.link_type == "ethernet"
+
+    def test_delete_link(self, api_test_project):
+        api_test_project.links = []
+        api_test_project.create_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
+        link = api_test_project.get_link(link_id="NEW_LINK_ID")
+        api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Ethernet2")
+        assert link is not None
+        assert api_test_project.get_link(link_id="NEW_LINK_ID") is None
+        with pytest.raises(ValueError, match="node_a: IOU not found"):
+            api_test_project.delete_link("IOU", "Ethernet1/1", "vEOS", "Ethernet2")
+        with pytest.raises(ValueError, match="node_b: vEO not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/1", "vEO", "Ethernet2")
+        with pytest.raises(ValueError, match="port_a: Ethernet1/ not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/", "vEOS", "Ethernet2")
+        with pytest.raises(ValueError, match="port_b: Etherne not found"):
+            api_test_project.delete_link("IOU1", "Ethernet1/1", "vEOS", "Etherne")
 
     @pytest.mark.parametrize(
         "link,expected",
