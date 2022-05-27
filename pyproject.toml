@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "gns3fy"
-version = "1.0.0"
+version = "1.0.0-rc.1"
 description = "Python SDK around GNS3 Server REST API"
 authors = ["David Flores <davidflores7_8@hotmail.com>"]
 license = "MIT"
