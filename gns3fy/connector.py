@@ -7,6 +7,10 @@ from requests.adapters import HTTPAdapter
 from requests.packages.urllib3.util.retry import Retry  # type: ignore
 
 
+class ConnectorError(Exception):
+    """GNS3 Connector Error"""
+
+
 class Connector:
     """
     Connector to be use for interaction against GNS3 server controller API.
@@ -143,10 +147,8 @@ class Connector:
 
         try:
             _response.raise_for_status()
-        except HTTPError:
-            raise HTTPError(
-                f"{_response.json()['status']}: {_response.json()['message']}"
-            )
+        except HTTPError as http_err:
+            raise ConnectorError(f"{http_err}") from http_err
         except Exception as err:
             raise err
 
