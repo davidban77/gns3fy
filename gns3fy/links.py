@@ -19,6 +19,7 @@ class Link(BaseResourceModel):
 
     - `link_id` (str): Link UUID (**required** to be set when using `get` method)
     - `link_type` (enum): Possible values: ethernet, serial
+    - `link_style` (dict): Describes the visual style of the link
     - `project_id` (str): Project UUID (**required**)
     - `connector` (object): `Connector` instance used for interaction (**required**)
     - `suspend` (bool): Suspend the link
@@ -50,6 +51,7 @@ class Link(BaseResourceModel):
     link_id: str
     _connector: Connector = PrivateAttr()
     link_type: Optional[str] = None
+    link_style: Optional[Any] = None
     suspend: Optional[bool] = None
     filters: Optional[Any] = None
     capturing: Optional[bool] = None
