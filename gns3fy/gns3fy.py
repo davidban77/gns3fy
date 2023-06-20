@@ -651,7 +651,7 @@ class Link:
         data = {
             k: v
             for k, v in self.__dict__.items()
-            if k not in ("connector", "__initialised__")
+            if k not in ("connector", "__initialised__", "__pydantic_initialised__")
             if v is not None
         }
 
@@ -1012,6 +1012,7 @@ class Node:
                 "links",
                 "connector",
                 "__initialised__",
+                 "__pydantic_initialised__",
             )
             if v is not None
         }
