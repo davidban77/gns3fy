@@ -1012,7 +1012,7 @@ class Node:
                 "links",
                 "connector",
                 "__initialised__",
-                 "__pydantic_initialised__",
+                "__pydantic_initialised__",
             )
             if v is not None
         }
@@ -1258,7 +1258,7 @@ class Project:
         data = {
             k: v
             for k, v in self.__dict__.items()
-            if k not in ("stats", "nodes", "links", "connector", "__initialised__")
+            if k not in ("stats", "nodes", "links", "connector", "__initialised__", "__pydantic_initialised__")
             if v is not None
         }
 
