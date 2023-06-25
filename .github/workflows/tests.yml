@@ -9,7 +9,11 @@ jobs:
 
     strategy:
       matrix:
+<<<<<<< HEAD
         python-version: [3.7, 3.8]
+=======
+        python-version: [3.6, 3.7, 3.8]
+>>>>>>> a5fa209ef0a03165745bd9bfba4d5c382a616bc5
     
     steps:
       # Checkout the code from the repo
