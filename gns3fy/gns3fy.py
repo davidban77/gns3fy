@@ -651,7 +651,7 @@ class Link:
         data = {
             k: v
             for k, v in self.__dict__.items()
-            if k not in ("connector", "__initialised__","__pydantic_initialised__")
+            if k not in ("connector", "__initialised__", "__pydantic_initialised__")
             if v is not None
         }
 
@@ -1258,7 +1258,15 @@ class Project:
         data = {
             k: v
             for k, v in self.__dict__.items()
-            if k not in ("stats", "nodes", "links", "connector", "__initialised__","__pydantic_initialised__")
+            if k
+            not in (
+                "stats",
+                "nodes",
+                "links",
+                "connector",
+                "__initialised__",
+                "__pydantic_initialised__",
+            )
             if v is not None
         }
 
@@ -1872,7 +1880,9 @@ class Project:
             ):
                 _matches.append(_l)
         if not _matches:
-            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")  # pragma: no cover
+            raise ValueError(
+                f"Link not found: {node_a, port_a, node_b, port_b}"
+            )  # pragma: no cover
 
             # now to delete the link via GNS3_api
         _link = _matches[0]
