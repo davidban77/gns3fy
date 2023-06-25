@@ -9,9 +9,10 @@ repository = "https://github.com/davidban77/gns3fy"
 homepage = "https://github.com/davidban77/gns3fy"
 keywords = ["network", "gns3", "python", "restapi", "netdev"]
 classifiers = [
-        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
 ]
 
 [tool.poetry.dependencies]
@@ -25,8 +26,8 @@ flake8 = "^3.7"
 requests-mock = "^1.6"
 pytest-cov = "^2.7"
 mkdocs = "^1.0"
-pydoc-markdown = "^3.5.0"
-black = {version = "^20.8b1", allow-prereleases = true}
+pydoc-markdown = "*"
+black = "*"
 mkdocs-material = "^6.1.0"
 
 [build-system]
