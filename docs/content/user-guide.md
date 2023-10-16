@@ -162,7 +162,7 @@ Template: Frame Relay switch -- ID: dd0f6f3a-ba58-3249-81cb-a1dd88407a47
 Template: ATM switch -- ID: aaa764e2-b383-300f-8a0e-3493bbfdb7d2
 """
 
->>> server.get_template_by_name("Ethernet switch")
+>>> server.get_template(name="Ethernet switch")
 {'builtin': True,
  'category': 'switch',
  'console_type': 'none',
