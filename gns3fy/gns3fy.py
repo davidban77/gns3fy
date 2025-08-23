@@ -6,15 +6,15 @@ from urllib.parse import urlparse
 from requests import HTTPError
 from dataclasses import field
 from typing import Optional, Any, Dict, List
-from pydantic import validator
+from pydantic import field_validator, ConfigDict
 from pydantic.dataclasses import dataclass
 from math import pi, sin, cos
 
 
-class Config:
-    validate_assignment = True
-    # TODO: Not really working.. Need to investigate more and possibly open an issue
-    extra = "ignore"
+config = ConfigDict(
+    validate_assignment=True,
+    extra='ignore'
+)
 
 
 NODE_TYPES = [
@@ -516,7 +516,7 @@ def verify_connector_and_id(f):
     return wrapper
 
 
-@dataclass(config=Config)
+@dataclass(config=config)
 class Link:
     """
     GNS3 Link API object. For more information visit: [Links Endpoint API information](
@@ -568,19 +568,22 @@ class Link:
 
     connector: Optional[Any] = field(default=None, repr=False)
 
-    @validator("link_type")
+    @field_validator("link_type")
+    @classmethod
     def _valid_link_type(cls, value):
         if value not in LINK_TYPES and value is not None:
             raise ValueError(f"Not a valid link_type - {value}")
         return value
 
-    @validator("suspend")
+    @field_validator("suspend")
+    @classmethod
     def _valid_suspend(cls, value):
         if type(value) is not bool and value is not None:
             raise ValueError(f"Not a valid suspend - {value}")
         return value
 
-    @validator("filters")
+    @field_validator("filters")
+    @classmethod
     def _valid_filters(cls, value):
         if type(value) is not dict and value is not None:
             raise ValueError(f"Not a valid filters - {value}")
@@ -651,7 +654,7 @@ class Link:
         data = {
             k: v
             for k, v in self.__dict__.items()
-            if k not in ("connector", "__initialised__", "__pydantic_initialised__")
+            if k not in ("connector", "__initialised__")
             if v is not None
         }
 
@@ -691,7 +694,7 @@ class Link:
         self._update(_response.json())
 
 
-@dataclass(config=Config)
+@dataclass(config=config)
 class Node:
     """
     GNS3 Node API object. For more information visit: [Node Endpoint API information](
@@ -778,19 +781,22 @@ class Node:
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
 
-    @validator("node_type")
+    @field_validator("node_type")
+    @classmethod
     def _valid_node_type(cls, value):
         if value not in NODE_TYPES and value is not None:
             raise ValueError(f"Not a valid node_type - {value}")
         return value
 
-    @validator("console_type")
+    @field_validator("console_type")
+    @classmethod
     def _valid_console_type(cls, value):
         if value not in CONSOLE_TYPES and value is not None:
             raise ValueError(f"Not a valid console_type - {value}")
         return value
 
-    @validator("status")
+    @field_validator("status")
+    @classmethod
     def _valid_status(cls, value):
         if value not in ("stopped", "started", "suspended") and value is not None:
             raise ValueError(f"Not a valid status - {value}")
@@ -1012,7 +1018,6 @@ class Node:
                 "links",
                 "connector",
                 "__initialised__",
-                "__pydantic_initialised__",
             )
             if v is not None
         }
@@ -1103,7 +1108,7 @@ class Node:
         self.connector.http_call("post", _url, data=data)
 
 
-@dataclass(config=Config)
+@dataclass(config=config)
 class Project:
     """
     GNS3 Project API object. For more information visit: [Project Endpoint API
@@ -1177,7 +1182,8 @@ class Project:
     links: List[Link] = field(default_factory=list, repr=False)
     connector: Optional[Any] = field(default=None, repr=False)
 
-    @validator("status")
+    @field_validator("status")
+    @classmethod
     def _valid_status(cls, value):
         if value != "opened" and value != "closed" and value is not None:
             raise ValueError("status must be opened or closed")
@@ -1265,7 +1271,6 @@ class Project:
                 "links",
                 "connector",
                 "__initialised__",
-                "__pydantic_initialised__",
             )
             if v is not None
         }

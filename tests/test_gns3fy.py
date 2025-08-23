@@ -3,7 +3,7 @@ import pytest
 import requests
 import requests_mock
 from pathlib import Path
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
 from requests.exceptions import HTTPError
 from gns3fy import Link, Node, Project, Gns3Connector
 from .data import links, nodes, projects
