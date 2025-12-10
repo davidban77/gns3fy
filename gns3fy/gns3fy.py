@@ -1,3 +1,15 @@
+"""
+Adapted gns3fy module for gns3-copilot.
+
+This module is based on the upstream gns3fy project (https://github.com/davidban77/gns3fy).
+Modifications made for this repository:
+- Adjusted some pydantic usages and dataclass configuration to reduce dependency conflicts
+  with langchain (pydantic version/api differences).
+- Kept the original API surface where possible but simplified validators/config to improve compatibility.
+- Please review any pydantic-specific code if upgrading langchain or pydantic in the future.
+
+Note: This file is adapted - not the untouched upstream source. See repository README for details.
+"""
 import os
 import time
 import requests
@@ -209,11 +221,30 @@ class Gns3Connector:
 
         try:
             _response.raise_for_status()
-        except HTTPError:
-            raise HTTPError(
-                f"{_response.json()['status']}: {_response.json()['message']}"
-            )
-
+            
+        except HTTPError as e:
+            # Handle the HTTPError (e.g., 422 Client Error) raised by response.raise_for_status()
+            try:
+                # Attempt to parse the response body as JSON to extract a detailed error message from the GNS3 server
+                error_json = _response.json()
+                
+                # Safely get the 'status' key, providing a default message if it's missing (to avoid KeyError)
+                status = error_json.get("status", "Unknown Status")
+                
+                # Safely get the 'message' key, providing a default message if it's missing
+                message = error_json.get("message", "No message provided in JSON.")
+                
+                # Raise a new HTTPError with the extracted, more descriptive message
+                # 'from e' chains the exceptions, preserving the original traceback
+                raise HTTPError(f"{status}: {message} (Original 422 Error)", response=_response) from e
+                
+            except Exception:
+                # Fallback handling if the response is not valid JSON, or if unexpected JSON keys cause an error
+                # Raise an HTTPError that includes the original exception message and the raw response text for debugging
+                raise HTTPError(
+                    f"Original Error: {e.args[0]}. GNS3 response text: {_response.text}"
+                ) from e
+                
         return _response
 
     def get_version(self):
@@ -939,13 +970,36 @@ class Node:
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/start"
         )
-        _response = self.connector.http_call("post", _url)
+        if "v2" in _url.lower():  # api_version 2
+            _response = self.connector.http_call("post", _url,)
 
-        # Update object or perform get if change was not reflected
-        if _response.json().get("status") == "started":
-            self._update(_response.json())
+            # Update object or perform get if change was not reflected
+            if _response.json().get("status") == "started":
+                self._update(_response.json())
+            else:
+                self.get()  # pragma: no cover
+        
         else:
-            self.get()  # pragma: no cover
+            # api_version 3
+            _response = self.connector.http_call(
+                "post",
+                _url,
+                json_data={"additionalProp1": {}}
+                )
+            # successful response code 204
+            if _response.status_code in (204,):
+                self.get()
+                return True
+            else:
+                try:
+                    error_detail = _response.json()
+                except:
+                    error_detail = _response.text
+                raise RuntimeError(
+                    "Failed to start node: %s, %s",
+                    _response.status_code,
+                    error_detail
+                    )
 
     @verify_connector_and_id
     def stop(self):
@@ -962,13 +1016,36 @@ class Node:
             f"{self.connector.base_url}/projects/{self.project_id}/nodes"
             f"/{self.node_id}/stop"
         )
-        _response = self.connector.http_call("post", _url)
+        if "v2" in _url.lower():  # api_version 2
+            _response = self.connector.http_call("post", _url,)
 
-        # Update object or perform get if change was not reflected
-        if _response.json().get("status") == "stopped":
-            self._update(_response.json())
+            # Update object or perform get if change was not reflected
+            if _response.json().get("status") == "stopped":
+                self._update(_response.json())
+            else:
+                self.get()  # pragma: no cover
+        
         else:
-            self.get()  # pragma: no cover
+            # api_version 3
+            _response = self.connector.http_call(
+                "post",
+                _url,
+                json_data={"additionalProp1": {}}
+                )
+            # successful response code 204
+            if _response.status_code in (204,):
+                self.get()
+                return True
+            else:
+                try:
+                    error_detail = _response.json()
+                except:
+                    error_detail = _response.text
+                raise RuntimeError(
+                    "Failed to start node: %s, %s",
+                    _response.status_code,
+                    error_detail
+                    )
 
     @verify_connector_and_id
     def reload(self):
@@ -987,11 +1064,36 @@ class Node:
         )
         _response = self.connector.http_call("post", _url)
 
-        # Update object or perform get if change was not reflected
-        if _response.json().get("status") == "started":
-            self._update(_response.json())
+        if "v2" in _url.lower():  # api_version 2
+            _response = self.connector.http_call("post", _url,)
+
+            # Update object or perform get if change was not reflected
+            if _response.json().get("status") == "started":
+                self._update(_response.json())
+            else:
+                self.get()  # pragma: no cover
+        
         else:
-            self.get()  # pragma: no cover
+            # api_version 3
+            _response = self.connector.http_call(
+                "post",
+                _url,
+                json_data={"additionalProp1": {}}
+                )
+            # successful response code 204
+            if _response.status_code in (204,):
+                self.get()
+                return True
+            else:
+                try:
+                    error_detail = _response.json()
+                except:
+                    error_detail = _response.text
+                raise RuntimeError(
+                    "Failed to start node: %s, %s",
+                    _response.status_code,
+                    error_detail
+                    )
 
     @verify_connector_and_id
     def suspend(self):
