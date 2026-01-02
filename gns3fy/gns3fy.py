@@ -164,7 +164,9 @@ class Gns3Connector:
         temp_session.headers["Content-Type"] = "application/json"
 
         try:
-            response = temp_session.post(auth_url, json=auth_data, verify=self.verify)
+            response = temp_session.post(
+                auth_url, json=auth_data, verify=self.verify, timeout=10.0
+            )
             if response.status_code == 200:
                 auth_result = response.json()
                 self.access_token = auth_result["access_token"]
@@ -235,6 +237,7 @@ class Gns3Connector:
             "headers": headers,
             "params": params,
             "verify": verify,
+            "timeout": 10.0,  # Fixed 10-second timeout for all GNS3 API requests
         }
         if data is not None:
             kwargs["data"] = data
@@ -2037,6 +2040,7 @@ class Project:
                         "console_type": _n.console_type,
                         "type": _n.node_type,
                         "ports": _n.ports,
+                        "status": _n.status,
                         # "template": _n.template,
                         "x": _n.x,
                         "y": _n.y,
@@ -2587,6 +2591,63 @@ class Project:
 
         _response = _conn.http_call("get", _url)
         self.drawings = _response.json()
+
+    @verify_connector_and_id
+    def create_drawing(
+        self,
+        svg: str,
+        x: int = 0,
+        y: int = 0,
+        z: int = 0,
+        locked: bool = False,
+        rotation: int = 0,
+    ) -> dict[str, Any]:
+        """
+        Creates a new drawing in the project
+
+        API: POST /v2/projects/{project_id}/drawings
+
+        Required Project instance attributes:
+
+        - `project_id`
+        - `connector`
+
+        Required parameters:
+
+        - `svg`: SVG content string
+
+        Optional parameters:
+
+        - `x`: X coordinate (default: 0)
+        - `y`: Y coordinate (default: 0)
+        - `z`: Z layer (default: 0)
+        - `locked`: Whether to lock the drawing (default: False)
+        - `rotation`: Rotation angle in degrees, range -359 to 359 (default: 0)
+        """
+        _conn = self.connector
+        assert _conn is not None
+        _project_id = self.project_id
+        assert _project_id is not None
+
+        _url = f"{_conn.base_url}/projects/{_project_id}/drawings"
+
+        # Prepare request body
+        request_body = {
+            "svg": svg,
+            "x": x,
+            "y": y,
+            "z": z,
+            "locked": locked,
+            "rotation": rotation,
+        }
+
+        # Send POST request to create drawing
+        _response = _conn.http_call("post", _url, json_data=request_body)
+
+        # Refresh drawings list
+        self.get_drawings()
+
+        return cast(dict[str, Any], _response.json())
 
     @verify_connector_and_id
     def update_drawing(
