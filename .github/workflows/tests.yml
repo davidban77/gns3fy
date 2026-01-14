@@ -9,7 +9,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: ["3.10", "3.11", "3.12"]
     
     steps:
       # Checkout the code from the repo
@@ -48,9 +48,9 @@ jobs:
 
       # Running tests
       - name: Running tests
-        run: poetry run pytest tests/ -v 
+        run: poetry run pytest tests/ -v
       - name: Running tests (with coverage)
-        run: poetry run pytest --cov-report=xml --cov=gns3fy tests
+        run: poetry run pytest --cov-report=xml --cov=gns3fy_next tests
  
       # Codecov coverage
       - name: Upload coverage to Codecov
