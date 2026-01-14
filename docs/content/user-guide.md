@@ -18,7 +18,7 @@ Next you can see different ways to interact with the library.
 Here is an example of defining a connector object and a project that is already configured on a local GNS3 server:
 
 ```python
->>> from gns3fy import Gns3Connector, Project
+>>> from gns3fy_next import Gns3Connector, Project
 >>> from tabulate import tabulate
 
 >>> server = Gns3Connector("http://localhost:3080")
@@ -535,7 +535,7 @@ Here is a simple script that shows an example of how to achive it with `Gns3Conn
 `migrate_gns3_templates.py`
 
 ```python
-from gns3fy import Gns3Connector
+from gns3fy_next import Gns3Connector
 
 OLD_URL = "http://gns3server01:3080"
 NEW_URL = "http://gns3server02:3080"
@@ -601,7 +601,7 @@ Here is an example of getting the CPU and Memory average usage for a period of t
 
 ```python
 import time
-from gns3fy import Gns3Connector, Project
+from gns3fy_next import Gns3Connector, Project
 
 server = Gns3Connector(url="http://gns3server")
 
@@ -644,7 +644,7 @@ Here is a snippet that creates and shows information about the snapshots configu
 
 ```python
 from datetime import datetime
-from gns3fy import Gns3Connector, Project
+from gns3fy_next import Gns3Connector, Project
 
 lab = Project(name="test3", connector=Gns3Connector(url="http://gns3server01:3080"))
 

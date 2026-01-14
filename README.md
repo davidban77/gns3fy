@@ -8,7 +8,17 @@
 [![pypi](https://img.shields.io/pypi/v/gns3fy.svg)](https://pypi.python.org/pypi/gns3fy)
 [![versions](https://img.shields.io/pypi/pyversions/gns3fy.svg)](https://github.com/davidban77/gns3fy)
 
-Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). Minimal GNS3 version is 2.2.
+Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). Supports GNS3 Server API v2 and v3.
+
+## Features
+
+- Support for GNS3 Server API v2 and v3
+- JWT-based authentication for v3 API (automatic token management)
+- Project locking operations (v3 API)
+- Create, update, delete projects, nodes, links, and drawings
+- Snapshot management
+- Template management
+- File operations on nodes and projects
 
 Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts. Ideal for network CI/CD pipeline tooling.
 
@@ -29,7 +39,7 @@ Here are some examples where gns3fy is used in a programmatic way:
 ## Install
 
 ```shell
-pip install gns3fy
+pip install gns3fy-next
 ```
 
 ### Development version
@@ -43,11 +53,11 @@ You can start the library and use the `Gns3Connector` object and the `Project` o
 For example:
 
 ```python
->>> import gns3fy
+>>> import gns3fy_next
 >>> from tabulate import tabulate
 
 # Define the server object to establish the connection
->>> gns3_server = gns3fy.Gns3Connector("http://<server address>:3080")
+>>> gns3_server = gns3fy_next.Gns3Connector("http://<server address>:3080")
 
 # Show the available projects on the server
 >>> print(
@@ -65,7 +75,7 @@ mpls-bgpv2      f5de5917-0ac5-4850-82b1-1d7e3c777fa1             30             
 """
 
 # Define the lab you want to load and assign the server connector
->>> lab = gns3fy.Project(name="API_TEST", connector=gns3_server)
+>>> lab = gns3fy_next.Project(name="API_TEST", connector=gns3_server)
 
 # Retrieve its information and display
 >>> lab.get()
@@ -100,7 +110,7 @@ Take a look at the API documentation for complete information about the attribut
 You have access to the `Node` and `Link` objects as well, this gives you the ability to start, stop, suspend the individual element in a GNS3 project.
 
 ```python
->>> from gns3fy import Node, Link, Gns3Connector
+>>> from gns3fy_next import Node, Link, Gns3Connector
 
 >>> PROJECT_ID = "<some project id>"
 >>> server = Gns3Connector("http://<server address>:3080")
@@ -169,4 +179,39 @@ vEOS-4.21.5F-1  Management1  Ethernetswitch-1  Ethernet0
 vEOS-4.21.5F-1  Ethernet1    alpine-1          eth0
 Cloud-1         eth1         Ethernetswitch-1  Ethernet7
 """
+```
+
+### GNS3 API v3 Support
+
+For GNS3 servers using API v3, you can use JWT-based authentication:
+
+```python
+>>> from gns3fy_next import Gns3Connector, Project
+
+# Connect to GNS3 v3 server with JWT authentication
+>>> server = Gns3Connector(
+...     url="http://<server address>:3080",
+...     user="your_username",
+...     cred="your_password",
+...     api_version=3
+... )
+
+# Create or open a project
+>>> lab = Project(name="my_project", connector=server)
+>>> lab.get()
+
+# Lock the project (v3 only)
+>>> lab.lock_project()
+>>> lab.get_locked()
+True
+
+# Unlock the project
+>>> lab.unlock_project()
+>>> lab.get_locked()
+False
+
+# Create a drawing
+>>> from gns3fy_next.drawing_utils import generate_rectangle_svg
+>>> svg_content = generate_rectangle_svg(x=10, y=10, width=200, height=100)
+>>> lab.create_drawing(svg=svg_content, x=100, y=100, z=0)
 ```

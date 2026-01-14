@@ -1,4 +1,4 @@
-from gns3fy.drawing_utils import (
+from gns3fy_next.drawing_utils import (
     generate_ellipse_svg,
     generate_line_svg,
     generate_rectangle_svg,

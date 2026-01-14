@@ -1,8 +1,18 @@
 # Welcome to gns3fy Docs!
 
-gns3fy is a Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html).
+gns3fy is a Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). Supports GNS3 Server API v2 and v3.
 
 Its main objective is to interact with the GNS3 server in a programatic way, so it can be integrated with the likes of Ansible, docker and scripts.
+
+## Features
+
+- Support for GNS3 Server API v2 and v3
+- JWT-based authentication for v3 API (automatic token management)
+- Project locking operations (v3 API)
+- Create, update, delete projects, nodes, links, and drawings
+- Snapshot management
+- Template management
+- File operations on nodes and projects
 
 ## Use cases
 
@@ -17,7 +27,7 @@ Here are some examples where gns3fy is used in a programmatic way:
 ## Install
 
 ```
-pip install gns3fy
+pip install gns3fy-next
 ```
 
 ### Development version
@@ -28,13 +38,13 @@ Use [poetry](https://github.com/sdispater/poetry) to install the package when cl
 ## Quick Start
 
 ```python
->>> import gns3fy
+>>> import gns3fy_next
 
 # Define the server object to establish the connection
->>> gns3_server = gns3fy.Gns3Connector("http://<server address>:3080")
+>>> gns3_server = gns3fy_next.Gns3Connector("http://<server address>:3080")
 
 # Define the lab you want to load and assign the server connector
->>> lab = gns3fy.Project(name="API_TEST", connector=gns3_server)
+>>> lab = gns3fy_next.Project(name="API_TEST", connector=gns3_server)
 
 # Retrieve its information and display
 >>> lab.get()

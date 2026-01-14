@@ -1,10 +1,66 @@
 # Upgrading and releases history
 
 ```shell
-pip install -U gns3fy
+pip install -U gns3fy-next
 ```
 
 ## Releases
+
+### 1.0.0 (2025)
+
+**First release of gns3fy-next** - A fork of gns3fy with enhanced features:
+
+**Enhancement:**
+
+- **GNS3 API v3 Support**: Added full support for GNS3 Server API v3
+  - JWT-based authentication for v3 API (automatic token handling)
+  - Automatic token refresh on expiry
+- **Project Locking Operations**: New methods to manage project locks
+  - `get_locked()`: Check if a project is locked
+  - `lock_project()`: Lock all drawings and nodes in a project
+  - `unlock_project()`: Unlock all drawings and nodes in a project
+  - Note: Only available with GNS3 API v3
+- **create_drawing Method**: New method to create drawings directly on projects
+  - Support for positioning (x, y, z coordinates)
+  - Configurable lock and rotation settings
+- **Enhanced nodes_inventory**: Now includes:
+  - `node_id`: Unique node identifier
+  - `status`: Current node status
+  - `x`, `y`: Node position coordinates
+  - `ports`: Detailed port information
+- **Request Timeouts**: Added configurable 10-second timeout for all GNS3 API requests
+- **Dependency Updates**:
+  - Pydantic: `^1.0` → `^2.0`
+  - Python: `^3.6` → `^3.8` (required by Pydantic 2.0)
+  - Added `PyJWT` dependency for v3 authentication
+  - Added `urllib3` for SSL warning handling
+
+### 0.7.2 (Unreleased - merged into 1.0.0)
+
+**Enhancement:**
+
+- **GNS3 API v3 Support**: Added full support for GNS3 Server API v3
+  - JWT-based authentication for v3 API (automatic token handling)
+  - Automatic token refresh on expiry
+- **Project Locking Operations**: New methods to manage project locks
+  - `get_locked()`: Check if a project is locked
+  - `lock_project()`: Lock all drawings and nodes in a project
+  - `unlock_project()`: Unlock all drawings and nodes in a project
+  - Note: Only available with GNS3 API v3
+- **create_drawing Method**: New method to create drawings directly on projects
+  - Support for positioning (x, y, z coordinates)
+  - Configurable lock and rotation settings
+- **Enhanced nodes_inventory**: Now includes:
+  - `node_id`: Unique node identifier
+  - `status`: Current node status
+  - `x`, `y`: Node position coordinates
+  - `ports`: Detailed port information
+- **Request Timeouts**: Added configurable 10-second timeout for all GNS3 API requests
+- **Dependency Updates**:
+  - Pydantic: `^1.0` → `^2.0`
+  - Python: `^3.6` → `^3.8` (required by Pydantic 2.0)
+  - Added `PyJWT` dependency for v3 authentication
+  - Added `urllib3` for SSL warning handling
 
 ### 0.7.1
 

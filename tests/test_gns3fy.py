@@ -5,7 +5,7 @@ import requests_mock
 from pathlib import Path
 from pydantic import ValidationError
 from requests.exceptions import HTTPError
-from gns3fy import Link, Node, Project, Gns3Connector
+from gns3fy_next import Link, Node, Project, Gns3Connector
 from .data import links, nodes, projects
 
 
