@@ -31,6 +31,7 @@ mkdocs = "^1.0"
 pydoc-markdown = "*"
 black = "*"
 mkdocs-material = "^6.1.0"
+pyyaml = "^6.0.1"
 
 [build-system]
 requires = ["poetry>=1.0"]
