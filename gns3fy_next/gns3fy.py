@@ -2436,7 +2436,7 @@ class Project:
         if _snapshot:
             raise ValueError("Snapshot already created")
 
-        _url = f"{_conn.nector.base_url}/projects/{_project_id}/snapshots"
+        _url = f"{_conn.connector.base_url}/projects/{_project_id}/snapshots"
 
         _response = _conn.http_call("post", _url, json_data={"name": name})
 

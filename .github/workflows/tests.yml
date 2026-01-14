@@ -14,30 +14,21 @@ jobs:
     steps:
       # Checkout the code from the repo
       - name: Checkout repo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       # Setup the python version, and dependencies
-      - name: Set Up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python-version }}
+          cache: 'poetry'
       
       # Installing and configuring poetry
       - name: Install Poetry
         uses: snok/install-poetry@v1
-        with:
-          version: 1.5.1
-          virtualenvs-create: true
-          virtualenvs-in-project: true
-          installer-parallel: true
-      - name: Load cache venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Install dependencies (if no cache)
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+
+      - name: Install dependencies
         run: poetry install --no-interaction
 
       # Linting
@@ -54,8 +45,7 @@ jobs:
  
       # Codecov coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
-          fail_ci_if_error: true
-      #- name: Upload to codecov
-      #  run: poetry run pytest --cov-report=xml --cov=gns3fy tests/
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
