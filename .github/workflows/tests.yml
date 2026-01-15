@@ -15,7 +15,11 @@ jobs:
       # Checkout the code from the repo
       - name: Checkout repo
         uses: actions/checkout@v4
-      
+
+      # Installing and configuring poetry
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
       # Setup the python version, and dependencies
       - name: Set up Python
         id: setup-python
@@ -23,10 +27,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: 'poetry'
-      
-      # Installing and configuring poetry
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
 
       - name: Install dependencies
         run: poetry install --no-interaction
