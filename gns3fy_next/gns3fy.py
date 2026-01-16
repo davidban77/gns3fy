@@ -268,24 +268,7 @@ class Gns3Connector:
             return e
 
         try:
-            # First, try to parse as JSON regardless of Content-Type header
-            # This handles cases where mock responses don't set proper headers
-            try:
-                error_json = response.json()
-                if isinstance(error_json, dict):
-                    status = error_json.get("status", "Unknown Status")
-                    message = error_json.get("message", "No message provided in JSON.")
-                    # Construct a more descriptive new error
-                    new_err = HTTPError(
-                        f"{status}: {message} (Original {response.status_code} Error)",
-                        response=response,
-                    )
-                    return new_err
-            except Exception:
-                # JSON parsing failed, fall through to original error handling
-                pass
-
-            # Check if Content-Type indicates JSON and try parsing
+            # Only attempt parsing when Content-Type is JSON
             if "application/json" in response.headers.get("Content-Type", "").lower():
                 error_json = response.json()
                 status = error_json.get("status", "Unknown Status")
@@ -2453,7 +2436,7 @@ class Project:
         if _snapshot:
             raise ValueError("Snapshot already created")
 
-        _url = f"{_conn.base_url}/projects/{_project_id}/snapshots"
+        _url = f"{_conn.nector.base_url}/projects/{_project_id}/snapshots"
 
         _response = _conn.http_call("post", _url, json_data={"name": name})
 
