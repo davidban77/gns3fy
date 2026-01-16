@@ -1,12 +1,12 @@
-# gns3fy
+# gns3fy-next
 
-![Tests](https://github.com/davidban77/gns3fy/actions/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/yueguobin/gns3fy-next/actions/workflows/tests.yml/badge.svg)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
-[![codecov](https://codecov.io/gh/davidban77/gns3fy/branch/develop/graph/badge.svg)](https://codecov.io/gh/davidban77/gns3fy)
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/alerts/)
-[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/context:python)
-[![pypi](https://img.shields.io/pypi/v/gns3fy.svg)](https://pypi.python.org/pypi/gns3fy)
-[![versions](https://img.shields.io/pypi/pyversions/gns3fy.svg)](https://github.com/davidban77/gns3fy)
+[![codecov](https://codecov.io/gh/yueguobin/gns3fy-next/branch/main/graph/badge.svg)](https://codecov.io/gh/yueguobin/gns3fy-next)
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/yueguobin/gns3fy-next.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/yueguobin/gns3fy-next/alerts/)
+[![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/yueguobin/gns3fy-next.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/yueguobin/gns3fy-next/context:python)
+[![pypi](https://img.shields.io/pypi/v/gns3fy-next.svg)](https://pypi.python.org/pypi/gns3fy-next)
+[![versions](https://img.shields.io/pypi/pyversions/gns3fy-next.svg)](https://github.com/yueguobin/gns3fy-next)
 
 Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). Supports GNS3 Server API v2 and v3.
 
