@@ -268,23 +268,22 @@ class Gns3Connector:
             return e
 
         try:
-            # Only attempt parsing when Content-Type is JSON
-            if "application/json" in response.headers.get("Content-Type", "").lower():
+            # Try to parse JSON response
+            # Handle cases where response.json() might be called multiple times
+            # or where response body contains JSON data
+            if response.content:
                 error_json = response.json()
-                status = error_json.get("status", "Unknown Status")
-                message = error_json.get("message", "No message provided in JSON.")
+                status = error_json.get("status")
+                message = error_json.get("message")
                 # Construct a more descriptive new error
                 new_err = HTTPError(
-                    f"{status}: {message} (Original {response.status_code} Error)",
+                    f"{status}: {message}",
                     response=response,
                 )
                 return new_err
         except Exception:
-            # If JSON parsing fails, return error with original text
-            return HTTPError(
-                f"Original Error: {str(e)}. GNS3 response text: {response.text}",
-                response=response,
-            )
+            # If JSON parsing fails, return original error
+            return e
         return e
 
     def get_version(self) -> dict[str, Any]:
@@ -791,14 +790,14 @@ class Link:
     @field_validator("suspend")
     @classmethod
     def _valid_suspend(cls, value: bool | None) -> bool | None:
-        if type(value) is not bool and value is not None:
+        if not isinstance(value, bool) and value is not None:
             raise ValueError(f"Not a valid suspend - {value}")
         return value
 
     @field_validator("filters")
     @classmethod
     def _valid_filters(cls, value: dict[str, Any] | None) -> dict[str, Any] | None:
-        if type(value) is not dict and value is not None:
+        if not isinstance(value, dict) and value is not None:
             raise ValueError(f"Not a valid filters - {value}")
         return value
 
@@ -2436,7 +2435,7 @@ class Project:
         if _snapshot:
             raise ValueError("Snapshot already created")
 
-        _url = f"{_conn.nector.base_url}/projects/{_project_id}/snapshots"
+        _url = f"{_conn.base_url}/projects/{_project_id}/snapshots"
 
         _response = _conn.http_call("post", _url, json_data={"name": name})
 
