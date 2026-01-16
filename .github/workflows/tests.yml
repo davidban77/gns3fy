@@ -35,7 +35,7 @@ jobs:
       - name: Run flake8
         run: poetry run flake8 .
       - name: Run black formatting check
-        run: poetry run black --diff --check
+        run: poetry run black --diff --check gns3fy_next tests
 
       # Running tests
       - name: Running tests
