@@ -9,8 +9,8 @@ docs-show:
 	mkdocs serve
 
 test:
-	poetry run flake8 .
-	poetry run black --diff --check .
+	poetry run ruff check .
+	poetry run ruff format --check .
 	poetry run pytest --cov-report=html --cov=gns3fy tests/
 
 build:
