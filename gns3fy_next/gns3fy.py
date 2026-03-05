@@ -1,38 +1,35 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
-# GNS3-Copilot - AI-powered Network Lab Assistant for GNS3
-#
-# This file is part of GNS3-Copilot project.
-#
-# GNS3-Copilot is free software: you can redistribute it and/or modify it
-# under the terms of the GNU General Public License as published by the
-# Free Software Foundation, either version 3 of the License, or (at your
-# option) any later version.
-#
-# GNS3-Copilot is distributed in the hope that it will be useful, but
-# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-# or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
-# for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with GNS3-Copilot. If not, see <https://www.gnu.org/licenses/>.
+# gns3fy-next - GNS3 REST API python library with API v3 support
 #
 # Copyright (C) 2025 Guobin Yue
-# Author: Guobin Yue
 #
-# Project Home: https://github.com/yueguobin/gns3-copilot
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program. If not, see <https://www.gnu.org/licenses/>.
 
 """
 gns3fy-next module
 
 GNS3 REST API python library with API v3 support.
 
-This module is a fork of gns3fy, providing enhanced features and API v3 support.
+This module is a fork of the gns3fy project, providing enhanced features and
+API v3 support.
 
 Enhancements over upstream:
 - Full GNS3 Server API v3 support with JWT authentication
 - Automatic token refresh on expiry
+- Direct JWT token authentication support (pass jwt_token parameter)
+- Tags support for templates and projects
 - Project locking operations (get_locked, lock_project, unlock_project)
 - Enhanced nodes_inventory with detailed port information
 - Configurable request timeouts

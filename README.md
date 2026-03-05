@@ -14,6 +14,8 @@ Python wrapper around [GNS3 Server API](http://api.gns3.net/en/2.2/index.html). 
 
 - Support for GNS3 Server API v2 and v3
 - JWT-based authentication for v3 API (automatic token management)
+- Direct JWT token authentication support
+- Tags support for templates and projects
 - Project locking operations (v3 API)
 - Create, update, delete projects, nodes, links, and drawings
 - Snapshot management
@@ -24,17 +26,18 @@ Its main objective is to interact with the GNS3 server in a programatic way, so 
 
 ## Documentation
 
-Check out the [Documentation](https://davidban77.github.io/gns3fy/) to explore use cases and the API Reference
+Check out the [Documentation](https://yueguobin.github.io/gns3fy-next/) to explore use cases and the API Reference
 
 ## Use cases
 
-Here are some examples where gns3fy is used in a programmatic way:
+Here are some examples where gns3fy-next is used in a programmatic way:
 
-- [Ansible-collection-gns3](https://galaxy.ansible.com/davidban77/gns3): Useful for CI/CD pipelines to interact with GNS3 server using Ansible. It can create/delete projects, nodes and links in an ansible playbook.
-- Terraform: Coming soon... (although it might be a Go version of it)
-- [Migrate templates between GNS3 servers](https://davidban77.github.io/gns3fy/user-guide/#migrate-templates-between-gns3-servers)
-- [Check server usage](https://davidban77.github.io/gns3fy/user-guide/#check-server-cpu-and-memory-usage) before turning up resource-hungry nodes
-- [Manipulate project snapshots](https://davidban77.github.io/gns3fy/user-guide/#create-and-list-project-snapshots) like create, delete or list the snapshots configured for the project.
+- GNS3 server automation and management
+- Network CI/CD pipeline tooling
+- Integration with Ansible, docker and scripts
+- Template migration between GNS3 servers
+- Automated testing of network topologies
+- Network lab provisioning and management
 
 ## Install
 
@@ -188,7 +191,7 @@ For GNS3 servers using API v3, you can use JWT-based authentication:
 ```python
 >>> from gns3fy_next import Gns3Connector, Project
 
-# Connect to GNS3 v3 server with JWT authentication
+# Connect to GNS3 v3 server with username/password (auto-fetches JWT token)
 >>> server = Gns3Connector(
 ...     url="http://<server address>:3080",
 ...     user="your_username",
@@ -196,8 +199,15 @@ For GNS3 servers using API v3, you can use JWT-based authentication:
 ...     api_version=3
 ... )
 
-# Create or open a project
->>> lab = Project(name="my_project", connector=server)
+# Or connect with a pre-obtained JWT token directly
+>>> server = Gns3Connector(
+...     url="http://<server address>:3080",
+...     jwt_token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+...     api_version=3
+... )
+
+# Create or open a project with tags
+>>> lab = Project(name="my_project", connector=server, tags=["production", "testing"])
 >>> lab.get()
 
 # Lock the project (v3 only)
