@@ -69,7 +69,7 @@ pip install -U gns3fy-next
 - Refactored docs for `mkdocs-material` theme
 - Improved CircleCI pipeline config to use workflows, parameters and reusable commands
 - Changed CI image from `miniconda3` to `circleci`. It has latest `poetry` and `curl` installed, which is needed for testing and publishing coverage.
-- Added labels to `create_link` method. [PR-78](https://github.com/davidban77/gns3fy/pull/78)
+- Added labels to `create_link` method
 - Testing is done on a per-python interpreter basis, meaning that `tox` is no longer needed.
 
 ### 0.7.0
@@ -142,10 +142,10 @@ pip install -U gns3fy-next
 
 **Enhancement:**
 
-- `tox` for pipeline testing. [PR-15](https://github.com/davidban77/gns3fy/pull/15)
-- `projects_summary` and `templates_summary` methods for `Gns3Connector`. [PR-17](https://github.com/davidban77/gns3fy/pull/17)
-- Improved `nodes_inventory` method. [PR-23](https://github.com/davidban77/gns3fy/pull/23)
-- Refactor of `Node` creation, basically changed the API endpoint from Node to Template. [PR-27](https://github.com/davidban77/gns3fy/pull/27)
+- `tox` for pipeline testing
+- `projects_summary` and `templates_summary` methods for `Gns3Connector`
+- Improved `nodes_inventory` method
+- Refactor of `Node` creation, basically changed the API endpoint from Node to Template
 
 ### 0.2.0
 

@@ -24,21 +24,21 @@
 #
 
 """
-Adapted gns3fy module for GNS3-Copilot
+gns3fy-next module
 
-This module is based on the upstream gns3fy project (https://github.com/davidban77/gns3fy).
+GNS3 REST API python library with API v3 support.
 
-Modifications made for GNS3-Copilot:
-- Adjusted pydantic usages and dataclass configuration to reduce dependency conflicts
-  with langchain (pydantic version/api differences)
-- Kept the original API surface where possible but simplified validators/config
-- Added JWT token authentication support
-- Integrated with context-aware connector factory
+This module is a fork of gns3fy, providing enhanced features and API v3 support.
 
-Note: This file is adapted from upstream gns3fy for compatibility with
-GNS3-Copilot's architecture.
+Enhancements over upstream:
+- Full GNS3 Server API v3 support with JWT authentication
+- Automatic token refresh on expiry
+- Project locking operations (get_locked, lock_project, unlock_project)
+- Enhanced nodes_inventory with detailed port information
+- Configurable request timeouts
+- Updated dependencies (Pydantic 2.0, Python 3.8+)
 
-Upstream: https://github.com/davidban77/gns3fy
+Project Home: https://github.com/yueguobin/gns3fy-next
 """
 
 import os

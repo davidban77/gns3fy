@@ -1,9 +1,9 @@
-site_name: gns3fy
-site_url: https://davidban77.github.io/gns3fy/
-site_description: GNS3 REST API python library.
-site_author: David Flores
-repo_url: https://github.com/davidban77/gns3fy/
-repo_name: davidban77/gns3fy
+site_name: gns3fy-next
+site_url: https://yueguobin.github.io/gns3fy-next/
+site_description: GNS3 REST API python library with API v3 support.
+site_author: Guobin Yue
+repo_url: https://github.com/yueguobin/gns3fy-next/
+repo_name: yueguobin/gns3fy-next
 docs_dir: "docs/content/"
 theme:
   name: material
@@ -32,9 +32,6 @@ markdown_extensions:
   - admonition
 
 extra:
-  social:
-    - icon: fontawesome/brands/twitter
-      link: https://twitter.com/davidban77
 
 nav:
   - Overview: index.md
@@ -44,4 +41,4 @@ nav:
     - Release Notes: about/changelog.md
     - License: about/license.md
 
-copyright: 'Copyright &copy; 2020 David Flores'
+copyright: 'Copyright &copy; 2025 Guobin Yue'

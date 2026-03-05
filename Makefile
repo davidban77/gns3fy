@@ -20,7 +20,7 @@ publish:
 	poetry publish
 
 gh-release:
-	gh release create v${VERSION} -F docs/content/about/changelog.md -t "Release v${VERSION}" --repo davidban77/gns3fy
+	gh release create v${VERSION} -F docs/content/about/changelog.md -t "Release v${VERSION}" --repo yueguobin/gns3fy-next
 
 docker-settings:
 	cp .vscode/docker-settings.json .vscode/settings.json
