@@ -9,30 +9,30 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.7, 3.8]
-    
+        python-version: ["3.9", "3.10", "3.11", "3.12"]
+
     steps:
       # Checkout the code from the repo
       - name: Checkout repo
-        uses: actions/checkout@v3
-      
+        uses: actions/checkout@v4
+
       # Setup the python version, and dependencies
       - name: Set Up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      
+
       # Installing and configuring poetry
       - name: Install Poetry
         uses: snok/install-poetry@v1
         with:
-          version: 1.5.1
+          version: 1.8.4
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
       - name: Load cache venv
         id: cached-poetry-dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .venv
           key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
@@ -44,18 +44,16 @@ jobs:
       - name: Run flake8
         run: poetry run flake8 .
       - name: Run black formatting check
-        run: poetry run black --diff --check
+        run: poetry run black --diff --check .
 
       # Running tests
       - name: Running tests
-        run: poetry run pytest tests/ -v 
+        run: poetry run pytest tests/ -v
       - name: Running tests (with coverage)
         run: poetry run pytest --cov-report=xml --cov=gns3fy tests
- 
+
       # Codecov coverage
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: true
-      #- name: Upload to codecov
-      #  run: poetry run pytest --cov-report=xml --cov=gns3fy tests/

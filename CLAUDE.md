@@ -85,8 +85,8 @@ Test classes follow the pattern `TestGns3Connector`, `TestLink`, `TestNode`, `Te
 
 GitHub Actions (`.github/workflows/tests.yml`):
 - Triggers on push and pull_request
-- Matrix: Python 3.7, 3.8
-- Steps: install Poetry 1.5.1 → cache deps → flake8 → black check → pytest with coverage → Codecov upload
+- Matrix: Python 3.9, 3.10, 3.11, 3.12
+- Steps: install Poetry 1.8.4 → cache deps → flake8 → black check → pytest with coverage → Codecov upload
 
 ## Dependencies
 
