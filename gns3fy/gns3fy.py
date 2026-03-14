@@ -1889,7 +1889,7 @@ class Project:
         _link_id = _link.link_id
         _link.delete()
         print(
-            f"Deleted Link-ID: {_link_id} From node {node_a }, port: {port_a} <-->  "
+            f"Deleted Link-ID: {_link_id} From node {node_a}, port: {port_a} <-->  "
             f"to node {node_b}, port: {port_b}"
         )
 
