@@ -1597,7 +1597,6 @@ class Project:
         _server = urlparse(self.connector.base_url).hostname
 
         for _n in self.nodes:
-
             _nodes_inventory.update(
                 {
                     _n.name: {
