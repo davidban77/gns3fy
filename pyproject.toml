@@ -25,9 +25,14 @@ pytest = "^7.0"
 flake8 = "^5.0"
 requests-mock = "^1.6"
 pytest-cov = "^4.0"
+black = "*"
+
+[tool.poetry.group.docs]
+optional = true
+
+[tool.poetry.group.docs.dependencies]
 mkdocs = "^1.0"
 pydoc-markdown = "*"
-black = "*"
 mkdocs-material = "^6.1.0"
 
 [build-system]
