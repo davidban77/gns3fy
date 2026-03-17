@@ -1,0 +1,87 @@
+version: "3"
+
+tasks:
+  lint:
+    desc: Run ruff linting and format check
+    cmds:
+      - uv run ruff check .
+      - uv run ruff format --check .
+
+  lint-fix:
+    desc: Auto-fix all linting and formatting issues
+    cmds:
+      - uv run ruff check --fix .
+      - uv run ruff format .
+
+  lint-file:
+    desc: Format and lint-fix a single file (used by hooks)
+    requires:
+      vars: [FILE]
+    cmds:
+      - uv run ruff format --quiet {{.FILE}}
+      - uv run ruff check --fix --quiet {{.FILE}}
+    silent: true
+
+  security:
+    desc: Run security checks (bandit rules via ruff + secret scan)
+    cmds:
+      - uv run ruff check --select S .
+      - bash -c 'FOUND=$(grep -rn --include="*.py" --include="*.yml" --include="*.yaml" --include="*.json" --include="*.toml" --include="*.cfg" --include="*.ini" --include="*.env" -E "(password|secret|token|api_key|apikey|private_key|credential)\s*[:=]\s*[\"'\'']{1}[^\"'\'']{8,}" . --exclude-dir=.git --exclude-dir=.claude --exclude-dir=__pycache__ 2>/dev/null || true); if [ -n "$FOUND" ]; then echo "Potential hardcoded secrets found:"; echo "$FOUND"; exit 1; else echo "No hardcoded secrets detected"; fi'
+
+  test:
+    desc: Run linting and tests with coverage
+    cmds:
+      - task: lint
+      - uv run pytest --cov-report=html --cov=gns3fy tests/
+
+  test-only:
+    desc: Run tests without linting
+    cmds:
+      - uv run pytest tests/ -v
+
+  test-ci:
+    desc: CI test run with XML coverage output
+    cmds:
+      - uv run pytest --cov-report=xml --cov=gns3fy tests
+
+  docs-generate:
+    desc: Generate API reference from docstrings
+    cmds:
+      - pydoc-markdown docs/pydoc-markdown.yml > docs/content/api_reference.md
+
+  docs-show:
+    desc: Serve docs locally
+    cmds:
+      - mkdocs serve
+
+  docs-publish:
+    desc: Deploy docs to GitHub Pages (master branch)
+    cmds:
+      - mkdocs gh-deploy -m "[ci skip]" --force
+
+  build:
+    desc: Build the package
+    cmds:
+      - uv build
+
+  publish:
+    desc: Publish to PyPI
+    cmds:
+      - uv publish
+
+  gh-release:
+    desc: Create a GitHub release
+    requires:
+      vars: [VERSION]
+    cmds:
+      - gh release create v{{.VERSION}} -F docs/content/about/changelog.md -t "Release v{{.VERSION}}" --repo davidban77/gns3fy
+
+  docker-settings:
+    desc: Copy Docker VS Code settings
+    cmds:
+      - cp .vscode/docker-settings.json .vscode/settings.json
+
+  local-settings:
+    desc: Copy local VS Code settings
+    cmds:
+      - cp .vscode/local-settings.json .vscode/settings.json
