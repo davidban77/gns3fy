@@ -132,17 +132,13 @@ class Gns3Connector:
             )
 
         else:
-            _response = getattr(self.session, method.lower())(
-                url, headers=headers, params=params, verify=verify
-            )
+            _response = getattr(self.session, method.lower())(url, headers=headers, params=params, verify=verify)
         self.api_calls += 1
 
         try:
             _response.raise_for_status()
         except HTTPError:
-            raise HTTPError(
-                f"{_response.json()['status']}: {_response.json()['message']}"
-            )
+            raise HTTPError(f"{_response.json()['status']}: {_response.json()['message']}")
 
         return _response
 
@@ -162,9 +158,7 @@ class Gns3Connector:
         _projects_summary = []
         for _p in self.get_projects():
             # Retrieve the project stats
-            _stats = self.http_call(
-                "get", f"{self.base_url}/projects/{_p['project_id']}/stats"
-            ).json()
+            _stats = self.http_call("get", f"{self.base_url}/projects/{_p['project_id']}/stats").json()
             if is_print:
                 print(
                     f"{_p['name']}: {_p['project_id']} -- Nodes: {_stats['nodes']} -- "
@@ -197,9 +191,7 @@ class Gns3Connector:
         - `name` or `project_id`
         """
         if project_id:
-            return self.http_call(
-                "get", url=f"{self.base_url}/projects/{project_id}"
-            ).json()
+            return self.http_call("get", url=f"{self.base_url}/projects/{project_id}").json()
         elif name:
             try:
                 return next(p for p in self.get_projects() if p["name"] == name)
@@ -254,9 +246,7 @@ class Gns3Connector:
         - `name` or `template_id`
         """
         if template_id:
-            return self.http_call(
-                "get", url=f"{self.base_url}/templates/{template_id}"
-            ).json()
+            return self.http_call("get", url=f"{self.base_url}/templates/{template_id}").json()
         elif name:
             try:
                 return next(t for t in self.get_templates() if t["name"] == name)
@@ -306,9 +296,7 @@ class Gns3Connector:
         if "compute_id" not in kwargs:
             kwargs["compute_id"] = "local"
 
-        response = self.http_call(
-            "post", url=f"{self.base_url}/templates", json_data=kwargs
-        )
+        response = self.http_call("post", url=f"{self.base_url}/templates", json_data=kwargs)
 
         return response.json()
 
@@ -336,9 +324,7 @@ class Gns3Connector:
 
         - `project_id`
         """
-        return self.http_call(
-            "get", url=f"{self.base_url}/projects/{project_id}/nodes"
-        ).json()
+        return self.http_call("get", url=f"{self.base_url}/projects/{project_id}/nodes").json()
 
     def get_node(self, project_id, node_id):
         """
@@ -360,9 +346,7 @@ class Gns3Connector:
 
         - `project_id`
         """
-        return self.http_call(
-            "get", url=f"{self.base_url}/projects/{project_id}/links"
-        ).json()
+        return self.http_call("get", url=f"{self.base_url}/projects/{project_id}/links").json()
 
     def get_link(self, project_id, link_id):
         """
@@ -499,13 +483,9 @@ def verify_connector_and_id(f):
                 _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes"
                 _response = self.connector.http_call("get", _url)
 
-                extracted = [
-                    node for node in _response.json() if node["name"] == self.name
-                ]
+                extracted = [node for node in _response.json() if node["name"] == self.name]
                 if len(extracted) > 1:  # pragma: no cover
-                    raise ValueError(
-                        "Multiple nodes found with same name. Need to submit node_id"
-                    )
+                    raise ValueError("Multiple nodes found with same name. Need to submit node_id")
                 self.node_id = extracted[0]["node_id"]
         # Checks for Link
         if self.__class__.__name__ == "Link":
@@ -602,9 +582,7 @@ class Link:
         - `connector`
         - `link_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
         _response = self.connector.http_call("get", _url)
 
         # Update object
@@ -622,9 +600,7 @@ class Link:
         - `connector`
         - `link_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
 
         self.connector.http_call("delete", _url)
 
@@ -680,9 +656,7 @@ class Link:
         - `connector`
         - `link_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/links/{self.link_id}"
 
         # TODO: Verify that the passed kwargs are supported ones
         _response = self.connector.http_call("put", _url, json_data=kwargs)
@@ -813,9 +787,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
         _response = self.connector.http_call("get", _url)
 
         # Update object
@@ -836,10 +808,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            f"/{self.node_id}/links"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/links"
         _response = self.connector.http_call("get", _url)
 
         # Create the Link array but cleanup cache if there is one
@@ -859,10 +828,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            f"/{self.node_id}/start"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/start"
         _response = self.connector.http_call("post", _url)
 
         # Update object or perform get if change was not reflected
@@ -882,10 +848,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            f"/{self.node_id}/stop"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/stop"
         _response = self.connector.http_call("post", _url)
 
         # Update object or perform get if change was not reflected
@@ -905,10 +868,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            f"/{self.node_id}/reload"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/reload"
         _response = self.connector.http_call("post", _url)
 
         # Update object or perform get if change was not reflected
@@ -928,10 +888,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes"
-            f"/{self.node_id}/suspend"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/suspend"
         _response = self.connector.http_call("post", _url)
 
         # Update object or perform get if change was not reflected
@@ -959,9 +916,7 @@ class Node:
         - `project_id`
         - `connector`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
 
         # TODO: Verify that the passed kwargs are supported ones
         _response = self.connector.http_call("put", _url, json_data=kwargs)
@@ -995,9 +950,7 @@ class Node:
                 _template = self.connector.get_template(name=self.template)
                 if _template is None:
                     raise ValueError(f"Template {self.template} not found")
-                self.template_id = self.connector.get_template(name=self.template).get(
-                    "template_id"
-                )
+                self.template_id = self.connector.get_template(name=self.template).get("template_id")
             else:
                 raise ValueError("Need either 'template' of 'template_id'")
 
@@ -1017,14 +970,9 @@ class Node:
             if v is not None
         }
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/"
-            f"templates/{self.template_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/templates/{self.template_id}"
 
-        _response = self.connector.http_call(
-            "post", _url, json_data=dict(x=0, y=0, compute_id=self.compute_id)
-        )
+        _response = self.connector.http_call("post", _url, json_data=dict(x=0, y=0, compute_id=self.compute_id))
 
         self._update(_response.json())
 
@@ -1043,9 +991,7 @@ class Node:
         - `connector`
         - `node_id`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
 
         self.connector.http_call("delete", _url)
 
@@ -1064,10 +1010,7 @@ class Node:
         - `connector`
         - `path`: Node's relative path of the file
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
-            f"/files/{path}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/files/{path}"
 
         return self.connector.http_call("get", _url).text
 
@@ -1095,10 +1038,7 @@ class Node:
         - `path`: Node's relative path of the file
         - `data`: Data to be included in the file
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}"
-            f"/files/{path}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/nodes/{self.node_id}/files/{path}"
 
         self.connector.http_call("post", _url, data=data)
 
@@ -1561,10 +1501,7 @@ class Project:
         _nodes_summary = []
         for _n in self.nodes:
             if is_print:
-                print(
-                    f"{_n.name}: {_n.status} -- Console: {_n.console} -- "
-                    f"ID: {_n.node_id}"
-                )
+                print(f"{_n.name}: {_n.status} -- Console: {_n.console} -- ID: {_n.node_id}")
             _nodes_summary.append((_n.name, _n.status, _n.console, _n.node_id))
 
         return _nodes_summary if not is_print else None
@@ -1597,7 +1534,6 @@ class Project:
         _server = urlparse(self.connector.base_url).hostname
 
         for _n in self.nodes:
-
             _nodes_inventory.update(
                 {
                     _n.name: {
@@ -1640,15 +1576,13 @@ class Project:
             _port_a = [
                 x["name"]
                 for x in _node_a.ports
-                if x["port_number"] == _side_a["port_number"]
-                and x["adapter_number"] == _side_a["adapter_number"]
+                if x["port_number"] == _side_a["port_number"] and x["adapter_number"] == _side_a["adapter_number"]
             ][0]
             _node_b = [x for x in self.nodes if x.node_id == _side_b["node_id"]][0]
             _port_b = [
                 x["name"]
                 for x in _node_b.ports
-                if x["port_number"] == _side_b["port_number"]
-                and x["adapter_number"] == _side_b["adapter_number"]
+                if x["port_number"] == _side_b["port_number"] and x["adapter_number"] == _side_b["adapter_number"]
             ][0]
             endpoint_a = f"{_node_a.name}: {_port_a}"
             endpoint_b = f"{_node_b.name}: {_port_b}"
@@ -1742,10 +1676,7 @@ class Project:
 
         _node.create()
         self.nodes.append(_node)
-        print(
-            f"Created: {_node.name} -- Type: {_node.node_type} -- "
-            f"Console: {_node.console}"
-        )
+        print(f"Created: {_node.name} -- Type: {_node.node_type} -- Console: {_node.console}")
 
     def create_link(self, node_a, port_a, node_b, port_b):
         """
@@ -1880,19 +1811,14 @@ class Project:
             ):
                 _matches.append(_l)
         if not _matches:
-            raise ValueError(
-                f"Link not found: {node_a, port_a, node_b, port_b}"
-            )  # pragma: no cover
+            raise ValueError(f"Link not found: {node_a, port_a, node_b, port_b}")  # pragma: no cover
 
             # now to delete the link via GNS3_api
         _link = _matches[0]
         self.links.remove(_link)
         _link_id = _link.link_id
         _link.delete()
-        print(
-            f"Deleted Link-ID: {_link_id} From node {node_a }, port: {port_a} <-->  "
-            f"to node {node_b}, port: {port_b}"
-        )
+        print(f"Deleted Link-ID: {_link_id} From node {node_a}, port: {port_a} <-->  to node {node_b}, port: {port_b}")
 
     @verify_connector_and_id
     def get_snapshots(self):
@@ -1987,10 +1913,7 @@ class Project:
         if not _snapshot:
             raise ValueError("Snapshot not found")
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
-            f"{_snapshot['snapshot_id']}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots/{_snapshot['snapshot_id']}"
 
         self.connector.http_call("delete", _url)
 
@@ -2016,10 +1939,7 @@ class Project:
         if not _snapshot:
             raise ValueError("Snapshot not found")
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/snapshots/"
-            f"{_snapshot['snapshot_id']}/restore"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/snapshots/{_snapshot['snapshot_id']}/restore"
 
         self.connector.http_call("post", _url)
 
@@ -2070,11 +1990,7 @@ class Project:
             self.get_drawings()
 
         try:
-            return next(
-                _drawing
-                for _drawing in self.drawings
-                if _drawing["drawing_id"] == drawing_id
-            )
+            return next(_drawing for _drawing in self.drawings if _drawing["drawing_id"] == drawing_id)
         except StopIteration:
             return None
 
@@ -2105,9 +2021,7 @@ class Project:
         """
         _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings"
 
-        response = self.connector.http_call(
-            "post", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
-        )
+        response = self.connector.http_call("post", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z))
 
         _drawing = response.json()
 
@@ -2124,43 +2038,24 @@ class Project:
         - `project_id`
         - `connector`
         """
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
-            f"{drawing_id}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings/{drawing_id}"
 
         if svg is None:
-            svg = [
-                draw["svg"]
-                for draw in self.drawings
-                if draw["drawing_id"] == drawing_id
-            ][0]
+            svg = [draw["svg"] for draw in self.drawings if draw["drawing_id"] == drawing_id][0]
 
         if locked is None:
-            locked = [
-                draw["locked"]
-                for draw in self.drawings
-                if draw["drawing_id"] == drawing_id
-            ][0]
+            locked = [draw["locked"] for draw in self.drawings if draw["drawing_id"] == drawing_id][0]
 
         if x is None:
-            x = [
-                draw["x"] for draw in self.drawings if draw["drawing_id"] == drawing_id
-            ][0]
+            x = [draw["x"] for draw in self.drawings if draw["drawing_id"] == drawing_id][0]
 
         if y is None:
-            y = [
-                draw["y"] for draw in self.drawings if draw["drawing_id"] == drawing_id
-            ][0]
+            y = [draw["y"] for draw in self.drawings if draw["drawing_id"] == drawing_id][0]
 
         if z is None:
-            z = [
-                draw["z"] for draw in self.drawings if draw["drawing_id"] == drawing_id
-            ][0]
+            z = [draw["z"] for draw in self.drawings if draw["drawing_id"] == drawing_id][0]
 
-        response = self.connector.http_call(
-            "put", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z)
-        )
+        response = self.connector.http_call("put", _url, json_data=dict(svg=svg, locked=locked, x=x, y=y, z=z))
 
         self.get_drawings()
 
@@ -2186,10 +2081,7 @@ class Project:
         if not _drawing:
             raise ValueError("drawing not found")
 
-        _url = (
-            f"{self.connector.base_url}/projects/{self.project_id}/drawings/"
-            f"{_drawing['drawing_id']}"
-        )
+        _url = f"{self.connector.base_url}/projects/{self.project_id}/drawings/{_drawing['drawing_id']}"
 
         self.connector.http_call("delete", _url)
 

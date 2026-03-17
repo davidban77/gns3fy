@@ -1,35 +1,50 @@
-[tool.poetry]
+[project]
 name = "gns3fy"
 version = "0.7.2"
 description = "Python wrapper around GNS3 Server API"
-authors = ["David Flores <davidflores7_8@hotmail.com>"]
-license = "MIT"
+authors = [{ name = "David Flores", email = "davidflores7_8@hotmail.com" }]
+license = { text = "MIT" }
 readme = "README.md"
-repository = "https://github.com/davidban77/gns3fy"
-homepage = "https://github.com/davidban77/gns3fy"
+requires-python = ">=3.9"
 keywords = ["network", "gns3", "python", "restapi", "netdev"]
 classifiers = [
-        "Programming Language :: Python :: 3.6",
-        "Programming Language :: Python :: 3.7",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+    "requests>=2.22",
+    "pydantic>=1.0,<2",
 ]
 
-[tool.poetry.dependencies]
-python = "^3.6"
-requests = "^2.22"
-pydantic = "^1.0"
+[project.urls]
+Homepage = "https://github.com/davidban77/gns3fy"
+Repository = "https://github.com/davidban77/gns3fy"
 
-[tool.poetry.dev-dependencies]
-pytest = "^5.0"
-flake8 = "^3.7"
-requests-mock = "^1.6"
-pytest-cov = "^2.7"
-mkdocs = "^1.0"
-pydoc-markdown = "*"
-black = "*"
-mkdocs-material = "^6.1.0"
+[dependency-groups]
+dev = [
+    "pytest>=7.0",
+    "requests-mock>=1.6",
+    "pytest-cov>=4.0",
+    "coverage>=7.0",
+    "ruff>=0.9",
+]
+docs = [
+    "mkdocs>=1.0",
+    "pydoc-markdown",
+    "mkdocs-material>=6.1.0",
+]
 
 [build-system]
-requires = ["poetry>=1.0"]
-build-backend = "poetry.masonry.api"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["S101"]

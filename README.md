@@ -1,7 +1,7 @@
 # gns3fy
 
 ![Tests](https://github.com/davidban77/gns3fy/actions/workflows/tests.yml/badge.svg)
-[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![codecov](https://codecov.io/gh/davidban77/gns3fy/branch/develop/graph/badge.svg)](https://codecov.io/gh/davidban77/gns3fy)
 [![Total alerts](https://img.shields.io/lgtm/alerts/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/alerts/)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/davidban77/gns3fy.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/davidban77/gns3fy/context:python)
@@ -34,7 +34,7 @@ pip install gns3fy
 
 ### Development version
 
-Use [poetry](https://github.com/sdispater/poetry) to install the package when cloning it.
+Use [uv](https://github.com/astral-sh/uv) to install the package when cloning it.
 
 ## How it works
 

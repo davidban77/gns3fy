@@ -27,8 +27,7 @@ def test_generate_ellipse_svg():
 def test_generate_line_svg():
     rectangle = generate_line_svg()
     assert rectangle == (
-        '<svg height="0" width="200"><line stroke="#000000" stroke-width="2" x1="0" '
-        'x2="200" y1="0" y2="0" /></svg>'
+        '<svg height="0" width="200"><line stroke="#000000" stroke-width="2" x1="0" x2="200" y1="0" y2="0" /></svg>'
     )
 
 

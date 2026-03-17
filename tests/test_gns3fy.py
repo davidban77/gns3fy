@@ -127,9 +127,7 @@ def post_put_matcher(request):
                 return resp
             elif _data["name"] == "DUPLICATE":
                 resp.status_code = 409
-                resp.json = lambda: dict(
-                    message="Project 'DUPLICATE' already exists", status=409
-                )
+                resp.json = lambda: dict(message="Project 'DUPLICATE' already exists", status=409)
                 return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/close"):
             resp.status_code = 204
@@ -140,9 +138,7 @@ def post_put_matcher(request):
             resp.status_code = 204
             resp.json = lambda: _returned
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"
-        ):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/templates/{CTEMPLATE['id']}"):
             _returned = json_api_test_node()
             resp.status_code = 201
             resp.json = lambda: _returned
@@ -178,9 +174,7 @@ def post_put_matcher(request):
             resp.json = lambda: _returned
             resp.status_code = 201
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/snapshots/44e08d78-0ee4-4b8f-bad4-117aa67cb759/restore"
-        ):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/snapshots/44e08d78-0ee4-4b8f-bad4-117aa67cb759/restore"):
             _returned = json_api_test_project()
             resp.json = lambda: _returned
             resp.status_code = 201
@@ -197,21 +191,17 @@ def post_put_matcher(request):
                 name=_data["name"],
                 compute_id=_data["compute_id"],
                 node_type=_data["node_type"],
-                console=_data.get("console")
-                if _data["name"] == CNODE["name"]
-                else 5077,
-                node_id=CNODE["id"]
-                if _data["name"] == CNODE["name"]
-                else "NEW_NODE_ID",
+                console=_data.get("console") if _data["name"] == CNODE["name"] else 5077,
+                node_id=CNODE["id"] if _data["name"] == CNODE["name"] else "NEW_NODE_ID",
             )
             # For the case when properties have been overriden
             if _data["properties"].get("console_http_port") == 8080:
                 _returned.update(properties=_data["properties"])
             resp.json = lambda: _returned
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/nodes/start"
-        ) or request.path_url.endswith(f"/{CPROJECT['id']}/nodes/reload"):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/start") or request.path_url.endswith(
+            f"/{CPROJECT['id']}/nodes/reload"
+        ):
             resp.status_code = 204
             return resp
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/stop"):
@@ -220,9 +210,9 @@ def post_put_matcher(request):
         elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/suspend"):
             resp.status_code = 204
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/nodes/{CNODE['id']}/start"
-        ) or request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}/reload"):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}/start") or request.path_url.endswith(
+            f"/{CPROJECT['id']}/nodes/{CNODE['id']}/reload"
+        ):
             _returned = json_api_test_node()
             _returned.update(status="started")
             resp.status_code = 200
@@ -234,14 +224,10 @@ def post_put_matcher(request):
             resp.status_code = 200
             resp.json = lambda: _returned
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/nodes/{CNODE['id']}/files//etc/network/interfaces"
-        ):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}/files//etc/network/interfaces"):
             resp.status_code = 201
             return resp
-        elif request.path_url.endswith(
-            f"/{CPROJECT['id']}/nodes/{CNODE['id']}/suspend"
-        ):
+        elif request.path_url.endswith(f"/{CPROJECT['id']}/nodes/{CNODE['id']}/suspend"):
             _returned = json_api_test_node()
             _returned.update(status="suspended")
             resp.status_code = 200
@@ -344,32 +330,22 @@ class Gns3ConnectorMock(Gns3Connector):
     def _apply_responses(self):
         # Record the API expected responses
         # Version
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/version", json=version_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/version", json=version_data())
         ############
         # Computes #
         ############
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/computes", json=computes_data()
-        )
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/computes/local", json=json_api_test_compute()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/computes", json=computes_data())
+        self.adapter.register_uri("GET", f"{self.base_url}/computes/local", json=json_api_test_compute())
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/computes/local/qemu/images",
             json=compute_qemu_images_data(),
         )
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/computes/local/ports", json=compute_ports_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/computes/local/ports", json=compute_ports_data())
         #############
         # Templates #
         #############
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/templates", json=templates_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/templates", json=templates_data())
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/templates/{CTEMPLATE['id']}",
@@ -381,15 +357,11 @@ class Gns3ConnectorMock(Gns3Connector):
             json={"message": "Template ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
         )
-        self.adapter.register_uri(
-            "DELETE", f"{self.base_url}/templates/{CTEMPLATE['id']}", status_code=204
-        )
+        self.adapter.register_uri("DELETE", f"{self.base_url}/templates/{CTEMPLATE['id']}", status_code=204)
         ############
         # Projects #
         ############
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/projects", json=projects_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/projects", json=projects_data())
         self.adapter.register_uri(
             "GET",
             f"{self.base_url}/projects/{CPROJECT['id']}",
@@ -421,8 +393,7 @@ class Gns3ConnectorMock(Gns3Connector):
         )
         self.adapter.register_uri(
             "DELETE",
-            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/"
-            "44e08d78-0ee4-4b8f-bad4-117aa67cb759",
+            f"{self.base_url}/projects/{CPROJECT['id']}/snapshots/44e08d78-0ee4-4b8f-bad4-117aa67cb759",
             status_code=204,
         )
         self.adapter.register_uri(
@@ -469,15 +440,11 @@ class Gns3ConnectorMock(Gns3Connector):
             json={"message": "Project ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
         )
-        self.adapter.register_uri(
-            "DELETE", f"{self.base_url}/projects/{CPROJECT['id']}"
-        )
+        self.adapter.register_uri("DELETE", f"{self.base_url}/projects/{CPROJECT['id']}")
         #########
         # Nodes #
         #########
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=nodes_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=nodes_data())
         # Register all nodes data to the respective endpoint project
         _nodes_links = {}
         for _n in nodes_data():
@@ -502,24 +469,18 @@ class Gns3ConnectorMock(Gns3Connector):
             )
         self.adapter.register_uri(
             "GET",
-            f"{self.base_url}/projects/{CPROJECT['id']}/nodes/" "7777-4444-0000",
+            f"{self.base_url}/projects/{CPROJECT['id']}/nodes/7777-4444-0000",
             json={"message": "Node ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
         )
         # Get a docker file interfaces info
         self.adapter.register_uri(
             "GET",
-            (
-                f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/"
-                "files//etc/network/interfaces"
-            ),
+            (f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/files//etc/network/interfaces"),
             text=files_data(),
             status_code=204,
         )
-        dummy_path_url = (
-            f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/"
-            "files//dummy/path"
-        )
+        dummy_path_url = f"{self.base_url}/projects/{CPROJECT['id']}/nodes/{CNODE['id']}/files//dummy/path"
         self.adapter.register_uri(
             "GET",
             dummy_path_url,
@@ -534,9 +495,7 @@ class Gns3ConnectorMock(Gns3Connector):
         #########
         # Links #
         #########
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/projects/{CPROJECT['id']}/links", json=links_data()
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/projects/{CPROJECT['id']}/links", json=links_data())
         # Register all links data to the respective endpoint
         for _l in links_data():
             self.adapter.register_uri(
@@ -551,7 +510,7 @@ class Gns3ConnectorMock(Gns3Connector):
             )
         self.adapter.register_uri(
             "GET",
-            f"{self.base_url}/projects/{CPROJECT['id']}/links/" "7777-4444-0000",
+            f"{self.base_url}/projects/{CPROJECT['id']}/links/7777-4444-0000",
             json={"message": "Link ID 7777-4444-0000 doesn't exist", "status": 404},
             status_code=404,
         )
@@ -575,9 +534,7 @@ class Gns3ConnectorMockStopped(Gns3ConnectorMock):
         # Now update nodes status data and save to the endpoint
         for n in _nodes:
             n.update(status="stopped")
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=_nodes
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=_nodes)
 
 
 # NOTE: Needed to register a different response for nodes endpoint
@@ -589,9 +546,7 @@ class Gns3ConnectorMockSuspended(Gns3ConnectorMock):
         # Now update nodes status data and save to the endpoint
         for n in _nodes:
             n.update(status="suspended")
-        self.adapter.register_uri(
-            "GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=_nodes
-        )
+        self.adapter.register_uri("GET", f"{self.base_url}/projects/{CPROJECT['id']}/nodes", json=_nodes)
 
 
 @pytest.fixture(scope="class")
@@ -637,15 +592,11 @@ class TestGns3Connector:
         assert "guest" == response["category"]
 
     def test_error_get_template_no_params(self, gns3_server):
-        with pytest.raises(
-            ValueError, match="Must provide either a name or template_id"
-        ):
+        with pytest.raises(ValueError, match="Must provide either a name or template_id"):
             gns3_server.get_template()
 
     def test_error_template_id_not_found(self, gns3_server):
-        with pytest.raises(
-            HTTPError, match="404: Template ID 7777-4444-0000 doesn't exist"
-        ):
+        with pytest.raises(HTTPError, match="404: Template ID 7777-4444-0000 doesn't exist"):
             gns3_server.get_template(template_id="7777-4444-0000")
 
     def test_error_template_name_not_found(self, gns3_server):
@@ -708,15 +659,11 @@ class TestGns3Connector:
         assert "opened" == response["status"]
 
     def test_error_get_project_no_params(self, gns3_server):
-        with pytest.raises(
-            ValueError, match="Must provide either a name or project_id"
-        ):
+        with pytest.raises(ValueError, match="Must provide either a name or project_id"):
             gns3_server.get_project()
 
     def test_error_project_id_not_found(self, gns3_server):
-        with pytest.raises(
-            HTTPError, match="404: Project ID 7777-4444-0000 doesn't exist"
-        ):
+        with pytest.raises(HTTPError, match="404: Project ID 7777-4444-0000 doesn't exist"):
             gns3_server.get_project(project_id="7777-4444-0000")
 
     def test_error_project_name_not_found(self, gns3_server):
@@ -746,9 +693,7 @@ class TestGns3Connector:
         assert response["console"] == 5005
 
     def test_error_node_not_found(self, gns3_server):
-        with pytest.raises(
-            HTTPError, match="404: Node ID 7777-4444-0000 doesn't exist"
-        ):
+        with pytest.raises(HTTPError, match="404: Node ID 7777-4444-0000 doesn't exist"):
             gns3_server.get_node(project_id=CPROJECT["id"], node_id="7777-4444-0000")
 
     def test_get_links(self, gns3_server):
@@ -762,9 +707,7 @@ class TestGns3Connector:
         assert response["suspend"] is False
 
     def test_error_link_not_found(self, gns3_server):
-        with pytest.raises(
-            HTTPError, match="404: Link ID 7777-4444-0000 doesn't exist"
-        ):
+        with pytest.raises(HTTPError, match="404: Link ID 7777-4444-0000 doesn't exist"):
             gns3_server.get_link(project_id=CPROJECT["id"], link_id="7777-4444-0000")
 
     def test_create_project(self, gns3_server):
@@ -787,8 +730,7 @@ class TestGns3Connector:
     def test_projects_summary(self, gns3_server):
         projects_summary = gns3_server.projects_summary(is_print=False)
         assert (
-            str(projects_summary)
-            == "[('test2', 'c9dc56bf-37b9-453b-8f95-2845ce8908e3', 10, 9, 'closed'), "
+            str(projects_summary) == "[('test2', 'c9dc56bf-37b9-453b-8f95-2845ce8908e3', 10, 9, 'closed'), "
             "('API_TEST', '4b21dfb3-675a-4efa-8613-2f7fb32e76fe', 6, 4, 'opened')]"
         )
 
@@ -804,8 +746,7 @@ class TestGns3Connector:
     def test_templates_summary(self, gns3_server):
         templates_summary = gns3_server.templates_summary(is_print=False)
         assert (
-            str(templates_summary)
-            == "[('IOU-L3', '8504c605-7914-4a8f-9cd4-a2638382db0e', 'iou', False, "
+            str(templates_summary) == "[('IOU-L3', '8504c605-7914-4a8f-9cd4-a2638382db0e', 'iou', False, "
             "'telnet', 'router'), ('IOU-L2', '92cccfb2-6401-48f2-8964-3c75323be3cb', "
             "'iou', False, 'telnet', 'switch'), ('vEOS', 'c6203d4b-d0ce-4951-bf18-"
             "c44369d46804', 'qemu', False, 'telnet', 'router'), ('alpine', "
@@ -881,9 +822,7 @@ class TestGns3Connector:
 
     def test_upload_compute_image(self, gns3_server):
         # NOTE: This is better tested on an integration scenario
-        response = gns3_server.upload_compute_image(
-            emulator="qemu", file_path=DATA_FILES / "files.txt"
-        )
+        response = gns3_server.upload_compute_image(emulator="qemu", file_path=DATA_FILES / "files.txt")
         assert response is None
 
     def test_get_compute_ports(self, gns3_server):
@@ -1079,9 +1018,7 @@ class TestNode:
         assert "alpine-1" == api_test_node.name
         assert "started" == api_test_node.status
 
-    @pytest.mark.parametrize(
-        "param", [{"template": CTEMPLATE["name"]}, {"template_id": CTEMPLATE["id"]}]
-    )
+    @pytest.mark.parametrize("param", [{"template": CTEMPLATE["name"]}, {"template_id": CTEMPLATE["id"]}])
     def test_create(self, param, gns3_server):
         node = Node(
             name="alpine-1",
@@ -1434,9 +1371,7 @@ class TestProject:
 
     def test_create_node(self, api_test_project):
         api_test_project.nodes = []
-        api_test_project.create_node(
-            name="alpine-2", console=5077, template=CTEMPLATE["name"]
-        )
+        api_test_project.create_node(name="alpine-2", console=5077, template=CTEMPLATE["name"])
         alpine2 = api_test_project.get_node(name="alpine-2")
         assert alpine2.console == 5077
         assert alpine2.name == "alpine-2"
@@ -1486,9 +1421,7 @@ class TestProject:
             (("IOU1", "Ethernet1/0", "vEOS", "Ethernet2"), "At least one port is used"),
         ],
     )
-    def test_error_create_link_with_invalid_param(
-        self, api_test_project, link, expected
-    ):
+    def test_error_create_link_with_invalid_param(self, api_test_project, link, expected):
         with pytest.raises(ValueError, match=expected):
             api_test_project.create_link(*link)
 
@@ -1510,16 +1443,11 @@ class TestProject:
         api_test_project.get_snapshots()
         assert isinstance(api_test_project.snapshots, list)
         assert api_test_project.snapshots[0]["name"] == "snap1"
-        assert (
-            api_test_project.snapshots[0]["snapshot_id"]
-            == "7fb725fd-efbf-4e90-a259-95f12addf5a2"
-        )
+        assert api_test_project.snapshots[0]["snapshot_id"] == "7fb725fd-efbf-4e90-a259-95f12addf5a2"
 
     def test_get_snapshot(self, api_test_project):
         api_test_project.snapshots = None
-        snap1 = api_test_project.get_snapshot(
-            snapshot_id="7fb725fd-efbf-4e90-a259-95f12addf5a2"
-        )
+        snap1 = api_test_project.get_snapshot(snapshot_id="7fb725fd-efbf-4e90-a259-95f12addf5a2")
         assert snap1["name"] == "snap1"
         assert snap1["created_at"] == 1_569_707_990
 
@@ -1544,9 +1472,7 @@ class TestProject:
             api_test_project.create_snapshot(name="snap2")
 
     def test_delete_snapshot(self, api_test_project):
-        response = api_test_project.delete_snapshot(
-            snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759"
-        )
+        response = api_test_project.delete_snapshot(snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759")
         assert response is None
 
     def test_error_delete_snapshot_not_found(self, api_test_project):
@@ -1554,9 +1480,7 @@ class TestProject:
             api_test_project.delete_snapshot(snapshot_id="dummmy")
 
     def test_restore_snapshot(self, api_test_project):
-        response = api_test_project.restore_snapshot(
-            snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759"
-        )
+        response = api_test_project.restore_snapshot(snapshot_id="44e08d78-0ee4-4b8f-bad4-117aa67cb759")
         assert response is None
 
     def test_error_restore_snapshot_not_found(self, api_test_project):
@@ -1607,9 +1531,7 @@ class TestProject:
         # Update:
         # NOTE: This should be really well tested in an integration phase since
         # the values are not really altered here
-        api_test_project.update_drawing(
-            drawing_id=api_test_project.drawings[0]["drawing_id"]
-        )
+        api_test_project.update_drawing(drawing_id=api_test_project.drawings[0]["drawing_id"])
         assert api_test_project.drawings[0]["x"] == -256
         assert api_test_project.drawings[0]["drawing_id"] == CDRAWING["id"]
 

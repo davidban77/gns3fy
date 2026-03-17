@@ -68,6 +68,12 @@ prof
 .eapi.conf
 .idea
 
+# Private keys and certificates #
+##################################
+*.pem
+*.key
+*.p12
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
