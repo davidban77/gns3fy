@@ -4,9 +4,9 @@
 
 **gns3fy** is a Python wrapper library around the GNS3 Server REST API (v2). It provides programmatic interaction with GNS3 servers for network automation, CI/CD pipelines, and Ansible integration.
 
-- **Language**: Python 3.6+
+- **Language**: Python 3.9+
 - **GNS3 Compatibility**: v2.2+
-- **Package Manager**: Poetry
+- **Package Manager**: uv
 - **Current Version**: 0.7.2
 
 ## Repository Structure
@@ -28,20 +28,19 @@ docs/content/               # MkDocs documentation source
 
 ```bash
 # Install dependencies
-poetry install --no-interaction
+uv sync --group dev
 
 # Run full test suite (lint + format check + tests)
-make test
+task test
 
 # Individual commands
-poetry run flake8 .                              # Lint
-poetry run black --diff --check .                # Format check
-poetry run pytest tests/ -v                      # Tests
-poetry run pytest --cov-report=xml --cov=gns3fy tests  # Tests with coverage
+task lint                                        # Lint + format check
+task test-only                                   # Tests without linting
+task test-ci                                     # Tests with XML coverage output
 
 # Documentation
-make docs-generate   # Generate API reference from docstrings
-make docs-show       # Serve docs locally
+task docs-generate   # Generate API reference from docstrings
+task docs-show       # Serve docs locally
 ```
 
 ## Architecture & Key Classes
@@ -60,8 +59,7 @@ Constants: `NODE_TYPES` (14 types), `CONSOLE_TYPES` (8 types), `LINK_TYPES` (2 t
 
 ## Code Conventions
 
-- **Formatter**: Black (enforced in CI)
-- **Linter**: Flake8 — max line length 120 (configured in `setup.cfg`)
+- **Formatter/Linter**: Ruff (enforced in CI) — line length 120, selects E/F/W rules
 - **Type Hints**: Use `typing` module (`Optional`, `Any`, `Dict`, `List`)
 - **Data Models**: Pydantic dataclasses with `@dataclass(config=Config)`
 - **Docstrings**: Markdown-formatted with embedded usage examples
@@ -86,17 +84,19 @@ Test classes follow the pattern `TestGns3Connector`, `TestLink`, `TestNode`, `Te
 GitHub Actions (`.github/workflows/tests.yml`):
 - Triggers on push and pull_request
 - Matrix: Python 3.9, 3.10, 3.11, 3.12
-- Steps: install Poetry 1.8.4 → cache deps → flake8 → black check → pytest with coverage → Codecov upload
+- Steps: setup uv → install Task → install deps → `task lint` → `task test-only` → `task test-ci` → Codecov upload
 
 ## Dependencies
 
-**Runtime**: `requests ^2.22`, `pydantic ^1.0`
+**Runtime**: `requests >=2.22`, `pydantic >=1.0,<2`
 
-**Dev**: `pytest ^5.0`, `flake8 ^3.7`, `requests-mock ^1.6`, `pytest-cov ^2.7`, `black`, `mkdocs ^1.0`, `mkdocs-material ^6.1.0`, `pydoc-markdown`
+**Dev**: `pytest >=7.0`, `requests-mock >=1.6`, `pytest-cov >=4.0`, `coverage >=7.0`, `ruff >=0.9`
+
+**Docs**: `mkdocs >=1.0`, `mkdocs-material >=6.1.0`, `pydoc-markdown`
 
 ## Important Notes
 
-- Always run `make test` (or the individual lint/format/test commands) before committing
-- The library uses Pydantic v1 (`pydantic ^1.0`) — do not use Pydantic v2 APIs
+- Always run `task test` (or the individual lint/format/test commands) before committing
+- The library uses Pydantic v1 (`pydantic >=1.0,<2`) — do not use Pydantic v2 APIs
 - HTTP mocking in tests registers endpoints for GET/POST/PUT/DELETE across projects, nodes, links, templates, computes, snapshots, and drawings
 - Documentation is auto-generated from docstrings via `pydoc-markdown` — keep docstrings up to date when modifying public APIs
