@@ -1756,6 +1756,7 @@ class Project:
         _link.create()
         self.links.append(_link)
         print(f"Created Link-ID: {_link.link_id} -- Type: {_link.link_type}")
+        return _link
 
     def delete_link(self, node_a, port_a, node_b, port_b):
         """
